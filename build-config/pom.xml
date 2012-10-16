@@ -32,7 +32,7 @@
     </parent>
 
     <artifactId>picketbox-build-config</artifactId>
-    <name>PicketBox: Build Configuration</name>
+    <name>PicketBox Build Configuration</name>
 
     <licenses>
         <license>

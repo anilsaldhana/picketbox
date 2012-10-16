@@ -20,101 +20,36 @@
 		<groupId>org.picketbox</groupId>
 		<artifactId>picketbox-core-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
+		<relativePath>../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>picketbox-core</artifactId>
 	<packaging>jar</packaging>
 	<name>PicketBox Core</name>
-	<url>http://jboss.org/picketbox/</url>
-	<description>PicketBox Core contains the core infrastructure code</description>
-	<licenses>
-		<license>
-			<name>lgpl</name>
-			<url>http://repository.jboss.com/licenses/lgpl.txt</url>
-		</license>
-	</licenses>
-	<organization>
-		<name>JBoss Inc.</name>
-		<url>http://www.jboss.org</url>
-	</organization>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12</version>
-				<configuration>
-					<printSummary>true</printSummary>
-					<disableXmlReport>false</disableXmlReport>
-					<testFailureIgnore>false</testFailureIgnore>
-					<includes>
-						<include>**/**TestCase.java</include>
-					</includes>
-					<forkMode>always</forkMode>
-					<useFile>false</useFile>
-					<trimStackTrace>false</trimStackTrace>
-				</configuration>
-			</plugin>
-			<!-- Generate the attached test jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	<description>PicketBox Core contains the core infrastructure code.</description>
+	<properties>
+		<picketlink.idm.version>2.0.0-SNAPSHOT</picketlink.idm.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.picketlink</groupId>
 			<artifactId>picketlink-idm-api</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
+			<version>${picketlink.idm.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.picketlink</groupId>
 			<artifactId>picketlink-idm-impl</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.santuario</groupId>
-			<artifactId>xmlsec</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.security</groupId>
-			<artifactId>jbossxacml</artifactId>
+			<version>${picketlink.idm.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.logging</groupId>
 			<artifactId>jboss-logging</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.jboss.logging</groupId>
-			<artifactId>jboss-logging-processor</artifactId>
-			<version>1.0.0.Final</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
+		
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.picketlink</groupId>
@@ -162,7 +97,7 @@
 			<groupId>org.picketbox</groupId>
 			<artifactId>picketbox-ldap</artifactId>
 			<version>1.0.2.Final</version>
-			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.picketbox</groupId>
@@ -172,29 +107,29 @@
 			<type>test-jar</type>
 		</dependency>
 	</dependencies>
-	<reporting>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<doclet>org.jboss.apiviz.APIviz</doclet>
-					<docletArtifact>
-						<groupId>org.jboss.apiviz</groupId>
-						<artifactId>apiviz</artifactId>
-						<version>1.2.5.GA</version>
-					</docletArtifact>
-					<additionalparam> -charset UTF-8 -docencoding UTF-8 -version
-						-author -breakiterator -windowtitle "${project.name}
-						${project.version} API Reference" -doctitle "${project.name}
-						${project.version} API Reference" -bottom "Copyright ©
-						${project.inceptionYear}-Present ${project.organization.name}. All
-						Rights Reserved." -link http://java.sun.com/javase/6/docs/api/
-						-sourceclasspath ${project.build.outputDirectory} 
-					</additionalparam>
-					<encoding>UTF-8</encoding>
-				</configuration>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<!-- Generate the attached test jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
 </project>

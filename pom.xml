@@ -32,7 +32,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>picketbox-core-pom</artifactId>
     <packaging>pom</packaging>
-    <name>PicketBox POM - Aggregator</name>
+    <name>PicketBox POM Aggregator</name>
     <url>http://jboss.org/picketbox/</url>
     <description>PicketBox is a security framework for Java Applications</description>
     <modules>

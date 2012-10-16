@@ -12,9 +12,7 @@
 	this software; if not, write to the Free ~ Software Foundation, Inc., 51 
 	Franklin St, Fifth Floor, Boston, MA ~ 02110-1301 USA, or see the FSF site: 
 	http://www.fsf.org. -->
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>org.jboss</groupId>
@@ -26,9 +24,9 @@
 	<artifactId>picketbox-core-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>5.0.0-SNAPSHOT</version>
-	<name>PicketBox Core - Parent</name>
+	<name>PicketBox Parent</name>
 	<url>http://jboss.org/picketbox/</url>
-	<description>PicketBox is a security framework for Java Applications</description>
+	<description>PicketBox Maven Parent Project</description>
 	<licenses>
 		<license>
 			<name>lgpl</name>
@@ -42,13 +40,100 @@
 	<properties>
 		<!-- Checkstyle configuration -->
 		<linkXRef>false</linkXRef>
+
+		<!-- Dependencies version -->
+		<persistence.api.version>persistence-api</persistence.api.version>
+		<apache.santuario.version>1.5.1</apache.santuario.version>
+		<jboss.logging.version>3.1.0.GA</jboss.logging.version>
+		<jboss.logging.processor.version>1.0.0.Final</jboss.logging.processor.version>
+		<hibernate.persistence.version>1.0.1.Final</hibernate.persistence.version>
+		<jboss.servlet.version>1.0.0.Final</jboss.servlet.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.santuario</groupId>
+				<artifactId>xmlsec</artifactId>
+				<version>${apache.santuario.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate.javax.persistence</groupId>
+				<artifactId>hibernate-jpa-2.0-api</artifactId>
+				<version>${hibernate.persistence.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec.javax.servlet</groupId>
+				<artifactId>jboss-servlet-api_3.0_spec</artifactId>
+				<version>${jboss.servlet.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.logging</groupId>
+				<artifactId>jboss-logging</artifactId>
+				<version>${jboss.logging.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Test dependencies -->
+			<dependency>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty</artifactId>
+				<version>6.1.18</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-server</artifactId>
+				<version>8.1.6.v20120903</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-webapp</artifactId>
+				<version>8.1.6.v20120903</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jsp-2.1-glassfish</artifactId>
+				<version>2.1.v20100127</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.1.2</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging-processor</artifactId>
+			<version>${jboss.logging.processor.version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 	<build>
 		<pluginManagement>
 			<plugins>
+				<!-- Default configuration for tests -->
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.10</version>
+					<version>2.12</version>
 					<configuration>
 						<printSummary>true</printSummary>
 						<disableXmlReport>false</disableXmlReport>
@@ -88,7 +173,7 @@
 						<configLocation>picketbox/checkstyle.xml</configLocation>
 						<consoleOutput>true</consoleOutput>
 						<failsOnError>true</failsOnError>
-						<useFile/>
+						<useFile />
 					</configuration>
 					<executions>
 						<execution>
@@ -103,6 +188,31 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<doclet>org.jboss.apiviz.APIviz</doclet>
+					<docletArtifact>
+						<groupId>org.jboss.apiviz</groupId>
+						<artifactId>apiviz</artifactId>
+						<version>1.2.5.GA</version>
+					</docletArtifact>
+					<additionalparam> -charset UTF-8 -docencoding UTF-8 -version
+						-author -breakiterator -windowtitle "${project.name}
+						${project.version} API Reference" -doctitle "${project.name}
+						${project.version} API Reference" -bottom "Copyright ©
+						${project.inceptionYear}-Present ${project.organization.name}. All
+						Rights Reserved." -link http://java.sun.com/javase/6/docs/api/
+						-sourceclasspath ${project.build.outputDirectory}
+					</additionalparam>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 	<repositories>
 		<repository>
 			<id>jboss-public-repository-group</id>
@@ -140,42 +250,4 @@
 			</releases>
 		</repository>
 	</repositories>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.0.2</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.8.1</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.santuario</groupId>
-				<artifactId>xmlsec</artifactId>
-				<version>1.5.1</version>
-				<optional>true</optional>
-			</dependency>
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>persistence-api</artifactId>
-				<version>1.0</version>
-				<optional>true</optional>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.security</groupId>
-				<artifactId>jbossxacml</artifactId>
-				<version>2.0.8.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.logging</groupId>
-				<artifactId>jboss-logging</artifactId>
-				<version>3.1.0.GA</version>
-				<scope>provided</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>
