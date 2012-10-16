@@ -38,7 +38,14 @@
     <modules>
         <module>parent</module>
         <module>build-config</module>
-        <module>picketbox-core</module>
+        <module>ldap</module>
+        <module>keystore</module>
+        <module>core</module>
+        <module>http</module>
+        <module>jaxrs</module>
+        <module>json</module>
+        <module>drools</module>
+        <module>infinispan</module>
     </modules>
     <reporting>
         <plugins>
