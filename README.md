@@ -1,7 +1,5 @@
-PicketBox Core 
+PicketBox
 ========================
-PicketBox Core Functionality
-
 This repository contains a security stack for Java applications. It can be used with any dependency injection framework of your choice.
 
 Building
