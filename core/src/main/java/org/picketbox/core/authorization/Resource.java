@@ -38,10 +38,9 @@ public interface Resource extends Serializable {
     boolean isAuthorized();
 
     /**
-     * Set the flag indicating that this resource is authorized
+     * Set the flag indicating that this resource needs authorization checks
      *
      * @param authorize
      */
     void setAuthorized(boolean authorize);
-
 }

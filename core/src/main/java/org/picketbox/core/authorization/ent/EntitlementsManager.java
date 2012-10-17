@@ -19,9 +19,10 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.core.authorization;
+package org.picketbox.core.authorization.ent;
 
 import org.picketbox.core.UserContext;
+import org.picketbox.core.authorization.Resource;
 
 /**
  * Unlike the {@link AuthorizationManager}, the {@link EntitlementsManager} is used to obtain all the entitlements with one
