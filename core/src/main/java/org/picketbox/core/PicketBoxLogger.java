@@ -27,6 +27,7 @@ import org.jboss.logging.LogMessage;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Message;
 import org.jboss.logging.MessageLogger;
+import org.picketbox.core.event.PicketBoxEventManager;
 
 /**
  * An subclass of {@link BasicLogger} from JBoss Logging
@@ -79,5 +80,9 @@ public interface PicketBoxLogger extends BasicLogger {
     @LogMessage(level = Logger.Level.WARN)
     @Message(id = 509, value = "ALL RESOURCES WILL BE PROTECTED. MAYBE YOU DID NOT DEFINE WHICH RESOURCES SHOULD BE PROTECTED.")
     void allResourcesWillBeProteced();
+
+    @LogMessage(level = Logger.Level.WARN)
+    @Message(id = 510, value = "Using %s : %s")
+    void debugInstanceUsage(String string, Object eventManager);
 
 }

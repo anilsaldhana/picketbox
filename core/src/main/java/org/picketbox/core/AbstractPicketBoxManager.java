@@ -59,7 +59,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     private AuthenticationProvider authenticationProvider;
     private AuthorizationManager authorizationManager;
     private SessionManager sessionManager;
-    private UserContextPopulator subjectPopulator;
+    private UserContextPopulator userContextPopulator;
     private IdentityManager identityManager;
     private PicketBoxConfiguration configuration;
     private PicketBoxEventManager eventManager;
@@ -204,7 +204,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         subject.setSession(session);
         subject.setCredential(null);
 
-        UserContext populatedUserContext = this.subjectPopulator.getIdentity(subject);
+        UserContext populatedUserContext = this.userContextPopulator.getIdentity(subject);
 
         getEventManager().raiseEvent(new UserAuthenticatedEvent(subject));
 
@@ -279,23 +279,34 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     protected void doStart() {
         this.eventManager = this.configuration.getEventManager().getEventManager();
 
+        PicketBoxLogger.LOGGER.debugInstanceUsage("Event Manager", this.eventManager);
+
         if (this.configuration != null) {
             this.authenticationProvider = new PicketBoxAuthenticationProvider(this, this.configuration);
 
+            PicketBoxLogger.LOGGER.debugInstanceUsage("Authentication Provider", this.authenticationProvider);
+
             if (!this.configuration.getAuthorization().getManagers().isEmpty()) {
                 this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
+                PicketBoxLogger.LOGGER.debugInstanceUsage("Authorization Manager", this.authorizationManager);
             }
 
             this.identityManager = new DefaultIdentityManager(this.configuration.getIdentityManager()
                     .getIdentityManagerConfiguration().getIdentityStore());
 
-            this.subjectPopulator = this.configuration.getIdentityManager().getUserPopulator();
+            PicketBoxLogger.LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
 
-            if (this.subjectPopulator == null) {
-                this.subjectPopulator = new DefaultUserContextPopulator(this.identityManager);
+            this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
+
+            if (this.userContextPopulator == null) {
+                this.userContextPopulator = new DefaultUserContextPopulator(this.identityManager);
             }
 
+            PicketBoxLogger.LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
+
             this.sessionManager = this.configuration.getSessionManager().getManager();
+
+            PicketBoxLogger.LOGGER.debugInstanceUsage("Session Manager", this.sessionManager);
 
             if (this.sessionManager == null && this.configuration.getSessionManager().getStore() != null) {
                 this.sessionManager = new DefaultSessionManager(this);
@@ -312,8 +323,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             PicketBoxLogger.LOGGER.debug("Using Authorization Manager : " + this.authorizationManager.getClass().getName());
         }
 
-        if (this.subjectPopulator != null) {
-            PicketBoxLogger.LOGGER.debug("Using Identity Manager : " + this.subjectPopulator.getClass().getName());
+        if (this.userContextPopulator != null) {
+            PicketBoxLogger.LOGGER.debug("Using User Context Populator : " + this.userContextPopulator.getClass().getName());
         }
 
         PicketBoxLogger.LOGGER.startingPicketBox();
