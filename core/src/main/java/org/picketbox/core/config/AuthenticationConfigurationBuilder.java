@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.impl.CertificateAuthenticationMechanism;
-import org.picketbox.core.authentication.impl.DigestAuthenticationMechanism;
 import org.picketbox.core.authentication.impl.TrustedUsernameAuthenticationMechanism;
 import org.picketbox.core.authentication.impl.UserNamePasswordAuthenticationMechanism;
 
@@ -53,7 +52,7 @@ public class AuthenticationConfigurationBuilder extends AbstractConfigurationBui
     @Override
     protected void setDefaults() {
         this.mechanisms.add(new UserNamePasswordAuthenticationMechanism());
-        this.mechanisms.add(new DigestAuthenticationMechanism());
+//        this.mechanisms.add(new DigestAuthenticationMechanism());
         this.mechanisms.add(new CertificateAuthenticationMechanism());
         this.mechanisms.add(new TrustedUsernameAuthenticationMechanism());
     }

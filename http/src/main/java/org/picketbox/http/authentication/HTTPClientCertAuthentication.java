@@ -90,11 +90,11 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected Principal doHTTPAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        X509Certificate[] certs = (X509Certificate[]) request.getAttribute(PicketBoxConstants.HTTP_CERTIFICATE);
+    protected Principal doHTTPAuthentication(HttpServletCredential<?> credential) {
+        HTTPClientCertCredential certCredential = (HTTPClientCertCredential) credential;
 
-        if (certs != null) {
-            X509Certificate clientCertificate = certs[0];
+        if (certCredential.getCredential() != null) {
+            X509Certificate clientCertificate = certCredential.getCredential().getCertificate();
 
             String username = getCertificatePrincipal(clientCertificate).getName();
 
@@ -113,7 +113,7 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
 
             if (user != null) {
                 if (isUseCertificateValidation()) {
-                    if (getIdentityManager().validateCertificate(user, clientCertificate)) {
+                    if (getIdentityManager().validateCredential(user, certCredential.getCredential())) {
                         return new PicketBoxPrincipal(user.getKey());
                     }
                 }

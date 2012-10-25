@@ -22,7 +22,7 @@
 
 package org.picketbox.core.authentication.credential;
 
-import org.picketbox.core.AbstractCredential;
+import org.picketbox.core.AbstractUserCredential;
 
 /**
  * <p>
@@ -32,7 +32,7 @@ import org.picketbox.core.AbstractCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class TrustedUsernameCredential extends AbstractCredential {
+public class TrustedUsernameCredential extends AbstractUserCredential {
 
     public TrustedUsernameCredential(String userName) {
         super.setUserName(userName);

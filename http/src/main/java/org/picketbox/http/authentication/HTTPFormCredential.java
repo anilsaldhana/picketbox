@@ -25,19 +25,29 @@ package org.picketbox.http.authentication;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketlink.idm.credential.PasswordCredential;
+
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPFormCredential implements HttpServletCredential {
+public class HTTPFormCredential extends AbstractUserCredential<PasswordCredential> implements HttpServletCredential<PasswordCredential> {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private String userName;
 
     public HTTPFormCredential(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+
+        String userName = this.request.getParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME);
+
+        if (userName != null) {
+            setUserName(userName);
+            setCredential(new PasswordCredential(this.request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD)));
+        }
     }
 
     /* (non-Javadoc)
@@ -56,8 +66,4 @@ public class HTTPFormCredential implements HttpServletCredential {
         return this.response;
     }
 
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
 }

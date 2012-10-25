@@ -22,7 +22,7 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.internal.jpa.JPATemplate;
+import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 
 
 

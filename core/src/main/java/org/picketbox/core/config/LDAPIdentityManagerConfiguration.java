@@ -22,8 +22,8 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.internal.LDAPIdentityStore;
-import org.picketlink.idm.internal.config.LDAPConfiguration;
+import org.picketlink.idm.ldap.internal.LDAPConfiguration;
+import org.picketlink.idm.ldap.internal.LDAPIdentityStore;
 import org.picketlink.idm.spi.IdentityStore;
 
 /**

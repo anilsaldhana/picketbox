@@ -22,7 +22,8 @@
 
 package org.picketbox.core.authentication;
 
-import org.picketbox.core.Credential;
+import org.picketbox.core.UserCredential;
+import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>
@@ -37,9 +38,9 @@ public class AuthenticationInfo {
     private String name;
     private String description;
     private boolean required = true;
-    private Class<? extends Credential> implementation;
+    private Class<? extends UserCredential> implementation;
 
-    public AuthenticationInfo(String name, String description, Class<? extends Credential> implementation) {
+    public AuthenticationInfo(String name, String description, Class<? extends UserCredential> implementation) {
         this.name = name;
         this.description = description;
         this.implementation = implementation;
@@ -49,7 +50,7 @@ public class AuthenticationInfo {
      * @return the name
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -63,7 +64,7 @@ public class AuthenticationInfo {
      * @return the description
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -76,14 +77,14 @@ public class AuthenticationInfo {
     /**
      * @return the implementation
      */
-    public Class<? extends Credential> getImplementation() {
-        return implementation;
+    public Class<? extends UserCredential> getImplementation() {
+        return this.implementation;
     }
 
     /**
      * @param implementation the implementation to set
      */
-    public void setImplementation(Class<? extends Credential> implementation) {
+    public void setImplementation(Class<? extends UserCredential<? extends Credential>> implementation) {
         this.implementation = implementation;
     }
 
@@ -91,7 +92,7 @@ public class AuthenticationInfo {
      * @return the required
      */
     public boolean isRequired() {
-        return required;
+        return this.required;
     }
 
     /**

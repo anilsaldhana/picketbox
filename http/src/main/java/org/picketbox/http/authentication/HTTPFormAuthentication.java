@@ -74,14 +74,15 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected Principal doHTTPAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String userName = request.getParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME);
-        String password = request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD);
+    protected Principal doHTTPAuthentication(HttpServletCredential<?> credential) {
+        HTTPFormCredential formCredential = (HTTPFormCredential) credential;
 
-        User user = getIdentityManager().getUser(userName);
+        if (formCredential.getCredential() != null) {
+            User user = getIdentityManager().getUser(formCredential.getUserName());
 
-        if (user != null && getIdentityManager().validatePassword(user, password)) {
-            return new PicketBoxPrincipal(user.getKey());
+            if (user != null && getIdentityManager().validateCredential(user, formCredential.getCredential())) {
+                return new PicketBoxPrincipal(user.getKey());
+            }
         }
 
         return null;

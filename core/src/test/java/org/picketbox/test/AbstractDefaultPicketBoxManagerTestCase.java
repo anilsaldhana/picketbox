@@ -26,9 +26,10 @@ import org.picketbox.core.DefaultPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.file.internal.FileUser;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.User;
 
 /**
  * <p>
@@ -59,13 +60,15 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
      * @param identityManager
      */
     private void initialize(IdentityManager identityManager) {
-        User adminUser = identityManager.createUser("admin");
+        FileUser adminUser = new FileUser("admin");
+        
+        identityManager.createUser(adminUser);
 
         adminUser.setEmail("admin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
-
-        identityManager.updatePassword(adminUser, "admin");
+        
+        identityManager.updateCredential(adminUser, new PasswordCredential("admin"));
 
         Role roleDeveloper = identityManager.createRole("developer");
         Role roleAdmin = identityManager.createRole("admin");

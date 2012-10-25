@@ -32,6 +32,7 @@ import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.identity.impl.EntityManagerContext;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.credential.PasswordCredential;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
@@ -64,7 +65,7 @@ public class JPABasedIdentityManagerTestcase extends AbstractJPAIdentityManagerT
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
 
-        identityManager.updatePassword(adminUser, "123");
+        identityManager.updateCredential(adminUser, new PasswordCredential("123"));
 
         Role roleDeveloper = identityManager.createRole("developer");
         Role roleAdmin = identityManager.createRole("admin");

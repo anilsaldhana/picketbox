@@ -24,14 +24,15 @@ package org.picketbox.core.authentication.impl;
 import java.security.Principal;
 import java.util.List;
 
-import org.picketbox.core.Credential;
 import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>
@@ -49,7 +50,7 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
     }
 
     @Override
-    public boolean supports(Credential credential) {
+    public boolean supports(UserCredential<? extends Credential> credential) {
         List<AuthenticationInfo> authenticationInfo = getAuthenticationInfo();
 
         for (AuthenticationInfo callbackInfo : authenticationInfo) {
@@ -62,11 +63,11 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
     }
 
     @Override
-    public AuthenticationResult authenticate(Credential credential) throws AuthenticationException {
+    public AuthenticationResult authenticate(UserCredential<? extends Credential> credential) throws AuthenticationException {
         return performAuthentication(credential);
     }
 
-    protected AuthenticationResult performAuthentication(Credential credential) throws AuthenticationException {
+    protected AuthenticationResult performAuthentication(UserCredential<? extends Credential> credential) throws AuthenticationException {
         Principal principal = null;
         AuthenticationResult result = new AuthenticationResult();
 
@@ -89,7 +90,7 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
         return result;
     }
 
-    protected abstract Principal doAuthenticate(Credential credential, AuthenticationResult result)
+    protected abstract Principal doAuthenticate(UserCredential<? extends Credential> credential, AuthenticationResult result)
             throws AuthenticationException;
 
     /**

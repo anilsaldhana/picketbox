@@ -22,25 +22,41 @@
 
 package org.picketbox.http.authentication;
 
+import java.security.cert.X509Certificate;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketlink.idm.credential.X509CertificateCredential;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPClientCertCredential implements HttpServletCredential {
+public class HTTPClientCertCredential extends AbstractUserCredential<X509CertificateCredential> implements
+        HttpServletCredential<X509CertificateCredential> {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private String userName;
 
     public HTTPClientCertCredential(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+
+        X509Certificate[] certs = (X509Certificate[]) request.getAttribute(PicketBoxConstants.HTTP_CERTIFICATE);
+
+        if (certs != null && certs.length > 0) {
+            X509Certificate clientCertificate = certs[0];
+
+            setCredential(new X509CertificateCredential(clientCertificate));
+        }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.http.authentication.HttpServletCredential#getRequest()
      */
     @Override
@@ -48,7 +64,9 @@ public class HTTPClientCertCredential implements HttpServletCredential {
         return this.request;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.http.authentication.HttpServletCredential#getResponse()
      */
     @Override
@@ -56,8 +74,4 @@ public class HTTPClientCertCredential implements HttpServletCredential {
         return this.response;
     }
 
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
 }

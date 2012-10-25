@@ -27,8 +27,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.picketbox.core.Credential;
 import org.picketbox.core.PicketBoxPrincipal;
+import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.OTPCredential;
@@ -36,6 +36,7 @@ import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.core.util.TimeBasedOTPUtil;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.credential.PasswordCredential;
 import org.picketlink.idm.model.User;
 
 /**
@@ -70,7 +71,7 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
      * .AuthenticationManager, org.picketbox.core.Credential, org.picketbox.core.authentication.AuthenticationResult)
      */
     @Override
-    protected Principal doAuthenticate(Credential credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential<?> credential, AuthenticationResult result) throws AuthenticationException {
         OTPCredential otpCredential = (OTPCredential) credential;
 
         String username = otpCredential.getUserName();
@@ -83,7 +84,7 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
         User user = identityManager.getUser(username);
 
         if (user != null) {
-            boolean validation = identityManager.validatePassword(user, pass);
+            boolean validation = identityManager.validateCredential(user, new PasswordCredential(pass));
             if (validation) {
                 // Validate OTP
                 String seed = user.getAttribute("serial");
