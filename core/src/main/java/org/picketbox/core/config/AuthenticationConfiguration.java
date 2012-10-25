@@ -35,8 +35,7 @@ public class AuthenticationConfiguration {
     private EventManagerConfiguration eventManager;
     private List<AuthenticationMechanism> mechanisms;
 
-    public AuthenticationConfiguration(List<AuthenticationMechanism> mechanisms,
-            EventManagerConfiguration eventManager) {
+    public AuthenticationConfiguration(List<AuthenticationMechanism> mechanisms, EventManagerConfiguration eventManager) {
         this.eventManager = eventManager;
         this.mechanisms = mechanisms;
     }

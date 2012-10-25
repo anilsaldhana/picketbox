@@ -24,8 +24,6 @@ package org.picketbox.core.config;
 
 import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 
-
-
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

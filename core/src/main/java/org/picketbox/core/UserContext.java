@@ -103,8 +103,6 @@ public class UserContext implements Serializable {
         return this.authenticationResult != null ? this.authenticationResult.getPrincipal() : null;
     }
 
-
-
     /**
      * @return the user
      */
@@ -159,7 +157,8 @@ public class UserContext implements Serializable {
      * @return
      */
     public boolean isAuthenticated() {
-        boolean isAuthenticated = this.authenticationResult != null && this.authenticationResult.getStatus().equals(AuthenticationStatus.SUCCESS);
+        boolean isAuthenticated = this.authenticationResult != null
+                && this.authenticationResult.getStatus().equals(AuthenticationStatus.SUCCESS);
 
         if (isAuthenticated) {
             if (session != null && !session.isValid()) {
@@ -187,7 +186,9 @@ public class UserContext implements Serializable {
     }
 
     /**
-     * <p>Invalidate the instance and clear its state.</p>
+     * <p>
+     * Invalidate the instance and clear its state.
+     * </p>
      */
     public void invalidate() {
         this.credential = null;
@@ -208,7 +209,9 @@ public class UserContext implements Serializable {
     }
 
     /**
-     * <p>Checks if this subject has the specified role.</p>
+     * <p>
+     * Checks if this subject has the specified role.
+     * </p>
      *
      * @param role
      * @return
@@ -218,7 +221,7 @@ public class UserContext implements Serializable {
             throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
 
-        for (Role userRole: getRoles()) {
+        for (Role userRole : getRoles()) {
             if (role.equals(userRole.getName())) {
                 return true;
             }
@@ -234,7 +237,7 @@ public class UserContext implements Serializable {
      */
     public Collection<String> getRoleNames() {
         Set<String> roleNames = new HashSet<String>();
-        for (Role userRole: getRoles()) {
+        for (Role userRole : getRoles()) {
             roleNames.add(userRole.getName());
         }
 

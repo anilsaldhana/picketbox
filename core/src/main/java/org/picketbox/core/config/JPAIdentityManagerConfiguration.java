@@ -31,7 +31,6 @@ import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 import org.picketlink.idm.jpa.schema.internal.SimpleJPAIdentityStore;
 import org.picketlink.idm.spi.IdentityStore;
 
-
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
@@ -49,7 +48,9 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         return this.entityManagerFactory;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.config.IdentityManagerConfiguration#getIdentityStore()
      */
     @Override

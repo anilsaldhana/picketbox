@@ -64,7 +64,9 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         registerDefaultEventHandler();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.session.SessionManager#create(org.picketbox.core.UserContext)
      */
     @Override
@@ -132,7 +134,9 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.session.SessionManager#update(org.picketbox.core.session.PicketBoxSession)
      */
     @Override
@@ -162,7 +166,9 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
     }
 
     /**
-     * <p>Fires the specified {@link SessionEvent}.</p>
+     * <p>
+     * Fires the specified {@link SessionEvent}.
+     * </p>
      *
      * @param event
      */
@@ -171,10 +177,12 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
     }
 
     /**
-     * <p>Registers the default implementation for {@link SessionEventHandler}.</p>
+     * <p>
+     * Registers the default implementation for {@link SessionEventHandler}.
+     * </p>
      */
     private void registerDefaultEventHandler() {
-        this.picketBoxManager.getEventManager().addHandler(this.defaultSessionEventHandler );
+        this.picketBoxManager.getEventManager().addHandler(this.defaultSessionEventHandler);
     }
 
     protected PicketBoxManager getPicketBoxManager() {

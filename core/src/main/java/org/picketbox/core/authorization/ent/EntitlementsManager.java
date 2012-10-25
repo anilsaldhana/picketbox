@@ -40,13 +40,4 @@ public interface EntitlementsManager {
      * @return
      */
     Entitlement[] entitlements(Resource resource, UserContext subject);
-
-    /**
-     * Marker interface to indicate an entitlement
-     *
-     * @author anil saldhana
-     * @since Jul 10, 2012
-     */
-    public interface Entitlement {
-    }
 }
