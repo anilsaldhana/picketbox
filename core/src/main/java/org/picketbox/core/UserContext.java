@@ -58,7 +58,7 @@ public class UserContext implements Serializable {
     @SuppressWarnings("unchecked")
     private Collection<Role> roles = Collections.EMPTY_LIST;
 
-    @SuppressWarnings({ "unused", "unchecked" })
+    @SuppressWarnings("unchecked")
     private Collection<Group> groups = Collections.EMPTY_LIST;
 
     protected transient Map<String, Object> contextData = new HashMap<String, Object>();
@@ -156,11 +156,6 @@ public class UserContext implements Serializable {
         return this;
     }
 
-    protected UserContext setAuthenticated(boolean isAuthenticated) {
-        this.authenticated = isAuthenticated;
-        return this;
-    }
-
     /**
      * @return
      */
@@ -190,7 +185,7 @@ public class UserContext implements Serializable {
         return this.credential;
     }
 
-    public UserContext setCredential(Credential credential) {
+    public UserContext setCredential(UserCredential credential) {
         this.credential = credential;
         return this;
     }
