@@ -259,17 +259,5 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-		<repository>
-			<id>snapshots.ci.cloudbees</id>
-			<name>CloudBees CI Snapshots Repository</name>
-			<layout>default</layout>
-			<url>https://repository-picketlink.forge.cloudbees.com/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
 	</repositories>
 </project>
