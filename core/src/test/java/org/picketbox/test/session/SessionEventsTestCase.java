@@ -41,7 +41,7 @@ import org.picketbox.core.session.event.SessionEventHandler;
 
 /**
  * Unit test the handling of session related events.
- * 
+ *
  * @author anil saldhana
  * @since Jul 16, 2012
  */
@@ -55,11 +55,8 @@ public class SessionEventsTestCase {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         this.testEventHandler = new TestSessionEventHandler();
-        
-        builder
-            .sessionManager()
-                .fileSessionStore()
-            .eventManager().handler(this.testEventHandler);
+
+        builder.sessionManager().fileSessionStore().eventManager().handler(this.testEventHandler);
 
         PicketBoxManager picketBoxManager = new DefaultPicketBoxManager(builder.build());
 
@@ -73,7 +70,7 @@ public class SessionEventsTestCase {
         createSession();
         assertTrue(this.testEventHandler.onCreateCalled);
     }
-    
+
     @Test
     public void testOnSetAttribute() throws Exception {
         PicketBoxSession session = createSession();
@@ -100,7 +97,7 @@ public class SessionEventsTestCase {
         assertFalse(session.isValid());
         assertTrue(this.testEventHandler.onInvalidateCalled);
     }
-    
+
     @Test
     public void testOnExpire() throws Exception {
         PicketBoxSession session = createSession();
@@ -113,21 +110,20 @@ public class SessionEventsTestCase {
     @Test
     public void testGetExpire() throws Exception {
         PicketBoxSession session = createSession();
-        
+
         session.expire();
         assertFalse(session.isValid());
         assertTrue(this.testEventHandler.onExpirationCalled);
     }
 
-
     private PicketBoxSession createSession() {
         UserContext subject = new UserContext();
-        
+
         PicketBoxSession session = this.sessionManager.create(subject);
 
         assertNotNull(session);
         assertTrue(session.isValid());
-        
+
         return session;
     }
 
@@ -152,7 +148,7 @@ public class SessionEventsTestCase {
 
         @Override
         public void onSetAttribute(SessionEvent sessionEvent, String key, Object val) {
-            onSetAttributeCalled= true;
+            onSetAttributeCalled = true;
             assertNotNull(sessionEvent);
             assertNotNull(sessionEvent.getSession());
             assertNotNull(key);

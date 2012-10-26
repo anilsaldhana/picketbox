@@ -21,23 +21,22 @@
  */
 package org.picketbox.core.authorization.ent;
 
-import org.picketbox.core.UserContext;
-import org.picketbox.core.authorization.Resource;
-
 /**
- * Unlike the {@link AuthorizationManager}, the {@link EntitlementsManager} is used to obtain all the entitlements with one
- * call.
+ * Interface to indicate an entitlement
  *
  * @author anil saldhana
- * @since Jul 17, 2012
+ * @since Jul 10, 2012
  */
-public interface EntitlementsManager {
+public interface Entitlement {
+    String COLON = ":";
+    String COMMA = ",";
+    String OPEN_PAREN = "{";
+    String CLOSE_PAREN = "}";
+
     /**
-     * Entitlement API
+     * JSON Representation
      *
-     * @param resource resource for which we need to check entitlements
-     * @param userContext subject (user/process) that is performing an action on the resource
-     * @return a collection of {@link EntitlementCollection}
+     * @return json representation
      */
-    EntitlementCollection entitlements(Resource resource, UserContext userContext);
+    String json();
 }

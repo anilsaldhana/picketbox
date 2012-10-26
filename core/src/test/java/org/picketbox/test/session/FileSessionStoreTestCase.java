@@ -45,19 +45,19 @@ import org.picketbox.core.session.SessionManager;
  * @since Aug 22, 2012
  */
 public class FileSessionStoreTestCase {
-    
+
     private SessionManager sessionManager;
 
     @Before
     public void onSetup() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        
+
         builder.sessionManager().fileSessionStore();
-        
+
         PicketBoxManager picketBoxManager = new DefaultPicketBoxManager(builder.build());
-        
+
         picketBoxManager.start();
-        
+
         this.sessionManager = picketBoxManager.getSessionManager();
     }
 

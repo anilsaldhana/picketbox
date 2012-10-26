@@ -19,25 +19,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.core.authorization.ent;
+package org.picketbox.core.authorization.ent.impl;
 
-import org.picketbox.core.UserContext;
-import org.picketbox.core.authorization.Resource;
+import org.picketbox.core.authorization.ent.Entitlement;
 
 /**
- * Unlike the {@link AuthorizationManager}, the {@link EntitlementsManager} is used to obtain all the entitlements with one
- * call.
+ * Represents the basic {@link Entitlement}
  *
  * @author anil saldhana
- * @since Jul 17, 2012
+ * @since Oct 24, 2012
  */
-public interface EntitlementsManager {
+public class SimpleEntitlement extends AbstractEntitlement {
+    public static final String SIMPLE = "simple";
+
     /**
-     * Entitlement API
+     * Construct a {@link SimpleEntitlement}
      *
-     * @param resource resource for which we need to check entitlements
-     * @param userContext subject (user/process) that is performing an action on the resource
-     * @return a collection of {@link EntitlementCollection}
+     * @param name
      */
-    EntitlementCollection entitlements(Resource resource, UserContext userContext);
+    public SimpleEntitlement(String name) {
+        this.pair.put(SIMPLE, name);
+    }
+
+    public String getName() {
+        return pair.get(SIMPLE);
+    }
 }

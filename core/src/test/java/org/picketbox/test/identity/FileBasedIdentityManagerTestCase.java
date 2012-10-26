@@ -33,8 +33,10 @@ import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
- * <p>Tests the configuration for the file-based identity store.</p>
- * 
+ * <p>
+ * Tests the configuration for the file-based identity store.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
@@ -43,9 +45,9 @@ public class FileBasedIdentityManagerTestCase extends AbstractDefaultPicketBoxMa
     @Test
     public void testIdentity() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        
+
         builder.identityManager().fileStore();
-        
+
         PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
 
         UserContext subject = new UserContext();
@@ -62,5 +64,5 @@ public class FileBasedIdentityManagerTestCase extends AbstractDefaultPicketBoxMa
         assertTrue(subject.hasRole("admin"));
         assertTrue(subject.hasRole("developer"));
     }
-    
+
 }

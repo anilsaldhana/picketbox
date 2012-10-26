@@ -49,7 +49,9 @@ import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
     /**
-     * <p>Tests is the {@link UserAuthenticatedEvent} is properly handled when the user is successfully authenticated.</p>
+     * <p>
+     * Tests is the {@link UserAuthenticatedEvent} is properly handled when the user is successfully authenticated.
+     * </p>
      *
      * @throws Exception
      */
@@ -93,7 +95,9 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     }
 
     /**
-     * <p>Tests is the {@link UserAuthenticatedEvent} is properly handled when the user authentication fail.</p>
+     * <p>
+     * Tests is the {@link UserAuthenticatedEvent} is properly handled when the user authentication fail.
+     * </p>
      *
      * @throws Exception
      */
@@ -137,7 +141,9 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     }
 
     /**
-     * <p>Tests is the {@link UserLoggedOutEvent} is properly handled when the user is logged out.</p>
+     * <p>
+     * Tests is the {@link UserLoggedOutEvent} is properly handled when the user is logged out.
+     * </p>
      *
      * @throws Exception
      */

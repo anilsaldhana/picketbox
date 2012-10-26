@@ -43,7 +43,7 @@ import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
 
 /**
- * An Application View of the authenticated/authorized Subject
+ * An Application View of the authenticated/authorized User
  *
  * @author anil saldhana
  * @since Jul 12, 2012
@@ -113,8 +113,9 @@ public class UserContext implements Serializable {
     /**
      * @param user the user to set
      */
-    public void setUser(User user) {
+    public UserContext setUser(User user) {
         this.user = user;
+        return this;
     }
 
     /**
@@ -131,8 +132,9 @@ public class UserContext implements Serializable {
      *
      * @param subject
      */
-    public void setSubject(Subject subject) {
+    public UserContext setSubject(Subject subject) {
         this.subject = subject;
+        return this;
     }
 
     /**
@@ -149,8 +151,14 @@ public class UserContext implements Serializable {
      *
      * @param contextData
      */
-    public void setContextData(Map<String, Object> contextData) {
+    public UserContext setContextData(Map<String, Object> contextData) {
         this.contextData = contextData;
+        return this;
+    }
+
+    protected UserContext setAuthenticated(boolean isAuthenticated) {
+        this.authenticated = isAuthenticated;
+        return this;
     }
 
     /**
@@ -169,8 +177,9 @@ public class UserContext implements Serializable {
         return isAuthenticated;
     }
 
-    public void setSession(PicketBoxSession session) {
+    public UserContext setSession(PicketBoxSession session) {
         this.session = session;
+        return this;
     }
 
     public PicketBoxSession getSession() {
@@ -181,8 +190,9 @@ public class UserContext implements Serializable {
         return this.credential;
     }
 
-    public void setCredential(UserCredential credential) {
+    public UserContext setCredential(Credential credential) {
         this.credential = credential;
+        return this;
     }
 
     /**
@@ -244,8 +254,9 @@ public class UserContext implements Serializable {
         return Collections.unmodifiableCollection(roleNames);
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public UserContext setRoles(Collection<Role> roles) {
         this.roles = roles;
+        return this;
     }
 
     @SuppressWarnings("unchecked")
@@ -257,12 +268,40 @@ public class UserContext implements Serializable {
         return Collections.unmodifiableCollection(this.roles);
     }
 
-    protected void setAuthenticationResult(AuthenticationResult result) {
+    /**
+     * Get the group names
+     *
+     * @return
+     */
+    public Collection<String> getGroupNames() {
+        Set<String> groupNames = new HashSet<String>();
+        for (Group userRole : getGroups()) {
+            groupNames.add(userRole.getName());
+        }
+
+        return Collections.unmodifiableCollection(groupNames);
+    }
+
+    public UserContext setGroups(Collection<Group> groups) {
+        this.groups = groups;
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<Group> getGroups() {
+        if (this.groups == null) {
+            this.groups = Collections.EMPTY_LIST;
+        }
+
+        return Collections.unmodifiableCollection(this.groups);
+    }
+
+    protected UserContext setAuthenticationResult(AuthenticationResult result) {
         this.authenticationResult = result;
+        return this;
     }
 
     public AuthenticationResult getAuthenticationResult() {
         return authenticationResult;
     }
-
 }
