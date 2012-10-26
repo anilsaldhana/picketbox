@@ -26,9 +26,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.picketbox.core.identity.impl.EntityManagerContext;
-import org.picketlink.idm.internal.JPAIdentityStore;
-import org.picketlink.idm.internal.jpa.JPACallback;
-import org.picketlink.idm.internal.jpa.JPATemplate;
+import org.picketlink.idm.jpa.schema.internal.JPACallback;
+import org.picketlink.idm.jpa.schema.internal.JPATemplate;
+import org.picketlink.idm.jpa.schema.internal.SimpleJPAIdentityStore;
 import org.picketlink.idm.spi.IdentityStore;
 
 
@@ -54,7 +54,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
      */
     @Override
     public IdentityStore getIdentityStore() {
-        JPAIdentityStore store = new JPAIdentityStore();
+        SimpleJPAIdentityStore store = new SimpleJPAIdentityStore();
 
         if (template == null) {
             this.template = new JPATemplate() {

@@ -25,11 +25,16 @@ package org.picketbox.http.authentication;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.core.util.HTTPDigestUtil;
+import org.picketlink.idm.credential.DigestCredential;
+
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPDigestCredential implements HttpServletCredential {
+public class HTTPDigestCredential extends AbstractUserCredential<DigestCredential> implements HttpServletCredential<DigestCredential> {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -59,5 +64,32 @@ public class HTTPDigestCredential implements HttpServletCredential {
     @Override
     public String getUserName() {
         return this.userName;
+    }
+
+    @Override
+    public DigestCredential getCredential() {
+        // Get the Authorization Header
+        String authorizationHeader = getRequest().getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
+
+        if (authorizationHeader != null && authorizationHeader.isEmpty() == false) {
+            if (authorizationHeader.startsWith(PicketBoxConstants.HTTP_DIGEST)) {
+                authorizationHeader = authorizationHeader.substring(7).trim();
+            }
+
+            String[] tokens = HTTPDigestUtil.quoteTokenize(authorizationHeader);
+
+            int len = tokens.length;
+            if (len == 0) {
+                return null;
+            }
+
+            DigestCredential digest = HTTPDigestUtil.digest(tokens);
+
+            digest.setMethod(getRequest().getMethod());
+
+            return digest;
+        }
+
+        return null;
     }
 }

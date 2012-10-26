@@ -23,16 +23,17 @@
 package org.picketbox.test.config;
 
 import java.io.InputStream;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.credential.X509CertificateCredential;
+import org.picketlink.idm.file.internal.FileBasedIdentityStore;
+import org.picketlink.idm.file.internal.FileUser;
 import org.picketlink.idm.internal.DefaultIdentityManager;
-import org.picketlink.idm.internal.file.FileBasedIdentityStore;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.User;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -47,8 +48,13 @@ public class IdentityManagerInitializer {
         
         IdentityManager identityManager = new DefaultIdentityManager(theStore);
         
-        User jbidTestUser = identityManager.createUser("jbid test");
-        User certUser = identityManager.createUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
+        FileUser jbidTestUser = new FileUser("jbid test");
+        
+        identityManager.createUser(jbidTestUser);
+        
+        FileUser certUser = new FileUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
+        
+        identityManager.createUser(certUser);
         
         InputStream bis = Thread.currentThread().getContextClassLoader().getResourceAsStream("cert/servercert.txt");
 
@@ -57,20 +63,22 @@ public class IdentityManagerInitializer {
         try {
             cf = CertificateFactory.getInstance("X.509");
             X509Certificate cert = (X509Certificate) cf.generateCertificate(bis);
-            identityManager.updateCertificate(jbidTestUser, cert);
-            identityManager.updateCertificate(certUser, cert);
+            identityManager.updateCredential(jbidTestUser, new X509CertificateCredential(cert));
+            identityManager.updateCredential(certUser, new X509CertificateCredential(cert));
             bis.close();
         } catch (Exception e) {
             throw new RuntimeException("Error updating user certificate.", e);
         }
         
-        User adminUser = identityManager.createUser("Aladdin");
+        FileUser adminUser = new FileUser("Aladdin");
+        
+        identityManager.createUser(adminUser);
 
         adminUser.setEmail("Aladdin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Aladdin");
 
-        identityManager.updatePassword(adminUser, "Open Sesame");
+        identityManager.updateCredential(adminUser, new PasswordCredential("Open Sesame"));
 
         Role roleManager = identityManager.createRole("manager");
         Role roleConfidencial = identityManager.createRole("confidencial");

@@ -22,8 +22,6 @@
 
 package org.picketbox.http.resource;
 
-import java.util.Arrays;
-
 import org.picketbox.core.UserContext;
 
 /**

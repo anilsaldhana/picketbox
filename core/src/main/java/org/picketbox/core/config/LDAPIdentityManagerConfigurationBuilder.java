@@ -24,7 +24,7 @@ package org.picketbox.core.config;
 
 import java.util.Properties;
 
-import org.picketlink.idm.internal.config.LDAPConfiguration;
+import org.picketlink.idm.ldap.internal.LDAPConfiguration;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

@@ -22,7 +22,7 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.internal.file.FileBasedIdentityStore;
+import org.picketlink.idm.file.internal.FileBasedIdentityStore;
 import org.picketlink.idm.spi.IdentityStore;
 
 

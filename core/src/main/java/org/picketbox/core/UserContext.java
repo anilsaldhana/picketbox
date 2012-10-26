@@ -68,7 +68,7 @@ public class UserContext implements Serializable {
 
     private transient PicketBoxSession session;
 
-    private transient Credential credential;
+    private transient UserCredential credential;
 
     private AuthenticationResult authenticationResult;
 
@@ -185,11 +185,11 @@ public class UserContext implements Serializable {
         return session;
     }
 
-    public Credential getCredential() {
+    public UserCredential getCredential() {
         return this.credential;
     }
 
-    public void setCredential(Credential credential) {
+    public void setCredential(UserCredential credential) {
         this.credential = credential;
     }
 

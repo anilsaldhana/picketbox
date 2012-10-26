@@ -26,7 +26,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.picketbox.core.Credential;
+import org.picketbox.core.UserCredential;
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationMechanism;
@@ -68,7 +68,7 @@ public class TrustedUsernameAuthenticationMechanism extends AbstractAuthenticati
      * org.picketbox.core.authentication.AuthenticationResult)
      */
     @Override
-    protected Principal doAuthenticate(Credential credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         User user = getIdentityManager().getUser(credential.getUserName());
 
         if (user != null) {

@@ -20,28 +20,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.credential;
+package org.picketbox.core;
 
-import org.picketbox.core.AbstractUserCredential;
+import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>
- * A simple credential for username/password authentication.
+ * This class represents a specific credential type. Eg.: username/password, digest, certificate, security tokens, etc.
+ * </p>
+ * <p>
+ * Each credential type is supported by some mechanism that knows how to get the necessary informations to proceed with the user
+ * authentication.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class UsernamePasswordCredential extends AbstractUserCredential {
+public interface UserCredential<CREDENTIAL extends Credential> {
 
-    private String password;
+    /**
+     * <p>
+     * Returns the username.
+     * </p>
+     *
+     * @return
+     */
+    String getUserName();
 
-    public UsernamePasswordCredential(String userName, String password) {
-        super.setUserName(userName);
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    /**
+     * <p>Returns the user credential.</p>
+     *
+     * @return
+     */
+    CREDENTIAL getCredential();
 }

@@ -25,19 +25,47 @@ package org.picketbox.http.authentication;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.core.util.Base64;
+import org.picketlink.idm.credential.PasswordCredential;
+
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPBasicCredential implements HttpServletCredential {
+public class HTTPBasicCredential extends AbstractUserCredential<PasswordCredential> implements HttpServletCredential<PasswordCredential> {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private String userName;
 
     public HTTPBasicCredential(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+
+        String authorizationHeader = request.getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
+
+        if (authorizationHeader != null) {
+            int whitespaceIndex = authorizationHeader.indexOf(' ');
+
+            if (whitespaceIndex > 0) {
+                String method = authorizationHeader.substring(0, whitespaceIndex);
+
+                if (PicketBoxConstants.HTTP_BASIC.equalsIgnoreCase(method)) {
+                    authorizationHeader = authorizationHeader.substring(whitespaceIndex + 1);
+                    authorizationHeader = new String(Base64.decode(authorizationHeader));
+                    int indexOfColon = authorizationHeader.indexOf(':');
+
+                    if (indexOfColon > 0) {
+                        String username = authorizationHeader.substring(0, indexOfColon);
+                        String password = authorizationHeader.substring(indexOfColon + 1);
+
+                        setUserName(username);
+                        setCredential(new PasswordCredential(password));
+                    }
+                }
+            }
+        }
     }
 
     /* (non-Javadoc)
@@ -56,8 +84,4 @@ public class HTTPBasicCredential implements HttpServletCredential {
         return this.response;
     }
 
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
 }

@@ -35,17 +35,15 @@ import javax.servlet.http.HttpSession;
 
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
-import org.picketbox.core.authentication.DigestHolder;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketbox.core.exceptions.FormatException;
 import org.picketbox.core.nonce.NonceGenerator;
 import org.picketbox.core.nonce.UUIDNonceGenerator;
-import org.picketbox.core.util.HTTPDigestUtil;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPDigestConfiguration;
+import org.picketlink.idm.credential.Credential;
+import org.picketlink.idm.credential.DigestCredential;
 import org.picketlink.idm.model.User;
-import org.picketlink.idm.password.PasswordValidator;
 
 /**
  * Class that handles HTTP/Digest Authentication
@@ -69,14 +67,17 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
      */
     protected ConcurrentMap<String, List<String>> idVersusNonce = new ConcurrentHashMap<String, List<String>>();
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.authentication.AuthenticationMechanism#getAuthenticationInfo()
      */
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
         List<AuthenticationInfo> info = new ArrayList<AuthenticationInfo>();
 
-        info.add(new AuthenticationInfo("HTTP DIGEST Authentication Credential", "Authenticates users using the HTTP DIGEST Authentication scheme.", HTTPDigestCredential.class));
+        info.add(new AuthenticationInfo("HTTP DIGEST Authentication Credential",
+                "Authenticates users using the HTTP DIGEST Authentication scheme.", HTTPDigestCredential.class));
 
         return info;
     }
@@ -115,7 +116,7 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
         INVALID, STALE, VALID
     }
 
-    private NONCE_VALIDATION_RESULT validateNonce(DigestHolder digest, String sessionId) {
+    private NONCE_VALIDATION_RESULT validateNonce(DigestCredential digest, String sessionId) {
         String nonce = digest.getNonce();
 
         List<String> storedNonces = this.idVersusNonce.get(sessionId);
@@ -145,71 +146,46 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected Principal doHTTPAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    protected Principal doHTTPAuthentication(HttpServletCredential<? extends Credential> credential) {
+        HTTPDigestCredential digestCredential = (HTTPDigestCredential) credential;
+
+        HttpServletRequest request = digestCredential.getRequest();
+
         HttpSession session = request.getSession(true);
         String sessionId = session.getId();
 
-        // Get the Authorization Header
-        String authorizationHeader = request.getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
+        DigestCredential digest = digestCredential.getCredential();
 
-        if (authorizationHeader != null && authorizationHeader.isEmpty() == false) {
+        // Pre-verify the client response
+        if (digest.getUsername() == null || digest.getRealm() == null || digest.getNonce() == null || digest.getUri() == null
+                || digest.getClientResponse() == null) {
+            return null;
+        }
 
-            if (authorizationHeader.startsWith(PicketBoxConstants.HTTP_DIGEST)) {
-                authorizationHeader = authorizationHeader.substring(7).trim();
-            }
-            String[] tokens = HTTPDigestUtil.quoteTokenize(authorizationHeader);
+        // Validate Opaque
+        if (digest.getOpaque() != null && digest.getOpaque().equals(getOpaque()) == false) {
+            return null;
+        }
 
-            int len = tokens.length;
-            if (len == 0) {
-                return null;
-            }
+        // Validate realm
+        if (digest.getRealm().equals(getRealmName()) == false) {
+            return null;
+        }
 
-            final DigestHolder digest = HTTPDigestUtil.digest(tokens);
+        // Validate qop
+        if (digest.getQop().equals(this.qop) == false) {
+            return null;
+        }
 
-            // Pre-verify the client response
-            if (digest.getUsername() == null || digest.getRealm() == null || digest.getNonce() == null
-                    || digest.getUri() == null || digest.getClientResponse() == null) {
-                return null;
-            }
+        // Validate the nonce
+        NONCE_VALIDATION_RESULT nonceResult = validateNonce(digest, sessionId);
 
-            // Validate Opaque
-            if (digest.getOpaque() != null && digest.getOpaque().equals(getOpaque()) == false) {
-                return null;
-            }
+        if (nonceResult == NONCE_VALIDATION_RESULT.VALID) {
+            User user = getIdentityManager().getUser(digest.getUsername());
 
-            // Validate realm
-            if (digest.getRealm().equals(getRealmName()) == false) {
-                return null;
-            }
-
-            // Validate qop
-            if (digest.getQop().equals(this.qop) == false) {
-                return null;
-            }
-
-            digest.setRequestMethod(request.getMethod());
-
-            // Validate the nonce
-            NONCE_VALIDATION_RESULT nonceResult = validateNonce(digest, sessionId);
-
-            if (nonceResult == NONCE_VALIDATION_RESULT.VALID) {
-                User user = getIdentityManager().getUser(digest.getUsername());
-
-                if (user != null) {
-                    if (getIdentityManager().validatePassword(user, new PasswordValidator() {
-
-                        @Override
-                        public boolean validate(String userPassword) {
-                            try {
-                                return HTTPDigestUtil.matchCredential(digest, userPassword.toCharArray());
-                            } catch (FormatException e) {
-                                throw new RuntimeException("Error validating digest credential.", e);
-                            }
-                        }
-
-                    })) {
-                        return new PicketBoxPrincipal(digest.getUsername());
-                    }
+            if (user != null) {
+                if (getIdentityManager().validateCredential(user, digest)) {
+                    return new PicketBoxPrincipal(digest.getUsername());
                 }
             }
         }
@@ -253,7 +229,9 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.http.authentication.AbstractHTTPAuthentication#getRealmName()
      */
     @Override

@@ -152,14 +152,14 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     }
 
     /**
-     * <p>Performs the authentication using the provided {@link Credential}.</p>
+     * <p>Performs the authentication using the provided {@link UserCredential}.</p>
      *
      * @param subject
      * @return
      * @throws AuthenticationException
      */
     private void performAuthentication(UserContext subject) throws AuthenticationException {
-        Credential credential = subject.getCredential();
+        UserCredential credential = subject.getCredential();
 
         if (credential == null) {
             throw PicketBoxMessages.MESSAGES.failedToValidateCredentials();

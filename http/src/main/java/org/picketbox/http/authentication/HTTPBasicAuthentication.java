@@ -32,7 +32,6 @@ import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketbox.core.util.Base64;
 import org.picketlink.idm.model.User;
 
 /**
@@ -79,29 +78,16 @@ public class HTTPBasicAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected PicketBoxPrincipal doHTTPAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String authorizationHeader = getAuthorizationHeader(request);
+    protected PicketBoxPrincipal doHTTPAuthentication(HttpServletCredential<?> credential) {
+        HTTPBasicCredential basicCredential = (HTTPBasicCredential) credential;
 
-        int whitespaceIndex = authorizationHeader.indexOf(' ');
+        if (basicCredential.getCredential() != null) {
+            String username = basicCredential.getUserName();
 
-        if (whitespaceIndex > 0) {
-            String method = authorizationHeader.substring(0, whitespaceIndex);
+            User user = getIdentityManager().getUser(username);
 
-            if (PicketBoxConstants.HTTP_BASIC.equalsIgnoreCase(method)) {
-                authorizationHeader = authorizationHeader.substring(whitespaceIndex + 1);
-                authorizationHeader = new String(Base64.decode(authorizationHeader));
-                int indexOfColon = authorizationHeader.indexOf(':');
-
-                if (indexOfColon > 0) {
-                    String username = authorizationHeader.substring(0, indexOfColon);
-                    String password = authorizationHeader.substring(indexOfColon + 1);
-
-                    User user = getIdentityManager().getUser(username);
-
-                    if (user != null && getIdentityManager().validatePassword(user, password)) {
-                        return new PicketBoxPrincipal(username);
-                    }
-                }
+            if (user != null && getIdentityManager().validateCredential(user, basicCredential.getCredential())) {
+                return new PicketBoxPrincipal(username);
             }
         }
 

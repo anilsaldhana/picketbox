@@ -22,9 +22,8 @@
 
 package org.picketbox.core.authentication.credential;
 
-import java.security.cert.X509Certificate;
-
-import org.picketbox.core.AbstractCredential;
+import org.picketbox.core.AbstractUserCredential;
+import org.picketlink.idm.credential.X509CertificateCredential;
 
 /**
  * <p>
@@ -34,15 +33,10 @@ import org.picketbox.core.AbstractCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class CertificateCredential extends AbstractCredential {
+public class CertificateCredential extends AbstractUserCredential<X509CertificateCredential> {
 
-    private X509Certificate[] certificates;
-
-    public CertificateCredential(X509Certificate[] certificates) {
-        this.certificates = certificates;
+    public CertificateCredential(X509CertificateCredential credential) {
+        super(credential);
     }
 
-    public X509Certificate[] getCertificates() {
-        return certificates;
-    }
 }

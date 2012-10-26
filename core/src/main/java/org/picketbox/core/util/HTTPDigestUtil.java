@@ -21,16 +21,9 @@
  */
 package org.picketbox.core.util;
 
-import static org.picketbox.core.authentication.PicketBoxConstants.UTF8;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import org.picketbox.core.PicketBoxMessages;
-import org.picketbox.core.authentication.DigestHolder;
-import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketbox.core.exceptions.FormatException;
+import org.picketlink.idm.credential.DigestCredential;
+import org.picketlink.idm.credential.DigestCredentialUtil;
 
 /**
  * Utility class to support HTTP Digest Authentication
@@ -95,7 +88,7 @@ public class HTTPDigestUtil {
      * @param tokens
      * @return
      */
-    public static DigestHolder digest(String[] tokens) {
+    public static DigestCredential digest(String[] tokens) {
         String username = null, realm = null, nonce = null, uri = null, qop = null, nc = null, cnonce = null, clientResponse = null, opaque = null, domain = null, stale = "false";
 
         int len = tokens.length;
@@ -128,7 +121,7 @@ public class HTTPDigestUtil {
             }
         }
         // Construct a digest holder
-        DigestHolder digestHolder = new DigestHolder();
+        DigestCredential digestHolder = new DigestCredential();
         digestHolder.setUsername(username).setRealm(realm).setNonce(nonce).setUri(uri).setQop(qop).setNc(nc).setCnonce(cnonce)
                 .setClientResponse(clientResponse).setOpaque(opaque);
 
@@ -137,107 +130,8 @@ public class HTTPDigestUtil {
         return digestHolder;
     }
 
-    /**
-     * Determine the message digest
-     *
-     * @param str
-     * @return
-     * @throws FormatException
-     */
-    public static byte[] md5(String str) throws FormatException {
-        try {
-            MessageDigest md = MessageDigest.getInstance(PicketBoxConstants.MD5);
-            return md.digest(str.getBytes(UTF8));
-        } catch (NoSuchAlgorithmException e) {
-            throw new FormatException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new FormatException(e);
-        }
+    public static String clientResponseValue(DigestCredential digest, char[] password) {
+        return DigestCredentialUtil.clientResponseValue(digest, password);
     }
 
-    /**
-     * Given the digest, construct the client response value
-     *
-     * @param digest
-     * @param password
-     * @return
-     * @throws FormatException
-     */
-    public static String clientResponseValue(DigestHolder digest, char[] password) throws FormatException {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance(PicketBoxConstants.MD5);
-            byte[] ha1;
-            // A1 digest
-            messageDigest.update(digest.getUsername().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(digest.getRealm().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(new String(password).getBytes(UTF8));
-            ha1 = messageDigest.digest();
-
-            // A2 digest
-            messageDigest.reset();
-            messageDigest.update(digest.getRequestMethod().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(digest.getUri().getBytes(UTF8));
-            byte[] ha2 = messageDigest.digest();
-
-            messageDigest.update(convertBytesToHex(ha1).getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(digest.getNonce().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(digest.getNc().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(digest.getCnonce().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(digest.getQop().getBytes(UTF8));
-            messageDigest.update((byte) ':');
-            messageDigest.update(convertBytesToHex(ha2).getBytes(UTF8));
-            byte[] digestedValue = messageDigest.digest();
-
-            return convertBytesToHex(digestedValue);
-        } catch (NoSuchAlgorithmException e) {
-            throw new FormatException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new FormatException(e);
-        }
-    }
-
-    /**
-     * Match the Client Response value with a generated digest based on the password
-     *
-     * @param digest
-     * @param password
-     * @return
-     * @throws FormatException
-     */
-    public static boolean matchCredential(DigestHolder digest, char[] password) throws FormatException {
-        return clientResponseValue(digest, password).equalsIgnoreCase(digest.getClientResponse());
-    }
-
-    /**
-     * Convert a byte array to hex
-     *
-     * @param bytes
-     * @return
-     */
-    public static String convertBytesToHex(byte[] bytes) {
-        int base = 16;
-
-        int ALL_ON = 0xff;
-
-        StringBuilder buf = new StringBuilder();
-        for (byte byteValue : bytes) {
-            int bit = ALL_ON & byteValue;
-            int c = '0' + (bit / base) % base;
-            if (c > '9')
-                c = 'a' + (c - '0' - 10);
-            buf.append((char) c);
-            c = '0' + bit % base;
-            if (c > '9')
-                c = 'a' + (c - '0' - 10);
-            buf.append((char) c);
-        }
-        return buf.toString();
-    }
 }

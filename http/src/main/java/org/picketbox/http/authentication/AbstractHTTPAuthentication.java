@@ -30,15 +30,16 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.picketbox.core.Credential;
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.UserContext;
+import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
+import org.picketlink.idm.credential.Credential;
 
 /**
  * Base class for all the HTTP authentication schemes
@@ -105,12 +106,12 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
      * @see org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism#doAuthenticate(org.picketbox.core.Credential, org.picketbox.core.authentication.AuthenticationResult)
      */
     @Override
-    protected Principal doAuthenticate(Credential credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential<? extends Credential> credential, AuthenticationResult result) throws AuthenticationException {
         if (!(credential instanceof HttpServletCredential)) {
             throw PicketBoxMessages.MESSAGES.unexpectedCredentialType(credential, HttpServletCredential.class);
         }
 
-        HttpServletCredential httpCredential = (HttpServletCredential) credential;
+        HttpServletCredential<? extends Credential> httpCredential = (HttpServletCredential<? extends Credential>) credential;
 
         HttpServletRequest request = httpCredential.getRequest();
         HttpServletResponse response = httpCredential.getResponse();
@@ -133,7 +134,7 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
             return null;
         }
 
-        Principal authenticatedPrincipal = performAuthentication(request, response);
+        Principal authenticatedPrincipal = performAuthentication(httpCredential);
 
         if (authenticatedPrincipal == null) {
             result.setStatus(AuthenticationStatus.INVALID_CREDENTIALS);
@@ -144,10 +145,13 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
 
     protected abstract boolean isAuthenticationRequest(HttpServletRequest request);
 
-    protected Principal performAuthentication(HttpServletRequest request, HttpServletResponse response)
+    protected Principal performAuthentication(HttpServletCredential<? extends Credential> credential)
             throws AuthenticationException {
 
-        Principal principal = doHTTPAuthentication(request, response);
+        Principal principal = doHTTPAuthentication(credential);
+
+        HttpServletRequest request = credential.getRequest();
+        HttpServletResponse response = credential.getResponse();
 
         if (principal == null) {
             sendErrorPage(request, response);
@@ -175,7 +179,7 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
         return principal;
     }
 
-    protected abstract Principal doHTTPAuthentication(HttpServletRequest request, HttpServletResponse response);
+    protected abstract Principal doHTTPAuthentication(HttpServletCredential<? extends Credential> credential);
 
     protected abstract void challengeClient(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException;
