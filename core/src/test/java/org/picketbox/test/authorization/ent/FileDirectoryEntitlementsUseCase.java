@@ -159,16 +159,6 @@ public class FileDirectoryEntitlementsUseCase {
         public FileResource(String name) {
             super(name);
         }
-
-        @Override
-        public boolean isAuthorized() {
-            return false;
-        }
-
-        @Override
-        public void setAuthorized(boolean authorize) {
-        }
-
     }
 
     public static class DirResource extends FileResource implements Resource {
@@ -187,15 +177,6 @@ public class FileDirectoryEntitlementsUseCase {
         public DirResource add(List<FileResource> files) {
             this.files.addAll(files);
             return this;
-        }
-
-        @Override
-        public boolean isAuthorized() {
-            return false;
-        }
-
-        @Override
-        public void setAuthorized(boolean authorize) {
         }
     }
 }
