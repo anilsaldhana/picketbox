@@ -44,7 +44,9 @@ public class DefaultUserContextPopulator implements UserContextPopulator {
         this.identityManager = identityManager;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.identity.UserContextPopulator#getIdentity(org.picketbox.core.UserContext)
      */
     @Override

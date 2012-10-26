@@ -43,7 +43,7 @@ import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
 
 /**
- * An Application View of the authenticated/authorized Subject
+ * An Application View of the authenticated/authorized User
  *
  * @author anil saldhana
  * @since Jul 12, 2012
@@ -58,7 +58,7 @@ public class UserContext implements Serializable {
     @SuppressWarnings("unchecked")
     private Collection<Role> roles = Collections.EMPTY_LIST;
 
-    @SuppressWarnings({ "unused", "unchecked" })
+    @SuppressWarnings("unchecked")
     private Collection<Group> groups = Collections.EMPTY_LIST;
 
     protected transient Map<String, Object> contextData = new HashMap<String, Object>();
@@ -103,8 +103,6 @@ public class UserContext implements Serializable {
         return this.authenticationResult != null ? this.authenticationResult.getPrincipal() : null;
     }
 
-
-
     /**
      * @return the user
      */
@@ -115,8 +113,9 @@ public class UserContext implements Serializable {
     /**
      * @param user the user to set
      */
-    public void setUser(User user) {
+    public UserContext setUser(User user) {
         this.user = user;
+        return this;
     }
 
     /**
@@ -133,8 +132,9 @@ public class UserContext implements Serializable {
      *
      * @param subject
      */
-    public void setSubject(Subject subject) {
+    public UserContext setSubject(Subject subject) {
         this.subject = subject;
+        return this;
     }
 
     /**
@@ -151,15 +151,17 @@ public class UserContext implements Serializable {
      *
      * @param contextData
      */
-    public void setContextData(Map<String, Object> contextData) {
+    public UserContext setContextData(Map<String, Object> contextData) {
         this.contextData = contextData;
+        return this;
     }
 
     /**
      * @return
      */
     public boolean isAuthenticated() {
-        boolean isAuthenticated = this.authenticationResult != null && this.authenticationResult.getStatus().equals(AuthenticationStatus.SUCCESS);
+        boolean isAuthenticated = this.authenticationResult != null
+                && this.authenticationResult.getStatus().equals(AuthenticationStatus.SUCCESS);
 
         if (isAuthenticated) {
             if (session != null && !session.isValid()) {
@@ -170,8 +172,9 @@ public class UserContext implements Serializable {
         return isAuthenticated;
     }
 
-    public void setSession(PicketBoxSession session) {
+    public UserContext setSession(PicketBoxSession session) {
         this.session = session;
+        return this;
     }
 
     public PicketBoxSession getSession() {
@@ -182,12 +185,15 @@ public class UserContext implements Serializable {
         return this.credential;
     }
 
-    public void setCredential(UserCredential credential) {
+    public UserContext setCredential(UserCredential credential) {
         this.credential = credential;
+        return this;
     }
 
     /**
-     * <p>Invalidate the instance and clear its state.</p>
+     * <p>
+     * Invalidate the instance and clear its state.
+     * </p>
      */
     public void invalidate() {
         this.credential = null;
@@ -208,7 +214,9 @@ public class UserContext implements Serializable {
     }
 
     /**
-     * <p>Checks if this subject has the specified role.</p>
+     * <p>
+     * Checks if this subject has the specified role.
+     * </p>
      *
      * @param role
      * @return
@@ -218,7 +226,7 @@ public class UserContext implements Serializable {
             throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
 
-        for (Role userRole: getRoles()) {
+        for (Role userRole : getRoles()) {
             if (role.equals(userRole.getName())) {
                 return true;
             }
@@ -234,15 +242,16 @@ public class UserContext implements Serializable {
      */
     public Collection<String> getRoleNames() {
         Set<String> roleNames = new HashSet<String>();
-        for (Role userRole: getRoles()) {
+        for (Role userRole : getRoles()) {
             roleNames.add(userRole.getName());
         }
 
         return Collections.unmodifiableCollection(roleNames);
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public UserContext setRoles(Collection<Role> roles) {
         this.roles = roles;
+        return this;
     }
 
     @SuppressWarnings("unchecked")
@@ -254,12 +263,40 @@ public class UserContext implements Serializable {
         return Collections.unmodifiableCollection(this.roles);
     }
 
-    protected void setAuthenticationResult(AuthenticationResult result) {
+    /**
+     * Get the group names
+     *
+     * @return
+     */
+    public Collection<String> getGroupNames() {
+        Set<String> groupNames = new HashSet<String>();
+        for (Group userRole : getGroups()) {
+            groupNames.add(userRole.getName());
+        }
+
+        return Collections.unmodifiableCollection(groupNames);
+    }
+
+    public UserContext setGroups(Collection<Group> groups) {
+        this.groups = groups;
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<Group> getGroups() {
+        if (this.groups == null) {
+            this.groups = Collections.EMPTY_LIST;
+        }
+
+        return Collections.unmodifiableCollection(this.groups);
+    }
+
+    protected UserContext setAuthenticationResult(AuthenticationResult result) {
         this.authenticationResult = result;
+        return this;
     }
 
     public AuthenticationResult getAuthenticationResult() {
         return authenticationResult;
     }
-
 }

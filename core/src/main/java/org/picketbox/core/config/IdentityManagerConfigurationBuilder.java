@@ -86,7 +86,6 @@ public class IdentityManagerConfigurationBuilder extends AbstractConfigurationBu
         return this.fileIdentityManagerManager;
     }
 
-
     @Override
     public GlobalIdentityManagerConfiguration doBuild() {
         return new GlobalIdentityManagerConfiguration(this.identityManagerBuilder.build(), this.userPopulator);

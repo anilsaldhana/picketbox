@@ -19,35 +19,24 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
-package org.picketbox.core.config;
-
-import org.picketlink.idm.jpa.schema.internal.JPATemplate;
+package org.picketbox.core.authorization.ent;
 
 /**
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ * Interface to indicate an entitlement
  *
+ * @author anil saldhana
+ * @since Jul 10, 2012
  */
-public class JPAIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<JPAIdentityManagerConfiguration> {
+public interface Entitlement {
+    String COLON = ":";
+    String COMMA = ",";
+    String OPEN_PAREN = "{";
+    String CLOSE_PAREN = "}";
 
-    private JPAIdentityManagerConfiguration configuration = new JPAIdentityManagerConfiguration();
-
-    public JPAIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
-        super(identityManagerConfigurationBuilder);
-    }
-
-    public JPAIdentityManagerConfigurationBuilder template(JPATemplate template) {
-        this.configuration.setTemplate(template);
-        return this;
-    }
-
-    @Override
-    protected void setDefaults() {
-    }
-
-    @Override
-    protected JPAIdentityManagerConfiguration doBuild() {
-        return this.configuration;
-    }
-
+    /**
+     * JSON Representation
+     *
+     * @return json representation
+     */
+    String json();
 }

@@ -68,7 +68,9 @@ public enum AuthenticationStatus {
     NONE,
 
     /**
-     * <p>This enum means that the authentication info for the user was replicated.</p>
+     * <p>
+     * This enum means that the authentication info for the user was replicated.
+     * </p>
      */
     REPLICATED
 

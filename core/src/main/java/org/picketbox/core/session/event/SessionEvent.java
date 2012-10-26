@@ -25,7 +25,6 @@ package org.picketbox.core.session.event;
 import org.picketbox.core.event.PicketBoxEvent;
 import org.picketbox.core.session.PicketBoxSession;
 
-
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

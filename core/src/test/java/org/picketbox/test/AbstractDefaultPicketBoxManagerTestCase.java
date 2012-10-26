@@ -36,9 +36,9 @@ import org.picketlink.idm.model.Role;
  * Base class for test cases that allows to create a fresh {@link PicketBoxManager} instance using some specific
  * {@link PicketBoxConfiguration}. This class also initializes the identity store with the default user information.
  * </p>
- * 
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  */
 public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
@@ -55,8 +55,10 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
     }
 
     /**
-     * <p>Initializes the identity manager store with users information.</p>
-     * 
+     * <p>
+     * Initializes the identity manager store with users information.
+     * </p>
+     *
      * @param identityManager
      */
     private void initialize(IdentityManager identityManager) {

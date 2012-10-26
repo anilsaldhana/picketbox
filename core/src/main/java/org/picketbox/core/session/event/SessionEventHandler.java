@@ -26,7 +26,9 @@ import org.picketbox.core.event.PicketBoxEventHandler;
 import org.picketbox.core.session.PicketBoxSession;
 
 /**
- * <p> {@link PicketBoxEventHandler} that handle {@link PicketBoxSession} related events.</p>
+ * <p>
+ * {@link PicketBoxEventHandler} that handle {@link PicketBoxSession} related events.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
@@ -34,14 +36,18 @@ import org.picketbox.core.session.PicketBoxSession;
 public interface SessionEventHandler extends PicketBoxEventHandler {
 
     /**
-     * <p>Handles the specified {@link SessionEvent} when a session is created.</p>
+     * <p>
+     * Handles the specified {@link SessionEvent} when a session is created.
+     * </p>
      *
      * @param sessionEvent
      */
     void onCreate(SessionEvent sessionEvent);
 
     /**
-     * <p>Handles the specified {@link SessionEvent} when an attribute is updated.</p>
+     * <p>
+     * Handles the specified {@link SessionEvent} when an attribute is updated.
+     * </p>
      *
      * @param sessionEvent
      * @param key
@@ -50,7 +56,9 @@ public interface SessionEventHandler extends PicketBoxEventHandler {
     void onSetAttribute(SessionEvent sessionEvent, String key, Object val);
 
     /**
-     * <p>Handles the specified {@link SessionEvent} when an attribute is requested.</p>
+     * <p>
+     * Handles the specified {@link SessionEvent} when an attribute is requested.
+     * </p>
      *
      * @param sessionEvent
      * @param key
@@ -58,14 +66,18 @@ public interface SessionEventHandler extends PicketBoxEventHandler {
     void onGetAttribute(SessionEvent sessionEvent, String key);
 
     /**
-     * <p>Handles the specified {@link SessionEvent} when the session is invalidated.</p>
+     * <p>
+     * Handles the specified {@link SessionEvent} when the session is invalidated.
+     * </p>
      *
      * @param sessionEvent
      */
     void onInvalidate(SessionEvent sessionEvent);
 
     /**
-     * <p>Handles the specified {@link SessionEvent} when the session is expired.</p>
+     * <p>
+     * Handles the specified {@link SessionEvent} when the session is expired.
+     * </p>
      *
      * @param sessionEvent
      */

@@ -36,17 +36,8 @@ public interface EntitlementsManager {
      * Entitlement API
      *
      * @param resource resource for which we need to check entitlements
-     * @param subject subject (user/process) that is performing an action on the resource
-     * @return
+     * @param userContext subject (user/process) that is performing an action on the resource
+     * @return a collection of {@link EntitlementCollection}
      */
-    Entitlement[] entitlements(Resource resource, UserContext subject);
-
-    /**
-     * Marker interface to indicate an entitlement
-     *
-     * @author anil saldhana
-     * @since Jul 10, 2012
-     */
-    public interface Entitlement {
-    }
+    EntitlementCollection entitlements(Resource resource, UserContext userContext);
 }

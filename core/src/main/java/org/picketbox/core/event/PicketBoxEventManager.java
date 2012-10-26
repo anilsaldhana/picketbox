@@ -22,8 +22,6 @@
 
 package org.picketbox.core.event;
 
-
-
 /**
  * <p>
  * Authentication event managers are responsible for handle specific authentication events during the authentication.
@@ -44,7 +42,9 @@ public interface PicketBoxEventManager {
     void raiseEvent(PicketBoxEvent<? extends PicketBoxEventHandler> event);
 
     /**
-     * <p>Adds a {@link PicketBoxEventHandler}.</p>
+     * <p>
+     * Adds a {@link PicketBoxEventHandler}.
+     * </p>
      *
      * @param defaultSessionEventHandler
      */
