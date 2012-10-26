@@ -44,6 +44,7 @@ import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionManager;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.internal.DefaultIdentityManager;
+import org.picketlink.idm.spi.IdentityStore;
 
 /**
  * <p>
@@ -279,34 +280,23 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     protected void doStart() {
         this.eventManager = this.configuration.getEventManager().getEventManager();
 
-        PicketBoxLogger.LOGGER.debugInstanceUsage("Event Manager", this.eventManager);
-
         if (this.configuration != null) {
-            this.authenticationProvider = new PicketBoxAuthenticationProvider(this, this.configuration);
-
-            PicketBoxLogger.LOGGER.debugInstanceUsage("Authentication Provider", this.authenticationProvider);
+            this.authenticationProvider = new PicketBoxAuthenticationProvider(this);
 
             if (!this.configuration.getAuthorization().getManagers().isEmpty()) {
                 this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
-                PicketBoxLogger.LOGGER.debugInstanceUsage("Authorization Manager", this.authorizationManager);
             }
 
-            this.identityManager = new DefaultIdentityManager(this.configuration.getIdentityManager()
-                    .getIdentityManagerConfiguration().getIdentityStore());
-
-            PicketBoxLogger.LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
+            IdentityStore identityStore = this.configuration.getIdentityManager()
+                    .getIdentityManagerConfiguration().getIdentityStore();
+            this.identityManager = new DefaultIdentityManager(identityStore);
 
             this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
-
             if (this.userContextPopulator == null) {
                 this.userContextPopulator = new DefaultUserContextPopulator(this.identityManager);
             }
 
-            PicketBoxLogger.LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
-
             this.sessionManager = this.configuration.getSessionManager().getManager();
-
-            PicketBoxLogger.LOGGER.debugInstanceUsage("Session Manager", this.sessionManager);
 
             if (this.sessionManager == null && this.configuration.getSessionManager().getStore() != null) {
                 this.sessionManager = new DefaultSessionManager(this);
@@ -319,13 +309,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             doConfigure();
         }
 
-        if (this.authorizationManager != null) {
-            PicketBoxLogger.LOGGER.debug("Using Authorization Manager : " + this.authorizationManager.getClass().getName());
-        }
-
-        if (this.userContextPopulator != null) {
-            PicketBoxLogger.LOGGER.debug("Using User Context Populator : " + this.userContextPopulator.getClass().getName());
-        }
+        logConfiguration();
 
         PicketBoxLogger.LOGGER.startingPicketBox();
 
@@ -334,6 +318,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         }
     }
 
+    /**
+     * <p>Subclasses can override this method to provide some additional processing before the startup.</p>
+     */
     protected void doConfigure() {
 
     }
@@ -392,4 +379,35 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         this.sessionManager = sessionManager;
     }
 
+    /**
+     * <p>Helper method to log the configuration.</p>
+     */
+    private void logConfiguration() {
+        PicketBoxLogger.LOGGER.debugInstanceUsage("Event Manager", this.eventManager);
+
+        PicketBoxLogger.LOGGER.debugInstanceUsage("Authentication Provider", this.authenticationProvider);
+
+        if (PicketBoxLogger.LOGGER.isDebugEnabled()) {
+            String[] supportedMechanisms = this.authenticationProvider.getSupportedMechanisms();
+
+            for (String string : supportedMechanisms) {
+                PicketBoxLogger.LOGGER.debug(" Authentication Mechanism: " + string);
+            }
+        }
+
+        PicketBoxLogger.LOGGER.debugInstanceUsage("Authorization Manager", this.authorizationManager);
+
+        PicketBoxLogger.LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
+        PicketBoxLogger.LOGGER.debugInstanceUsage(" Identity Store", this.configuration.getIdentityManager()
+                .getIdentityManagerConfiguration().getIdentityStore());
+
+        PicketBoxLogger.LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
+
+        if (this.sessionManager != null) {
+            PicketBoxLogger.LOGGER.debugInstanceUsage("Session Manager", this.sessionManager);
+            PicketBoxLogger.LOGGER.debugInstanceUsage(" Session Store", this.configuration.getSessionManager().getStore());
+        } else {
+            PicketBoxLogger.LOGGER.debug("Session Management is DISABLED.");
+        }
+    }
 }

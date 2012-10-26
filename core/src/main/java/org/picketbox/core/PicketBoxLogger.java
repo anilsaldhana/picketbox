@@ -27,7 +27,6 @@ import org.jboss.logging.LogMessage;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Message;
 import org.jboss.logging.MessageLogger;
-import org.picketbox.core.event.PicketBoxEventManager;
 
 /**
  * An subclass of {@link BasicLogger} from JBoss Logging

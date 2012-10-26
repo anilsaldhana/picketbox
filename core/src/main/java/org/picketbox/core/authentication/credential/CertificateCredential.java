@@ -33,7 +33,7 @@ import org.picketlink.idm.credential.X509CertificateCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class CertificateCredential extends AbstractUserCredential<X509CertificateCredential> {
+public class CertificateCredential extends AbstractUserCredential {
 
     public CertificateCredential(X509CertificateCredential credential) {
         super(credential);

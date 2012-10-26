@@ -34,7 +34,7 @@ import org.picketlink.idm.credential.DigestCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPDigestCredential extends AbstractUserCredential<DigestCredential> implements HttpServletCredential<DigestCredential> {
+public class HTTPDigestCredential extends AbstractUserCredential implements HttpServletCredential {
 
     private HttpServletRequest request;
     private HttpServletResponse response;

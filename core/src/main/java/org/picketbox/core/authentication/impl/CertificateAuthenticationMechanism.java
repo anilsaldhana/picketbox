@@ -45,11 +45,6 @@ import org.picketlink.idm.model.User;
  */
 public class CertificateAuthenticationMechanism extends AbstractAuthenticationMechanism {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.api.AuthenticationService#getAuthenticationInfo()
-     */
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
         List<AuthenticationInfo> arrayList = new ArrayList<AuthenticationInfo>();
@@ -61,14 +56,8 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism#doAuthenticate(org.picketbox.core.Credential,
-     * org.picketbox.core.authentication.AuthenticationResult)
-     */
     @Override
-    protected Principal doAuthenticate(UserCredential<?> credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         boolean isValidCredential = false;
 
         User user = getIdentityManager().getUser(credential.getUserName());

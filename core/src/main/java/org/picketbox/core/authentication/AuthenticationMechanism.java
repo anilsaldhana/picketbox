@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.picketbox.core.UserCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>
@@ -50,7 +49,7 @@ public interface AuthenticationMechanism {
      * @param handlerClass
      * @return
      */
-    boolean supports(UserCredential<? extends Credential> credential);
+    boolean supports(UserCredential credential);
 
     /**
      * <p>
@@ -72,6 +71,6 @@ public interface AuthenticationMechanism {
      * @return
      * @throws AuthenticationException
      */
-    AuthenticationResult authenticate(UserCredential<? extends Credential> credential) throws AuthenticationException;
+    AuthenticationResult authenticate(UserCredential credential) throws AuthenticationException;
 
 }

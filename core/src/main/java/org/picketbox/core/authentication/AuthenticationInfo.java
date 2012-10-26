@@ -23,7 +23,6 @@
 package org.picketbox.core.authentication;
 
 import org.picketbox.core.UserCredential;
-import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>
@@ -84,7 +83,7 @@ public class AuthenticationInfo {
     /**
      * @param implementation the implementation to set
      */
-    public void setImplementation(Class<? extends UserCredential<? extends Credential>> implementation) {
+    public void setImplementation(Class<? extends UserCredential> implementation) {
         this.implementation = implementation;
     }
 

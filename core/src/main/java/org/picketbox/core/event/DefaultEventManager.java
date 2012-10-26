@@ -66,7 +66,6 @@ public class DefaultEventManager implements PicketBoxEventManager {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public void addHandler(PicketBoxEventHandler handler) {
         if (!this.observers.containsKey(handler.getEventType())) {
             this.observers.put(handler.getEventType(), new ArrayList<PicketBoxEventHandler>());
