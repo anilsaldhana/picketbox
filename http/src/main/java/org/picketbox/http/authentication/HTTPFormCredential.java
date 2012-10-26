@@ -33,7 +33,7 @@ import org.picketlink.idm.credential.PasswordCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPFormCredential extends AbstractUserCredential<PasswordCredential> implements HttpServletCredential<PasswordCredential> {
+public class HTTPFormCredential extends AbstractUserCredential implements HttpServletCredential {
 
     private HttpServletRequest request;
     private HttpServletResponse response;

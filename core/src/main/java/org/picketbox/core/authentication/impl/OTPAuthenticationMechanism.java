@@ -63,19 +63,13 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
         return info;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism#doAuthenticate(org.picketbox.core.authentication
-     * .AuthenticationManager, org.picketbox.core.Credential, org.picketbox.core.authentication.AuthenticationResult)
-     */
     @Override
-    protected Principal doAuthenticate(UserCredential<?> credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         OTPCredential otpCredential = (OTPCredential) credential;
+        PasswordCredential passwordCredential = (PasswordCredential) otpCredential.getCredential();
 
         String username = otpCredential.getUserName();
-        String pass = otpCredential.getPassword();
+        String pass = passwordCredential.getPassword();
         String otp = otpCredential.getOtp();
 
         Principal principal = null;
@@ -90,12 +84,12 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
                 String seed = user.getAttribute("serial");
                 if (seed != null) {
                     try {
-                        if (algorithm.equals(TimeBasedOTP.HMAC_SHA1)) {
-                            validation = TimeBasedOTPUtil.validate(otp, seed.getBytes(), NUMBER_OF_DIGITS);
-                        } else if (algorithm.equals(TimeBasedOTP.HMAC_SHA256)) {
-                            validation = TimeBasedOTPUtil.validate256(otp, seed.getBytes(), NUMBER_OF_DIGITS);
-                        } else if (algorithm.equals(TimeBasedOTP.HMAC_SHA512)) {
-                            validation = TimeBasedOTPUtil.validate512(otp, seed.getBytes(), NUMBER_OF_DIGITS);
+                        if (this.algorithm.equals(TimeBasedOTP.HMAC_SHA1)) {
+                            validation = TimeBasedOTPUtil.validate(otp, seed.getBytes(), this.NUMBER_OF_DIGITS);
+                        } else if (this.algorithm.equals(TimeBasedOTP.HMAC_SHA256)) {
+                            validation = TimeBasedOTPUtil.validate256(otp, seed.getBytes(), this.NUMBER_OF_DIGITS);
+                        } else if (this.algorithm.equals(TimeBasedOTP.HMAC_SHA512)) {
+                            validation = TimeBasedOTPUtil.validate512(otp, seed.getBytes(), this.NUMBER_OF_DIGITS);
                         }
                     } catch (GeneralSecurityException e) {
                         throw new AuthenticationException(e);

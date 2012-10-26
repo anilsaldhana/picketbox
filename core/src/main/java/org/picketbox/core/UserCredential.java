@@ -36,7 +36,7 @@ import org.picketlink.idm.credential.Credential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public interface UserCredential<CREDENTIAL extends Credential> {
+public interface UserCredential {
 
     /**
      * <p>
@@ -52,5 +52,5 @@ public interface UserCredential<CREDENTIAL extends Credential> {
      *
      * @return
      */
-    CREDENTIAL getCredential();
+    Credential getCredential();
 }

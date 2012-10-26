@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.UserCredential;
-import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>{@link UserCredential} interface for HTTP authentication schemes.</p>
@@ -34,7 +33,7 @@ import org.picketlink.idm.credential.Credential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public interface HttpServletCredential<CREDENTIAL extends Credential> extends UserCredential<CREDENTIAL> {
+public interface HttpServletCredential extends UserCredential {
 
     /**
      * <p>Returns the {@link HttpServletRequest}.</p>

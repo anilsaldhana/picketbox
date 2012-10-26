@@ -50,7 +50,7 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
     }
 
     @Override
-    public boolean supports(UserCredential<? extends Credential> credential) {
+    public boolean supports(UserCredential credential) {
         List<AuthenticationInfo> authenticationInfo = getAuthenticationInfo();
 
         for (AuthenticationInfo callbackInfo : authenticationInfo) {
@@ -63,11 +63,18 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
     }
 
     @Override
-    public AuthenticationResult authenticate(UserCredential<? extends Credential> credential) throws AuthenticationException {
+    public AuthenticationResult authenticate(UserCredential credential) throws AuthenticationException {
         return performAuthentication(credential);
     }
 
-    protected AuthenticationResult performAuthentication(UserCredential<? extends Credential> credential) throws AuthenticationException {
+    /**
+     * <p>Performs the authentication workflow given the specified {@link Credential}.</p>
+     *
+     * @param credential
+     * @return
+     * @throws AuthenticationException
+     */
+    protected AuthenticationResult performAuthentication(UserCredential credential) throws AuthenticationException {
         Principal principal = null;
         AuthenticationResult result = new AuthenticationResult();
 
@@ -90,7 +97,15 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
         return result;
     }
 
-    protected abstract Principal doAuthenticate(UserCredential<? extends Credential> credential, AuthenticationResult result)
+    /**
+     * <p>Sub-classes should override this method to implement how the authentication is actually done.</p>
+     *
+     * @param credential
+     * @param result
+     * @return
+     * @throws AuthenticationException
+     */
+    protected abstract Principal doAuthenticate(UserCredential credential, AuthenticationResult result)
             throws AuthenticationException;
 
     /**

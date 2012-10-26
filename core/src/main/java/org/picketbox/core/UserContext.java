@@ -53,18 +53,15 @@ public class UserContext implements Serializable {
     private static final long serialVersionUID = -7767959770091515534L;
 
     private Subject subject;
-    private Principal principal;
     private User user;
 
     @SuppressWarnings("unchecked")
     private Collection<Role> roles = Collections.EMPTY_LIST;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unused", "unchecked" })
     private Collection<Group> groups = Collections.EMPTY_LIST;
 
     protected transient Map<String, Object> contextData = new HashMap<String, Object>();
-
-    private boolean authenticated;
 
     private transient PicketBoxSession session;
 
@@ -158,10 +155,6 @@ public class UserContext implements Serializable {
         this.contextData = contextData;
     }
 
-    protected void setAuthenticated(boolean isAuthenticated) {
-        this.authenticated = isAuthenticated;
-    }
-
     /**
      * @return
      */
@@ -197,10 +190,8 @@ public class UserContext implements Serializable {
      * <p>Invalidate the instance and clear its state.</p>
      */
     public void invalidate() {
-        this.authenticated = false;
         this.credential = null;
         this.contextData.clear();
-        this.principal = null;
         this.roles = null;
         this.groups = null;
         this.subject = null;

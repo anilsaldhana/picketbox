@@ -35,8 +35,7 @@ import org.picketlink.idm.credential.X509CertificateCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPClientCertCredential extends AbstractUserCredential<X509CertificateCredential> implements
-        HttpServletCredential<X509CertificateCredential> {
+public class HTTPClientCertCredential extends AbstractUserCredential implements HttpServletCredential {
 
     private HttpServletRequest request;
     private HttpServletResponse response;

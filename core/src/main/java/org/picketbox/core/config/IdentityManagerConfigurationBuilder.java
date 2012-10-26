@@ -34,7 +34,6 @@ public class IdentityManagerConfigurationBuilder extends AbstractConfigurationBu
 
     private IdentityManager identityManager;
 
-    @SuppressWarnings("unused")
     private AbstractConfigurationBuilder<? extends IdentityManagerConfiguration> identityManagerBuilder;
 
     private LDAPIdentityManagerConfigurationBuilder ldapIdentityManagerManager;

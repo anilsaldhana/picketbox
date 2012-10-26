@@ -33,7 +33,6 @@ import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketlink.idm.credential.PasswordCredential;
 import org.picketlink.idm.model.User;
 
 /**
@@ -56,21 +55,13 @@ public class UserNamePasswordAuthenticationMechanism extends AbstractAuthenticat
         return arrayList;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.picketbox.core.authentication.spi.AbstractAuthenticationService#doAuthenticate(org.picketbox.core.authentication.
-     * AuthenticationManager, org.picketbox.core.authentication.api.AuthenticationCallbackHandler,
-     * org.picketbox.core.authentication.api.AuthenticationResult)
-     */
     @Override
-    protected Principal doAuthenticate(UserCredential<?> credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         UsernamePasswordCredential userCredential = (UsernamePasswordCredential) credential;
 
         User user = getIdentityManager().getUser(userCredential.getUserName());
 
-        if (user != null && getIdentityManager().validateCredential(user, new PasswordCredential(userCredential.getPassword()))) {
+        if (user != null && getIdentityManager().validateCredential(user, userCredential.getCredential())) {
             return new PicketBoxPrincipal(user.getKey());
         }
 

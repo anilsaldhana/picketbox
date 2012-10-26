@@ -41,7 +41,6 @@ import org.picketbox.core.nonce.NonceGenerator;
 import org.picketbox.core.nonce.UUIDNonceGenerator;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPDigestConfiguration;
-import org.picketlink.idm.credential.Credential;
 import org.picketlink.idm.credential.DigestCredential;
 import org.picketlink.idm.model.User;
 
@@ -146,7 +145,7 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected Principal doHTTPAuthentication(HttpServletCredential<? extends Credential> credential) {
+    protected Principal doHTTPAuthentication(HttpServletCredential credential) {
         HTTPDigestCredential digestCredential = (HTTPDigestCredential) credential;
 
         HttpServletRequest request = digestCredential.getRequest();

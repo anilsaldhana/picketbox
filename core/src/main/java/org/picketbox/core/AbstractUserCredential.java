@@ -32,16 +32,16 @@ import org.picketlink.idm.credential.Credential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class AbstractUserCredential<CREDENTIAL extends Credential> implements UserCredential<CREDENTIAL> {
+public class AbstractUserCredential implements UserCredential {
 
     private String userName;
 
-    private CREDENTIAL credential;
+    private Credential credential;
 
     public AbstractUserCredential() {
     }
 
-    public AbstractUserCredential(CREDENTIAL credential) {
+    public AbstractUserCredential(Credential credential) {
         this.credential = credential;
     }
 
@@ -59,11 +59,11 @@ public class AbstractUserCredential<CREDENTIAL extends Credential> implements Us
         this.userName = userName;
     }
 
-    public CREDENTIAL getCredential() {
+    public Credential getCredential() {
         return credential;
     }
 
-    public void setCredential(CREDENTIAL credential) {
+    public void setCredential(Credential credential) {
         this.credential = credential;
     }
 

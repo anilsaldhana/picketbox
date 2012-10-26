@@ -44,9 +44,6 @@ import org.picketlink.idm.model.User;
  */
 public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
 
-    /* (non-Javadoc)
-     * @see org.picketbox.core.authentication.AuthenticationMechanism#getAuthenticationInfo()
-     */
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
         List<AuthenticationInfo> info = new ArrayList<AuthenticationInfo>();
@@ -56,25 +53,13 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
         return info;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.http.AbstractHTTPAuthentication#isAuthenticationRequest(javax.servlet.http.
-     * HttpServletRequest)
-     */
     @Override
     protected boolean isAuthenticationRequest(HttpServletRequest request) {
         return request.getRequestURI().contains(PicketBoxConstants.HTTP_FORM_J_SECURITY_CHECK);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.http.authentication.AbstractHTTPAuthentication#getAuthenticationCallbackHandler(javax.servlet.http.
-     * HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
-    protected Principal doHTTPAuthentication(HttpServletCredential<?> credential) {
+    protected Principal doHTTPAuthentication(HttpServletCredential credential) {
         HTTPFormCredential formCredential = (HTTPFormCredential) credential;
 
         if (formCredential.getCredential() != null) {
@@ -88,21 +73,11 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.picketbox.core.authentication.http.AbstractHTTPAuthentication#challengeClient(javax.servlet.http.HttpServletRequest,
-     * javax.servlet.http.HttpServletResponse)
-     */
     @Override
     protected void challengeClient(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         forwardLoginPage(request, response);
     }
 
-    /* (non-Javadoc)
-     * @see org.picketbox.http.authentication.AbstractHTTPAuthentication#getFormAuthPage()
-     */
     @Override
     public String getFormAuthPage() {
         HTTPAuthenticationConfiguration authenticationConfig = getAuthenticationConfig();
@@ -118,9 +93,6 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
         return super.formAuthPage;
     }
 
-    /* (non-Javadoc)
-     * @see org.picketbox.http.authentication.AbstractHTTPAuthentication#getDefaultPage()
-     */
     @Override
     public String getDefaultPage() {
         HTTPAuthenticationConfiguration authenticationConfig = getAuthenticationConfig();
@@ -136,9 +108,6 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
         return super.defaultPage;
     }
 
-    /* (non-Javadoc)
-     * @see org.picketbox.http.authentication.AbstractHTTPAuthentication#getFormErrorPage()
-     */
     @Override
     public String getFormErrorPage() {
         HTTPAuthenticationConfiguration authenticationConfig = getAuthenticationConfig();

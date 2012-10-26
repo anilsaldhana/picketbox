@@ -78,7 +78,7 @@ public class HTTPBasicAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected PicketBoxPrincipal doHTTPAuthentication(HttpServletCredential<?> credential) {
+    protected PicketBoxPrincipal doHTTPAuthentication(HttpServletCredential credential) {
         HTTPBasicCredential basicCredential = (HTTPBasicCredential) credential;
 
         if (basicCredential.getCredential() != null) {

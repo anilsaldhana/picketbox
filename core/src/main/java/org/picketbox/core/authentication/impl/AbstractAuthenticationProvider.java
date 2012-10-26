@@ -27,7 +27,6 @@ import java.util.List;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
-import org.picketbox.core.config.PicketBoxConfiguration;
 
 /**
  * <p>
@@ -42,9 +41,9 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
     private final List<AuthenticationMechanism> mechanisms = new ArrayList<AuthenticationMechanism>();
     private PicketBoxManager picketBoxManager;
 
-    public AbstractAuthenticationProvider(PicketBoxManager picketBoxManager, PicketBoxConfiguration configuration) {
+    public AbstractAuthenticationProvider(PicketBoxManager picketBoxManager) {
         this.picketBoxManager = picketBoxManager;
-        this.mechanisms.addAll(configuration.getAuthentication().getMechanisms());
+        this.mechanisms.addAll(this.picketBoxManager.getConfiguration().getAuthentication().getMechanisms());
     }
 
     /*

@@ -77,7 +77,7 @@ import org.picketbox.http.wrappers.ResponseWrapper;
 public class DelegatingSecurityFilter implements Filter {
 
     private PicketBoxHTTPManager securityManager;
-    private Class<? extends HttpServletCredential<?>> credentialType;
+    private Class<? extends HttpServletCredential> credentialType;
 
     @Override
     public void init(FilterConfig fc) throws ServletException {
@@ -145,7 +145,7 @@ public class DelegatingSecurityFilter implements Filter {
 
         // wraps the request and response with PicketBox wrapper classes
         RequestWrapper wrappedRequest = new RequestWrapper(httpRequest, this.securityManager);
-        ResponseWrapper wrappedResponse = new ResponseWrapper(httpResponse, this.securityManager);
+        ResponseWrapper wrappedResponse = new ResponseWrapper(httpResponse);
 
         try {
             propagateSecurityContext(wrappedRequest);
@@ -239,7 +239,7 @@ public class DelegatingSecurityFilter implements Filter {
         }
 
         try {
-            HttpServletCredential<?> credential = this.credentialType.getConstructor(
+            HttpServletCredential credential = this.credentialType.getConstructor(
                     new Class[] { HttpServletRequest.class, HttpServletResponse.class }).newInstance(
                     new Object[] { httpRequest, httpResponse });
 
@@ -303,7 +303,7 @@ public class DelegatingSecurityFilter implements Filter {
      * @return
      * @throws ServletException
      */
-    private Class<? extends HttpServletCredential<?>> getSupporttedCredential(ServletContext servletContext)
+    private Class<? extends HttpServletCredential> getSupporttedCredential(ServletContext servletContext)
             throws ServletException {
         String authenticationType = servletContext.getInitParameter(PicketBoxConstants.AUTHENTICATION_KEY);
 

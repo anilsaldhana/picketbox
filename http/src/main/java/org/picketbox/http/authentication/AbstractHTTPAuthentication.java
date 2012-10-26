@@ -39,7 +39,6 @@ import org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
-import org.picketlink.idm.credential.Credential;
 
 /**
  * Base class for all the HTTP authentication schemes
@@ -102,16 +101,13 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
         this.realmName = realmName;
     }
 
-    /* (non-Javadoc)
-     * @see org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism#doAuthenticate(org.picketbox.core.Credential, org.picketbox.core.authentication.AuthenticationResult)
-     */
     @Override
-    protected Principal doAuthenticate(UserCredential<? extends Credential> credential, AuthenticationResult result) throws AuthenticationException {
+    protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         if (!(credential instanceof HttpServletCredential)) {
             throw PicketBoxMessages.MESSAGES.unexpectedCredentialType(credential, HttpServletCredential.class);
         }
 
-        HttpServletCredential<? extends Credential> httpCredential = (HttpServletCredential<? extends Credential>) credential;
+        HttpServletCredential httpCredential = (HttpServletCredential) credential;
 
         HttpServletRequest request = httpCredential.getRequest();
         HttpServletResponse response = httpCredential.getResponse();
@@ -143,11 +139,22 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
         return authenticatedPrincipal;
     }
 
+    /**
+     * <p>Sub-classes should override this method to check if the specified {@link HttpServletRequest} requires authentication.</p>
+     *
+     * @param request
+     * @return
+     */
     protected abstract boolean isAuthenticationRequest(HttpServletRequest request);
 
-    protected Principal performAuthentication(HttpServletCredential<? extends Credential> credential)
-            throws AuthenticationException {
-
+    /**
+     * <p>Performs the authentication workflow.</p>
+     *
+     * @param credential
+     * @return
+     * @throws AuthenticationException
+     */
+    private Principal performAuthentication(HttpServletCredential credential) throws AuthenticationException {
         Principal principal = doHTTPAuthentication(credential);
 
         HttpServletRequest request = credential.getRequest();
@@ -179,11 +186,31 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
         return principal;
     }
 
-    protected abstract Principal doHTTPAuthentication(HttpServletCredential<? extends Credential> credential);
+    /**
+     * <p>Sub-classes should override this method to provide the specific implementation for a given authentication mechanism.</p>
+     *
+     * @param credential
+     * @return
+     */
+    protected abstract Principal doHTTPAuthentication(HttpServletCredential credential);
 
+    /**
+     * <p>Sub-classes should override this method to provide how a authentication challenge is sent to the client.</p>
+     *
+     * @param request
+     * @param response
+     * @throws AuthenticationException
+     */
     protected abstract void challengeClient(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException;
 
+    /**
+     * <p>Sub-classes can override this method to provide how to send users to a error page.</p>
+     *
+     * @param request
+     * @param response
+     * @throws AuthenticationException
+     */
     protected void sendErrorPage(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         sendRedirect(response, request.getContextPath() + getFormErrorPage());
     }

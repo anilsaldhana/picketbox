@@ -82,6 +82,15 @@ public class SessionEventsTestCase {
         assertTrue(this.testEventHandler.onSetAttributeCalled);
         assertEquals("b", session.getAttribute("a"));
     }
+    
+    @Test
+    public void testOnGetAttribute() throws Exception {
+        PicketBoxSession session = createSession();
+
+        session.setAttribute("a", "b");
+        assertEquals("b", session.getAttribute("a"));
+        assertTrue(this.testEventHandler.onGetAttributeCalled);
+    }
 
     @Test
     public void testOnInvalidate() throws Exception {

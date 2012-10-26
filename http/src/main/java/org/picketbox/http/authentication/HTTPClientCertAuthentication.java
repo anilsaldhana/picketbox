@@ -38,6 +38,7 @@ import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPClientCertConfiguration;
+import org.picketlink.idm.credential.X509CertificateCredential;
 import org.picketlink.idm.model.User;
 
 /**
@@ -90,11 +91,12 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
      * HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected Principal doHTTPAuthentication(HttpServletCredential<?> credential) {
+    protected Principal doHTTPAuthentication(HttpServletCredential credential) {
         HTTPClientCertCredential certCredential = (HTTPClientCertCredential) credential;
 
         if (certCredential.getCredential() != null) {
-            X509Certificate clientCertificate = certCredential.getCredential().getCertificate();
+            X509CertificateCredential x509Credential = (X509CertificateCredential) certCredential.getCredential();
+            X509Certificate clientCertificate = x509Credential.getCertificate();
 
             String username = getCertificatePrincipal(clientCertificate).getName();
 

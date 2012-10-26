@@ -25,8 +25,6 @@ package org.picketbox.http.wrappers;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.picketbox.http.PicketBoxHTTPManager;
-
 /**
  * <p>
  * A {@link HttpServletResponse} wrapper.
@@ -37,11 +35,8 @@ import org.picketbox.http.PicketBoxHTTPManager;
  */
 public class ResponseWrapper extends HttpServletResponseWrapper {
 
-    private PicketBoxHTTPManager picketBoxManager;
-
-    public ResponseWrapper(HttpServletResponse response, PicketBoxHTTPManager picketBoxManager) {
+    public ResponseWrapper(HttpServletResponse response) {
         super(response);
-        this.picketBoxManager = picketBoxManager;
     }
 
 }
