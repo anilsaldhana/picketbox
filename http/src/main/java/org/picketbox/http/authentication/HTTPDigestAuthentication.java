@@ -35,7 +35,6 @@ import javax.servlet.http.HttpSession;
 
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
-import org.picketbox.core.authentication.DigestHolder;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.nonce.NonceGenerator;
@@ -43,6 +42,7 @@ import org.picketbox.core.nonce.UUIDNonceGenerator;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPDigestConfiguration;
 import org.picketlink.idm.credential.Credential;
+import org.picketlink.idm.credential.DigestCredential;
 import org.picketlink.idm.model.User;
 
 /**
@@ -116,7 +116,7 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
         INVALID, STALE, VALID
     }
 
-    private NONCE_VALIDATION_RESULT validateNonce(DigestHolder digest, String sessionId) {
+    private NONCE_VALIDATION_RESULT validateNonce(DigestCredential digest, String sessionId) {
         String nonce = digest.getNonce();
 
         List<String> storedNonces = this.idVersusNonce.get(sessionId);
@@ -154,7 +154,7 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
         HttpSession session = request.getSession(true);
         String sessionId = session.getId();
 
-        final DigestHolder digest = digestCredential.getDigestHolder();
+        DigestCredential digest = digestCredential.getCredential();
 
         // Pre-verify the client response
         if (digest.getUsername() == null || digest.getRealm() == null || digest.getNonce() == null || digest.getUri() == null
@@ -184,7 +184,7 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
             User user = getIdentityManager().getUser(digest.getUsername());
 
             if (user != null) {
-                if (getIdentityManager().validateCredential(user, digestCredential)) {
+                if (getIdentityManager().validateCredential(user, digest)) {
                     return new PicketBoxPrincipal(digest.getUsername());
                 }
             }

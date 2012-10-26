@@ -26,9 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
-import org.picketbox.core.authentication.DigestHolder;
 import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketbox.core.exceptions.FormatException;
 import org.picketbox.core.util.HTTPDigestUtil;
 import org.picketlink.idm.credential.DigestCredential;
 
@@ -36,7 +34,7 @@ import org.picketlink.idm.credential.DigestCredential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPDigestCredential extends AbstractUserCredential<DigestCredential> implements HttpServletCredential<DigestCredential>, DigestCredential {
+public class HTTPDigestCredential extends AbstractUserCredential<DigestCredential> implements HttpServletCredential<DigestCredential> {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -45,7 +43,6 @@ public class HTTPDigestCredential extends AbstractUserCredential<DigestCredentia
     public HTTPDigestCredential(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        setCredential(this);
     }
 
     /* (non-Javadoc)
@@ -64,7 +61,13 @@ public class HTTPDigestCredential extends AbstractUserCredential<DigestCredentia
         return this.response;
     }
 
-    public DigestHolder getDigestHolder() {
+    @Override
+    public String getUserName() {
+        return this.userName;
+    }
+
+    @Override
+    public DigestCredential getCredential() {
         // Get the Authorization Header
         String authorizationHeader = getRequest().getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
 
@@ -80,28 +83,13 @@ public class HTTPDigestCredential extends AbstractUserCredential<DigestCredentia
                 return null;
             }
 
-            DigestHolder digest = HTTPDigestUtil.digest(tokens);
+            DigestCredential digest = HTTPDigestUtil.digest(tokens);
 
-            digest.setRequestMethod(getRequest().getMethod());
+            digest.setMethod(getRequest().getMethod());
 
             return digest;
         }
 
         return null;
     }
-
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
-
-    @Override
-    public boolean validate(char[] password) {
-        try {
-            return HTTPDigestUtil.matchCredential(getDigestHolder(), password);
-        } catch (FormatException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

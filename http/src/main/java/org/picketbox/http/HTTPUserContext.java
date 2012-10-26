@@ -25,8 +25,8 @@ package org.picketbox.http;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.picketbox.core.UserCredential;
 import org.picketbox.core.UserContext;
+import org.picketbox.core.UserCredential;
 
 /**
  * <p>
@@ -43,7 +43,7 @@ public class HTTPUserContext extends UserContext {
 
     private static final long serialVersionUID = 8826031649152896118L;
 
-    public HTTPUserContext(HttpServletRequest request, HttpServletResponse response, UserCredential credential) {
+    public HTTPUserContext(HttpServletRequest request, HttpServletResponse response, UserCredential<?> credential) {
         this.contextData.put(REQUEST_CONTEXT_DATA, request);
         this.contextData.put(RESPONSE_CONTEXT_DATA, response);
         setCredential(credential);

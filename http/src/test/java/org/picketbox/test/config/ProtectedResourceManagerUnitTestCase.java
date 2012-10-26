@@ -38,13 +38,13 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
-import org.picketbox.core.authentication.DigestHolder;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.util.HTTPDigestUtil;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.http.resource.HTTPProtectedResourceManager;
 import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
+import org.picketlink.idm.credential.DigestCredential;
 
 /**
  * Unit test the {@link HTTPProtectedResourceManager} for {@link HTTPDigestAuthentication}.
@@ -135,7 +135,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
             value = value.substring(7).trim();
 
             String[] tokens = HTTPDigestUtil.quoteTokenize(value);
-            DigestHolder digestHolder = HTTPDigestUtil.digest(tokens);
+            DigestCredential digestHolder = HTTPDigestUtil.digest(tokens);
 
             DigestScheme digestAuth = new DigestScheme();
             digestAuth.overrideParamter("algorithm", "MD5");
@@ -235,7 +235,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
             value = value.substring(7).trim();
 
             String[] tokens = HTTPDigestUtil.quoteTokenize(value);
-            DigestHolder digestHolder = HTTPDigestUtil.digest(tokens);
+            DigestCredential digestHolder = HTTPDigestUtil.digest(tokens);
 
             DigestScheme digestAuth = new DigestScheme();
             digestAuth.overrideParamter("algorithm", "MD5");

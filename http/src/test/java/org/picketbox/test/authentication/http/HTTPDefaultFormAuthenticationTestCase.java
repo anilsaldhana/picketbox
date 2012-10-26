@@ -38,7 +38,6 @@ import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.authentication.HTTPFormAuthentication;
 import org.picketbox.http.authentication.HTTPFormCredential;
-import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletContext.TestRequestDispatcher;
 import org.picketbox.test.http.TestServletRequest;
