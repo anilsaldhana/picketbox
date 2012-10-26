@@ -19,35 +19,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.picketbox.core.authorization.ent.impl;
 
-package org.picketbox.core.config;
-
-import org.picketlink.idm.jpa.schema.internal.JPATemplate;
+import org.picketbox.core.authorization.ent.Entitlement;
 
 /**
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ * Represents the basic {@link Entitlement}
  *
+ * @author anil saldhana
+ * @since Oct 24, 2012
  */
-public class JPAIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<JPAIdentityManagerConfiguration> {
+public class SimpleEntitlement extends AbstractEntitlement {
+    public static final String SIMPLE = "simple";
 
-    private JPAIdentityManagerConfiguration configuration = new JPAIdentityManagerConfiguration();
-
-    public JPAIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
-        super(identityManagerConfigurationBuilder);
+    /**
+     * Construct a {@link SimpleEntitlement}
+     *
+     * @param name
+     */
+    public SimpleEntitlement(String name) {
+        this.pair.put(SIMPLE, name);
     }
 
-    public JPAIdentityManagerConfigurationBuilder template(JPATemplate template) {
-        this.configuration.setTemplate(template);
-        return this;
+    public String getName() {
+        return pair.get(SIMPLE);
     }
-
-    @Override
-    protected void setDefaults() {
-    }
-
-    @Override
-    protected JPAIdentityManagerConfiguration doBuild() {
-        return this.configuration;
-    }
-
 }

@@ -72,28 +72,36 @@ public interface PicketBoxManager extends PicketBoxLifecycle {
     void logout(UserContext authenticatedUser) throws IllegalStateException;
 
     /**
-     * <p>Returns the configured {@link PicketBoxEventManager} instance.</p>
+     * <p>
+     * Returns the configured {@link PicketBoxEventManager} instance.
+     * </p>
      *
      * @return
      */
     PicketBoxEventManager getEventManager();
 
     /**
-     * <p>Returns the configured {@link IdentityManager} instance.</p>
+     * <p>
+     * Returns the configured {@link IdentityManager} instance.
+     * </p>
      *
      * @return
      */
     IdentityManager getIdentityManager();
 
     /**
-     * <p>Returns the configuration used to build and start an instance.</p>
+     * <p>
+     * Returns the configuration used to build and start an instance.
+     * </p>
      *
      * @return
      */
     PicketBoxConfiguration getConfiguration();
 
     /**
-     * <p>Returns the configured {@link SessionManager} instance.</p>
+     * <p>
+     * Returns the configured {@link SessionManager} instance.
+     * </p>
      *
      * @return
      */

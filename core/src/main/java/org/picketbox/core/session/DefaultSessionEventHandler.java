@@ -29,7 +29,9 @@ import org.picketbox.core.session.event.SessionEvent;
 import org.picketbox.core.session.event.SessionEventHandler;
 
 /**
- * <p>Built-in implementation for {@link SessionEventHandler} that delegate the processing for the {@link SessionManager}.</p>
+ * <p>
+ * Built-in implementation for {@link SessionEventHandler} that delegate the processing for the {@link SessionManager}.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

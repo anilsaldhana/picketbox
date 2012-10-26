@@ -25,8 +25,6 @@ package org.picketbox.core.config;
 import org.picketlink.idm.file.internal.FileBasedIdentityStore;
 import org.picketlink.idm.spi.IdentityStore;
 
-
-
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
@@ -36,7 +34,9 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
     private String workingDir;
     private boolean alwaysCreateFiles;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.config.IdentityManagerConfiguration#getIdentityStore()
      */
     @Override

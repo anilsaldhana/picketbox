@@ -35,14 +35,14 @@ import org.picketbox.core.ctx.SecurityContextPropagation;
 
 /**
  * Unit test the {@link SecurityContextPropagation}
- * 
+ *
  * @author anil saldhana
  * @since Aug 22, 2012
  */
 public class SecurityContextPropagationTestCase {
-    
-	@SuppressWarnings("serial")
-	@Test
+
+    @SuppressWarnings("serial")
+    @Test
     public void testThreadLevelPropagation() throws Exception {
         final Principal anil = new PicketBoxPrincipal("anil");
 

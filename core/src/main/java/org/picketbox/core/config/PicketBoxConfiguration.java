@@ -35,7 +35,8 @@ public class PicketBoxConfiguration {
     private EventManagerConfiguration eventManager;
 
     public PicketBoxConfiguration(AuthenticationConfiguration authentication, AuthorizationConfiguration authorization,
-            GlobalIdentityManagerConfiguration identityManager, SessionManagerConfig sessionManager, EventManagerConfiguration eventManager) {
+            GlobalIdentityManagerConfiguration identityManager, SessionManagerConfig sessionManager,
+            EventManagerConfiguration eventManager) {
         this.authentication = authentication;
         this.authorization = authorization;
         this.identityManager = identityManager;

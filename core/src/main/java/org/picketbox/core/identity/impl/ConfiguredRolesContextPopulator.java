@@ -33,8 +33,8 @@ import org.picketlink.idm.model.SimpleUser;
 /**
  * <p>
  * A Simple Identity Manager that just takes in a list of roles and passes it back to the subject. Use this
- * {@link UserContextPopulator} when you have great confidence in your authentication process and all your authenticated users need
- * to get the same set of roles.
+ * {@link UserContextPopulator} when you have great confidence in your authentication process and all your authenticated users
+ * need to get the same set of roles.
  * </p>
  *
  * @author anil saldhana
@@ -50,7 +50,9 @@ public class ConfiguredRolesContextPopulator implements UserContextPopulator {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.identity.UserContextPopulator#getIdentity(org.picketbox.core.UserContext)
      */
     @Override

@@ -58,7 +58,7 @@ public class JPABasedIdentityManagerTestcase extends AbstractJPAIdentityManagerT
         EntityManagerContext.set(this.entityManager);
 
         IdentityManager identityManager = picketBoxManager.getIdentityManager();
-        
+
         User adminUser = identityManager.createUser("admin");
 
         adminUser.setEmail("admin@picketbox.com");

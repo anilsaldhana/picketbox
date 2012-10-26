@@ -41,14 +41,18 @@ public interface SecurityContext {
     UserContext getUserContext();
 
     /**
-     * <p>Returns the current {@link Principal}, if authenticated.</p>
+     * <p>
+     * Returns the current {@link Principal}, if authenticated.
+     * </p>
      *
      * @return
      */
     Principal getPrincipal();
 
     /**
-     * <p>Checks if the current user has the specified role.</p>
+     * <p>
+     * Checks if the current user has the specified role.
+     * </p>
      *
      * @param role
      * @return

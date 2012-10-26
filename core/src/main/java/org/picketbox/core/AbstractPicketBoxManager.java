@@ -66,14 +66,16 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     private PicketBoxEventManager eventManager;
 
     @SuppressWarnings("unused")
-    //TODO: handle entitlements
+    // TODO: handle entitlements
     private EntitlementsManager entitlementsManager;
 
     public AbstractPicketBoxManager(PicketBoxConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.PicketBoxManager#authenticate(org.picketbox.core.UserContext)
      */
     @Override
@@ -82,7 +84,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         PicketBoxSession userSession = restoreSession(subject);
 
-        // if there is a valid session associate it with the subject and performs a silent authentication, trusting the provided principal.
+        // if there is a valid session associate it with the subject and performs a silent authentication, trusting the provided
+        // principal.
         if (userSession != null) {
             UserContext restoredUserContext = userSession.getUserContext();
             Principal restoredPrincipal = restoredUserContext.getPrincipal(false);
@@ -109,7 +112,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         return subject;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.PicketBoxManager#logout(org.picketbox.core.UserContext)
      */
     @Override
@@ -192,7 +197,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     }
 
     /**
-     * <p>Performs some post authentication steps when the authentication is successfull.</p>
+     * <p>
+     * Performs some post authentication steps when the authentication is successfull.
+     * </p>
      *
      * @param session
      * @return
@@ -213,7 +220,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     }
 
     /**
-     * <p>Performs some post authentication steps when the authentication fail.</p>
+     * <p>
+     * Performs some post authentication steps when the authentication fail.
+     * </p>
      *
      * @param subject
      */
@@ -221,9 +230,10 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         getEventManager().raiseEvent(new UserAuthenticatedEvent(subject));
     }
 
-
     /**
-     * <p>Tries to restore the session associated with the given {@link UserContext}.</p>
+     * <p>
+     * Tries to restore the session associated with the given {@link UserContext}.
+     * </p>
      *
      * @param subject
      * @return
@@ -249,8 +259,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
     /**
      * <p>
-     * Creates a session for the authenticated {@link UserContext}. The subject must be authenticated, its
-     * isAuthenticated() method should return true.
+     * Creates a session for the authenticated {@link UserContext}. The subject must be authenticated, its isAuthenticated()
+     * method should return true.
      * </p>
      *
      * @param securityContext the security context with environment specific information
@@ -341,7 +351,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.PicketBoxManager#getEventManager()
      */
     @Override
@@ -359,7 +371,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         return this.identityManager;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.PicketBoxManager#getConfiguration()
      */
     @Override
@@ -367,7 +381,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         return this.configuration;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.PicketBoxManager#getSessionManager()
      */
     @Override

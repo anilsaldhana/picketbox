@@ -22,7 +22,6 @@
 
 package org.picketbox.core.authentication;
 
-
 /**
  * <p>
  * This interface defines the contract for a Authentication Provider.

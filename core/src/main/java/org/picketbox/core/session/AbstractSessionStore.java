@@ -38,8 +38,6 @@ public abstract class AbstractSessionStore extends AbstractPicketBoxLifeCycle im
 
     protected Map<Serializable, PicketBoxSession> sessions = new HashMap<Serializable, PicketBoxSession>();
 
-
-
     /*
      * (non-Javadoc)
      *
