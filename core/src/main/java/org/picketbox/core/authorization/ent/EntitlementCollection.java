@@ -53,7 +53,7 @@ public class EntitlementCollection {
      * @return
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -115,7 +115,7 @@ public class EntitlementCollection {
      * @return
      */
     public List<Entitlement> getEntitlements() {
-        return Collections.unmodifiableList(entitlements);
+        return Collections.unmodifiableList(this.entitlements);
     }
 
     /**

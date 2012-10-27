@@ -65,6 +65,7 @@ public class DefaultEventManager implements PicketBoxEventManager {
         }
     }
 
+    @Override
     public void addHandler(PicketBoxEventHandler handler) {
         if (!this.observers.containsKey(handler.getEventType())) {
             this.observers.put(handler.getEventType(), new ArrayList<PicketBoxEventHandler>());

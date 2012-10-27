@@ -52,7 +52,7 @@ public class IdentityManagerConfigurationBuilder extends AbstractConfigurationBu
             this.identityManager = new DefaultIdentityManager();
         }
 
-        if (identityManagerBuilder == null) {
+        if (this.identityManagerBuilder == null) {
             fileStore();
         }
     }

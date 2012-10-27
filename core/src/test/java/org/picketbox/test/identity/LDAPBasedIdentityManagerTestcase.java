@@ -41,6 +41,7 @@ import org.picketbox.test.ldap.AbstractLDAPTest;
  */
 public class LDAPBasedIdentityManagerTestcase extends AbstractLDAPTest {
 
+    @Override
     @Before
     public void setup() throws Exception {
         super.setup();

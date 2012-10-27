@@ -124,7 +124,7 @@ public class UserContext implements Serializable {
      * @return
      */
     public Subject getSubject() {
-        return subject;
+        return this.subject;
     }
 
     /**
@@ -143,7 +143,7 @@ public class UserContext implements Serializable {
      * @return
      */
     public Map<String, Object> getContextData() {
-        return Collections.unmodifiableMap(contextData);
+        return Collections.unmodifiableMap(this.contextData);
     }
 
     /**
@@ -164,7 +164,7 @@ public class UserContext implements Serializable {
                 && this.authenticationResult.getStatus().equals(AuthenticationStatus.SUCCESS);
 
         if (isAuthenticated) {
-            if (session != null && !session.isValid()) {
+            if (this.session != null && !this.session.isValid()) {
                 isAuthenticated = false;
             }
         }
@@ -178,7 +178,7 @@ public class UserContext implements Serializable {
     }
 
     public PicketBoxSession getSession() {
-        return session;
+        return this.session;
     }
 
     public UserCredential getCredential() {
@@ -297,6 +297,19 @@ public class UserContext implements Serializable {
     }
 
     public AuthenticationResult getAuthenticationResult() {
-        return authenticationResult;
+        return this.authenticationResult;
+    }
+
+    @Override
+    public String toString() {
+        String userName  = null;
+
+        if (isAuthenticated()) {
+            userName = getPrincipal().getName();
+        } else if (getCredential() != null) {
+            userName = getCredential().getUserName();
+        }
+
+        return " Username: " + userName + "/ IsAuthenticated: " + this.isAuthenticated() + " / Credential: [" + this.credential + "] / Authentication Result: [" + this.authenticationResult + "] / Session: [" + this.session + "]";
     }
 }

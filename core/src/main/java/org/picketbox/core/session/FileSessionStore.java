@@ -64,7 +64,7 @@ public class FileSessionStore extends AbstractSessionStore {
     protected void loadFromFile() {
         ObjectInputStream ois = null;
         try {
-            File file = new File(sessionFileName);
+            File file = new File(this.sessionFileName);
             if (file.exists() == false) {
                 return; // If there is no session file, return as the store will create one
             }
@@ -72,9 +72,9 @@ public class FileSessionStore extends AbstractSessionStore {
             this.sessions.clear();
             this.sessions.putAll((Map<? extends Serializable, ? extends PicketBoxSession>) ois.readObject());
         } catch (IOException e) {
-            throw PicketBoxMessages.MESSAGES.unableToLoadFromFile(sessionFileName, e);
+            throw PicketBoxMessages.MESSAGES.unableToLoadFromFile(this.sessionFileName, e);
         } catch (ClassNotFoundException e) {
-            throw PicketBoxMessages.MESSAGES.unableToLoadFromFile(sessionFileName, e);
+            throw PicketBoxMessages.MESSAGES.unableToLoadFromFile(this.sessionFileName, e);
         } finally {
             StreamUtil.safeClose(ois);
         }
@@ -83,10 +83,10 @@ public class FileSessionStore extends AbstractSessionStore {
     protected void storeToFile() {
         ObjectOutputStream oos = null;
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(sessionFileName));
+            oos = new ObjectOutputStream(new FileOutputStream(this.sessionFileName));
             oos.writeObject(this.sessions);
         } catch (IOException e) {
-            throw PicketBoxMessages.MESSAGES.unableToStoreToFile(sessionFileName, e);
+            throw PicketBoxMessages.MESSAGES.unableToStoreToFile(this.sessionFileName, e);
         } finally {
             StreamUtil.safeClose(oos);
         }

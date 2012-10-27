@@ -40,13 +40,13 @@ public abstract class AbstractEntitlement implements Entitlement {
     @Override
     public String json() {
         StringBuilder sb = new StringBuilder(OPEN_PAREN);
-        Set<String> keys = pair.keySet();
+        Set<String> keys = this.pair.keySet();
         int size = keys.size();
         Iterator<String> iter = keys.iterator();
 
         for (int i = 0; i < size; i++) {
             String key = iter.next();
-            sb.append(key).append(COLON).append(pair.get(key));
+            sb.append(key).append(COLON).append(this.pair.get(key));
             if (i > 0) {
                 sb.append(COMMA);
             }
@@ -59,7 +59,7 @@ public abstract class AbstractEntitlement implements Entitlement {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((pair == null) ? 0 : pair.hashCode());
+        result = prime * result + ((this.pair == null) ? 0 : this.pair.hashCode());
         return result;
     }
 
@@ -72,10 +72,10 @@ public abstract class AbstractEntitlement implements Entitlement {
         if (getClass() != obj.getClass())
             return false;
         AbstractEntitlement other = (AbstractEntitlement) obj;
-        if (pair == null) {
+        if (this.pair == null) {
             if (other.pair != null)
                 return false;
-        } else if (!mapEquals(pair, other.pair))
+        } else if (!mapEquals(this.pair, other.pair))
             return false;
         return true;
     }

@@ -35,7 +35,7 @@ public abstract class AbstractPicketBoxResource implements Resource {
 
     @Override
     public boolean isAuthorized() {
-        return authorized;
+        return this.authorized;
     }
 
     @Override

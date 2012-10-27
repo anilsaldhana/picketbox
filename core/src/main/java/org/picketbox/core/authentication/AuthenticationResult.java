@@ -59,7 +59,7 @@ public class AuthenticationResult implements Serializable {
      * @return the messages
      */
     public List<String> getMessages() {
-        return Collections.unmodifiableList(messages);
+        return Collections.unmodifiableList(this.messages);
     }
 
     public void addMessage(String message) {
@@ -70,11 +70,11 @@ public class AuthenticationResult implements Serializable {
      * @return the status
      */
     public AuthenticationStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public Principal getPrincipal() {
-        return principal;
+        return this.principal;
     }
 
     public void setStatus(AuthenticationStatus status) {
@@ -83,5 +83,10 @@ public class AuthenticationResult implements Serializable {
 
     public void setPrincipal(Principal principal) {
         this.principal = principal;
+    }
+
+    @Override
+    public String toString() {
+        return "Principal: " + getPrincipal() + " / Status: " + getStatus() + " / Messages: " + getMessages();
     }
 }

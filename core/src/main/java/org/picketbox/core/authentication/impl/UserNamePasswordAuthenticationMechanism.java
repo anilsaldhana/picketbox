@@ -45,6 +45,7 @@ import org.picketlink.idm.model.User;
  */
 public class UserNamePasswordAuthenticationMechanism extends AbstractAuthenticationMechanism {
 
+    @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
         List<AuthenticationInfo> arrayList = new ArrayList<AuthenticationInfo>();
 

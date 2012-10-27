@@ -63,13 +63,13 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
      */
     private void initialize(IdentityManager identityManager) {
         FileUser adminUser = new FileUser("admin");
-        
+
         identityManager.createUser(adminUser);
 
         adminUser.setEmail("admin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
-        
+
         identityManager.updateCredential(adminUser, new PasswordCredential("admin"));
 
         Role roleDeveloper = identityManager.createRole("developer");

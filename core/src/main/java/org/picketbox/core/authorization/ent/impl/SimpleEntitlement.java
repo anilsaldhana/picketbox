@@ -42,6 +42,6 @@ public class SimpleEntitlement extends AbstractEntitlement {
     }
 
     public String getName() {
-        return pair.get(SIMPLE);
+        return this.pair.get(SIMPLE);
     }
 }

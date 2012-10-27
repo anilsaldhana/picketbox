@@ -41,7 +41,7 @@ public class OTPCredential extends UsernamePasswordCredential {
      * @return
      */
     public String getOtp() {
-        return otp;
+        return this.otp;
     }
 
     /**

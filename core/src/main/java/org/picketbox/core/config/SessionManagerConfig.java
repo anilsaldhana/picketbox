@@ -42,7 +42,7 @@ public class SessionManagerConfig {
     }
 
     public SessionManager getManager() {
-        return manager;
+        return this.manager;
     }
 
     public SessionStore getStore() {

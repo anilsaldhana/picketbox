@@ -80,7 +80,7 @@ public interface PicketBoxLogger extends BasicLogger {
     @Message(id = 509, value = "ALL RESOURCES WILL BE PROTECTED. MAYBE YOU DID NOT DEFINE WHICH RESOURCES SHOULD BE PROTECTED.")
     void allResourcesWillBeProteced();
 
-    @LogMessage(level = Logger.Level.WARN)
+    @LogMessage(level = Logger.Level.DEBUG)
     @Message(id = 510, value = "Using %s : %s")
     void debugInstanceUsage(String string, Object eventManager);
 

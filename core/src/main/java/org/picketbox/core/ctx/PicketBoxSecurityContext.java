@@ -43,7 +43,7 @@ public class PicketBoxSecurityContext implements SecurityContext {
 
     @Override
     public UserContext getUserContext() {
-        return subject;
+        return this.subject;
     }
 
     @Override

@@ -54,31 +54,31 @@ public class SimpleAuthorizationManager implements AuthorizationManager {
 
     @Override
     public boolean started() {
-        return started;
+        return this.started;
     }
 
     @Override
     public void start() {
-        started = true;
+        this.started = true;
     }
 
     @Override
     public boolean stopped() {
-        return stopped;
+        return this.stopped;
     }
 
     @Override
     public void stop() {
-        stopped = true;
-        started = false;
+        this.stopped = true;
+        this.started = false;
     }
 
     @Override
     public boolean authorize(Resource resource, UserContext subject) throws AuthorizationException {
-        if (stopped) {
+        if (this.stopped) {
             throw PicketBoxMessages.MESSAGES.instanceAlreadyStopped();
         }
-        if (!started) {
+        if (!this.started) {
             throw PicketBoxMessages.MESSAGES.instanceNotStarted();
         }
 

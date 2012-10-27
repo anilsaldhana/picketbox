@@ -38,6 +38,6 @@ public abstract class SessionEvent implements PicketBoxEvent<SessionEventHandler
     }
 
     public PicketBoxSession getSession() {
-        return session;
+        return this.session;
     }
 }

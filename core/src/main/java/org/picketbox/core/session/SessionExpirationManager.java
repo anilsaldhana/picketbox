@@ -64,6 +64,6 @@ public class SessionExpirationManager {
                     }
                 }
             }
-        }, expiryValue);
+        }, this.expiryValue);
     }
 }

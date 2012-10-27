@@ -70,27 +70,27 @@ public class TimeBasedOTPUnitTestCase {
     public void testTOTP() throws Exception {
         int totpIndex = -1;
 
-        for (int i = 0; i < testTime.length; i++) {
-            long T = (testTime[i] - T0) / X;
-            steps = Long.toHexString(T).toUpperCase();
+        for (int i = 0; i < this.testTime.length; i++) {
+            long T = (this.testTime[i] - this.T0) / this.X;
+            this.steps = Long.toHexString(T).toUpperCase();
 
             // Just get a 16 digit string
-            while (steps.length() < 16)
-                steps = "0" + steps;
+            while (this.steps.length() < 16)
+                this.steps = "0" + this.steps;
 
-            assertEquals(totp[++totpIndex], TimeBasedOTP.generateTOTP(seed, steps, NUMBER_OF_DIGITS, "HmacSHA1"));
-            assertEquals(totp[++totpIndex], TimeBasedOTP.generateTOTP(seed, steps, NUMBER_OF_DIGITS, "HmacSHA256"));
-            assertEquals(totp[++totpIndex], TimeBasedOTP.generateTOTP(seed, steps, NUMBER_OF_DIGITS, "HmacSHA512"));
+            assertEquals(this.totp[++totpIndex], TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA1"));
+            assertEquals(this.totp[++totpIndex], TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA256"));
+            assertEquals(this.totp[++totpIndex], TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA512"));
         }
     }
 
     // @Test TODO: Fix this test method when running on Jenkins.
     public void testTOTPValidity() throws Exception {
-        String totp = TimeBasedOTP.generateTOTP(seed, NUMBER_OF_DIGITS);
+        String totp = TimeBasedOTP.generateTOTP(this.seed, this.NUMBER_OF_DIGITS);
 
-        System.out.println("We are going to sleep for " + SLEEP_TIME + " secs");
-        Thread.sleep(SLEEP_TIME * 5000); // 10 secs
+        System.out.println("We are going to sleep for " + this.SLEEP_TIME + " secs");
+        Thread.sleep(this.SLEEP_TIME * 5000); // 10 secs
 
-        assertTrue("TOTP validated", TimeBasedOTPUtil.validate(totp, seed.getBytes(), 8));
+        assertTrue("TOTP validated", TimeBasedOTPUtil.validate(totp, this.seed.getBytes(), 8));
     }
 }

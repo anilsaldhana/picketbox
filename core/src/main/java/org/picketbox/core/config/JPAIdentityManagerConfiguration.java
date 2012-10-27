@@ -57,7 +57,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
     public IdentityStore getIdentityStore() {
         SimpleJPAIdentityStore store = new SimpleJPAIdentityStore();
 
-        if (template == null) {
+        if (this.template == null) {
             this.template = new JPATemplate() {
                 @Override
                 public Object execute(JPACallback callback) {

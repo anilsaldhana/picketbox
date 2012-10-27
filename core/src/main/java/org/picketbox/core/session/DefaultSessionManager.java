@@ -186,6 +186,6 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
     }
 
     protected PicketBoxManager getPicketBoxManager() {
-        return picketBoxManager;
+        return this.picketBoxManager;
     }
 }
