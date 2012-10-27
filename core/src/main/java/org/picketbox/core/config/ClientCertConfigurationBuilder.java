@@ -20,35 +20,44 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.config;
+package org.picketbox.core.config;
 
-import org.picketbox.core.config.SessionManagerConfig;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPSessionManagerConfiguration extends SessionManagerConfig {
+public class ClientCertConfigurationBuilder extends AbstractConfigurationBuilder<ClientCertConfiguration> {
 
-    private String sessionAttributeName;
+    private ClientCertConfiguration configuration = new ClientCertConfiguration();
 
-    /**
-     * @return the sessionAttributeName
+    public ClientCertConfigurationBuilder(ConfigurationBuilder builder) {
+        super(builder);
+    }
+
+    @Override
+    protected void setDefaults() {
+    }
+
+    public ClientCertConfigurationBuilder clientCert() {
+        return this;
+    }
+
+    public ClientCertConfigurationBuilder useCNAsPrincipal() {
+        this.configuration.setUseCNAsPrincipal(true);
+        return this;
+    }
+
+    public ClientCertConfigurationBuilder useCertificateValidation() {
+        this.configuration.setUseCertificateValidation(true);
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
      */
-    public String getSessionAttributeName() {
-        return this.sessionAttributeName;
+    @Override
+    public ClientCertConfiguration doBuild() {
+        return this.configuration ;
     }
-
-    public HTTPSessionManagerConfiguration(String sessionAttributeName, SessionManagerConfig defaultConfiguration) {
-        super(defaultConfiguration.getManager(), defaultConfiguration.getStore(), defaultConfiguration.getSessionTimeout());
-        this.sessionAttributeName = sessionAttributeName;
-    }
-
-    /**
-     * @param sessionAttributeName the sessionAttributeName to set
-     */
-    public void setSessionAttributeName(String sessionAttributeName) {
-        this.sessionAttributeName = sessionAttributeName;
-    }
-
 }

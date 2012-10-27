@@ -23,6 +23,7 @@
 package org.picketbox.core;
 
 import static org.picketbox.core.PicketBoxLogger.LOGGER;
+import static org.picketbox.core.PicketBoxMessages.MESSAGES;
 
 import java.security.Principal;
 
@@ -84,7 +85,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     public UserContext authenticate(UserContext userContext) throws AuthenticationException {
         checkIfStarted();
 
-        LOGGER.tracef("authenticating User: %s", userContext);
+        LOGGER.tracef("authenticating user [%s]", userContext);
 
         PicketBoxSession userSession = restoreSession(userContext);
 
@@ -94,7 +95,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             UserContext restoredUserContext = userSession.getUserContext();
             Principal restoredPrincipal = restoredUserContext.getPrincipal(false);
 
-            LOGGER.tracef("re-authenticating principal %s", restoredPrincipal.getName());
+            LOGGER.tracef("performing silent authentication and re-authenticating principal %s", restoredPrincipal.getName());
 
             TrustedUsernameCredential credential = new TrustedUsernameCredential(restoredPrincipal.getName());
 
@@ -110,18 +111,42 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             // creates a fresh new session if none was retrieved from the session manager
             if (userSession == null) {
                 userSession = createSession(userContext);
-                LOGGER.tracef("created session %s", userSession);
             }
 
             performSuccessfulAuthentication(userContext, userSession);
 
-            LOGGER.tracef("authenticated user is %s", userContext);
+            LOGGER.tracef("authenticated user is: [%s]", userContext);
         } else {
-            LOGGER.tracef("user not authenticated. User: %s", userContext);
+            LOGGER.tracef("user not authenticated: [%s]", userContext);
             performUnsuccessfulAuthentication(userContext);
         }
 
         return userContext;
+    }
+
+    /**
+     * <p>
+     * Tries to restore the session associated with the given {@link UserContext}.
+     * </p>
+     *
+     * @param userContext
+     * @return
+     */
+    private PicketBoxSession restoreSession(UserContext userContext) {
+        PicketBoxSession userSession = null;
+
+        if (this.sessionManager != null) {
+            PicketBoxLogger.LOGGER.trace("trying to restore previous created session.");
+
+            userSession = this.sessionManager.restoreSession(userContext);
+
+            if (userSession != null) {
+                LOGGER.tracef("found session [%s]", userSession);
+            } else {
+                LOGGER.trace("session not associated with user.");
+            }
+        }
+        return userSession;
     }
 
     /*
@@ -134,10 +159,11 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         checkIfStarted();
 
         if (authenticatedUser.isAuthenticated()) {
+            LOGGER.tracef("logging out and invalidating user [%s]", authenticatedUser);
             authenticatedUser.invalidate();
             getEventManager().raiseEvent(new UserLoggedOutEvent());
         } else {
-            throw PicketBoxMessages.MESSAGES.invalidUserSession();
+            throw MESSAGES.invalidUserSession();
         }
     }
 
@@ -147,30 +173,39 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      * @see org.picketbox.core.PicketBoxManager#authorize(org.picketbox.core.PicketBoxSecurityContext)
      */
     @Override
-    public boolean authorize(UserContext subject, Resource resource) {
+    public boolean authorize(UserContext authenticatedUser, Resource resource) {
         checkIfStarted();
+
         try {
-            if (this.authorizationManager == null || (subject == null || !subject.isAuthenticated())) {
+            if (this.authorizationManager == null || (authenticatedUser == null || !authenticatedUser.isAuthenticated())) {
                 return true;
             }
 
-            return this.authorizationManager.authorize(resource, subject);
+            LOGGER.tracef("Authorizing user to resource. Resource [$s] and User [%s]", resource, authenticatedUser);
+
+            return this.authorizationManager.authorize(resource, authenticatedUser);
         } catch (Exception e) {
-            throw PicketBoxMessages.MESSAGES.authorizationFailed(e);
+            throw MESSAGES.authorizationFailed(e);
         }
     }
 
     /**
-     * @param securityContext
-     * @param authenticationCallbackHandler
+     * <p>
+     * Sub-classes can override this method to provde some pre-processing logic durint the authentication. Depending the return
+     * value the authentication process is aborted or not.
+     * </p>
+     *
+     * @param userContext
      * @return
      */
-    protected boolean doPreAuthentication(UserContext subject) {
+    protected boolean doPreAuthentication(UserContext userContext) {
         return true;
     }
 
     /**
-     * <p>Performs the authentication using the provided {@link UserCredential}.</p>
+     * <p>
+     * Performs the authentication using the provided {@link UserCredential}.
+     * </p>
      *
      * @param userContext
      * @return
@@ -180,29 +215,31 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         UserCredential credential = userContext.getCredential();
 
         if (credential == null) {
-            throw PicketBoxMessages.MESSAGES.failedToValidateCredentials();
+            throw MESSAGES.failedToValidateCredentials();
         }
-
-        LOGGER.trace("performing authentication");
 
         AuthenticationResult result = null;
 
         if (doPreAuthentication(userContext)) {
+            LOGGER.tracef("performing authentication for credential [%s]", credential);
+
             String[] mechanisms = this.authenticationProvider.getSupportedMechanisms();
 
             for (String mechanismName : mechanisms) {
                 AuthenticationMechanism mechanism = this.authenticationProvider.getMechanism(mechanismName);
 
                 if (mechanism.supports(credential)) {
-                    LOGGER.tracef("using authentication mechanism : %s", mechanism);
+                    LOGGER.tracef("using authentication mechanism [%s]", mechanism);
 
                     try {
                         result = mechanism.authenticate(credential);
                     } catch (AuthenticationException e) {
-                        throw PicketBoxMessages.MESSAGES.authenticationFailed(e);
+                        throw MESSAGES.authenticationFailed(e);
                     }
                 }
             }
+        } else {
+            LOGGER.tracef("authentication will not me performed. doPreAuthentication method returned false. user is [%s]", userContext);
         }
 
         if (result == null) {
@@ -222,13 +259,13 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      */
     protected UserContext performSuccessfulAuthentication(UserContext userContext, PicketBoxSession session) {
         if (!userContext.isAuthenticated()) {
-            throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
+            throw MESSAGES.userNotAuthenticated();
         }
 
         userContext.setSession(session);
         userContext.setCredential(null);
 
-        LOGGER.tracef("populating user context with populator %s", this.userContextPopulator);
+        LOGGER.tracef("populating user context with populator [%s]", this.userContextPopulator);
 
         UserContext populatedUserContext = this.userContextPopulator.getIdentity(userContext);
 
@@ -250,41 +287,6 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
     /**
      * <p>
-     * Tries to restore the session associated with the given {@link UserContext}.
-     * </p>
-     *
-     * @param userContext
-     * @return
-     */
-    private PicketBoxSession restoreSession(UserContext userContext) {
-        PicketBoxSession session = null;
-
-        if (this.sessionManager != null) {
-            PicketBoxLogger.LOGGER.trace("trying to restore previous created session.");
-
-            if (userContext.getSession() != null && userContext.getSession().getId() != null) {
-                session = this.sessionManager.retrieve(userContext.getSession().getId());
-            }
-
-            // check if the provided subject is marked as authenticated and if the session is valid
-            if (userContext.isAuthenticated()) {
-                if (session == null || !session.isValid()) {
-                    throw PicketBoxMessages.MESSAGES.invalidUserSession();
-                }
-            }
-
-            if (session != null) {
-                PicketBoxLogger.LOGGER.tracef("found session: %s", session);
-            } else {
-                PicketBoxLogger.LOGGER.trace("session not associated with user.");
-            }
-        }
-
-        return session;
-    }
-
-    /**
-     * <p>
      * Creates a session for the authenticated {@link UserContext}. The subject must be authenticated, its isAuthenticated()
      * method should return true.
      * </p>
@@ -301,10 +303,15 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         }
 
         if (this.sessionManager == null) {
+            LOGGER.tracef("no session created. sessions are NOT enabled.");
             return null;
         }
 
-        return this.sessionManager.create(authenticatedUserContext);
+        PicketBoxSession session = this.sessionManager.create(authenticatedUserContext);
+
+        LOGGER.tracef("created session [%s]", session);
+
+        return session;
     }
 
     /*
@@ -323,8 +330,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
             }
 
-            IdentityStore identityStore = this.configuration.getIdentityManager()
-                    .getIdentityManagerConfiguration().getIdentityStore();
+            IdentityStore identityStore = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
+                    .getIdentityStore();
             this.identityManager = new DefaultIdentityManager(identityStore);
 
             this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
@@ -347,7 +354,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         logConfiguration();
 
-        PicketBoxLogger.LOGGER.startingPicketBox();
+        LOGGER.startingPicketBox();
 
         if (this.authorizationManager != null) {
             this.authorizationManager.start();
@@ -355,7 +362,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     }
 
     /**
-     * <p>Subclasses can override this method to provide some additional processing before the startup.</p>
+     * <p>
+     * Subclasses can override this method to provide some additional processing before the startup.
+     * </p>
      */
     protected void doConfigure() {
 
@@ -422,34 +431,36 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     }
 
     /**
-     * <p>Helper method to log the configuration.</p>
+     * <p>
+     * Helper method to log the configuration.
+     * </p>
      */
     private void logConfiguration() {
-        PicketBoxLogger.LOGGER.debugInstanceUsage("Event Manager", this.eventManager);
+        LOGGER.debugInstanceUsage("Event Manager", this.eventManager);
 
-        PicketBoxLogger.LOGGER.debugInstanceUsage("Authentication Provider", this.authenticationProvider);
+        LOGGER.debugInstanceUsage("Authentication Provider", this.authenticationProvider);
 
-        if (PicketBoxLogger.LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             String[] supportedMechanisms = this.authenticationProvider.getSupportedMechanisms();
 
             for (String string : supportedMechanisms) {
-                PicketBoxLogger.LOGGER.trace(" Authentication Mechanism: " + string);
+                LOGGER.trace(" Authentication Mechanism: " + string);
             }
         }
 
-        PicketBoxLogger.LOGGER.debugInstanceUsage("Authorization Manager", this.authorizationManager);
+        LOGGER.debugInstanceUsage("Authorization Manager", this.authorizationManager);
 
-        PicketBoxLogger.LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
-        PicketBoxLogger.LOGGER.debugInstanceUsage(" Identity Store", this.configuration.getIdentityManager()
-                .getIdentityManagerConfiguration().getIdentityStore());
+        LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
+        LOGGER.debugInstanceUsage(" Identity Store", this.configuration.getIdentityManager().getIdentityManagerConfiguration()
+                .getIdentityStore());
 
-        PicketBoxLogger.LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
+        LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
 
         if (this.sessionManager != null) {
-            PicketBoxLogger.LOGGER.debugInstanceUsage("Session Manager", this.sessionManager);
-            PicketBoxLogger.LOGGER.debugInstanceUsage(" Session Store", this.configuration.getSessionManager().getStore());
+            LOGGER.debugInstanceUsage("Session Manager", this.sessionManager);
+            LOGGER.debugInstanceUsage(" Session Store", this.configuration.getSessionManager().getStore());
         } else {
-            PicketBoxLogger.LOGGER.trace("Session Management is DISABLED.");
+            LOGGER.trace("Session Management is DISABLED.");
         }
     }
 }

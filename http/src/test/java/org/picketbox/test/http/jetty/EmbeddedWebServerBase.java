@@ -43,21 +43,21 @@ public abstract class EmbeddedWebServerBase {
     public void setUp() throws Exception {
 
         // Start the Jetty embedded container
-        server = new Server();
+        this.server = new Server();
 
-        server.setConnectors(getConnectors());
+        this.server.setConnectors(getConnectors());
 
         this.establishUserApps();
 
-        server.start();
+        this.server.start();
     }
 
     @After
     public void tearDown() throws Exception {
-        if (server != null) {
-            server.stop();
-            server.destroy();
-            server = null;
+        if (this.server != null) {
+            this.server.stop();
+            this.server.destroy();
+            this.server = null;
         }
     }
 

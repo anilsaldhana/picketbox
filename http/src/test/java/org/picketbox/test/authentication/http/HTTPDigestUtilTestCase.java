@@ -41,13 +41,13 @@ public class HTTPDigestUtilTestCase {
 
     @Test
     public void testQuoteTokenize() throws Exception {
-        String[] tokens = HTTPDigestUtil.quoteTokenize(val);
+        String[] tokens = HTTPDigestUtil.quoteTokenize(this.val);
         validateTokens(tokens);
     }
 
     @Test
     public void testExtract() throws Exception {
-        String[] tokens = HTTPDigestUtil.quoteTokenize(val);
+        String[] tokens = HTTPDigestUtil.quoteTokenize(this.val);
         assertTrue(tokens.length > 0);
         validateExtractedTokens(tokens);
     }

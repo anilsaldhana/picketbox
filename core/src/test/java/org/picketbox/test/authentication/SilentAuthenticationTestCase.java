@@ -34,17 +34,19 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.core.session.DefaultSessionId;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionId;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
  * <p>
- * Tests the silent authentication when using a valid {@link PicketBoxSession} identifier.
+ * Tests the silent authentication when using a valid {@link PicketBoxSession} identifier to create and authenticate a
+ * {@link UserContext} instance.
  * </p>
- * 
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  */
 public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
@@ -54,7 +56,7 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
      * creating the {@link UserContext} with a valid {@link SessionId}, PicketBox should perform a silent authentication
      * restoring the {@link PicketBoxSession} with the specified identifier.
      * </p>
-     * 
+     *
      * @throws AuthenticationException
      */
     @Test
@@ -95,6 +97,7 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
         // check if the session instances are the same, althought the users instance are not the same
         Assert.assertNotSame(authenticatedUser, silentAuthenticatedUser);
         assertEquals(userSession, silentUserSession);
+        assertEquals(userSession.getCreationDate(), silentUserSession.getCreationDate());
     }
 
     /**
@@ -102,11 +105,11 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
      * Tests if the authentication fail when providing a invalid session identifier. In this case a
      * {@link AuthenticationException} is raised asking for the user credentials.
      * </p>
-     * 
+     *
      * @throws AuthenticationException
      */
     @Test(expected = AuthenticationException.class)
-    public void testUnsuccessfulAuthentication() throws AuthenticationException {
+    public void testUnsuccessfulAuthenticationInvalidSessionId() throws AuthenticationException {
         PicketBoxManager picketBoxManager = createManager();
 
         UserContext authenticatingUser = new UserContext();
@@ -140,9 +143,30 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
 
     /**
      * <p>
+     * Tests if the authentication fails when providing a invalid session identifier. In this case a
+     * {@link AuthenticationException} is raised asking for the user credentials.
+     * </p>
+     *
+     * @throws AuthenticationException
+     */
+    @Test(expected = AuthenticationException.class)
+    public void testUnsuccessfulAuthenticationUnauthenticatedUser() throws AuthenticationException {
+        PicketBoxManager picketBoxManager = createManager();
+
+        UserContext authenticatingUser = new UserContext(new DefaultSessionId());
+
+        // let's authenticate the user
+        UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
+    }
+
+    /**
+     * <p>
      * Creates a {@link PicketBoxManager} with the Session Management support.
      * </p>
-     * 
+     *
      * @return
      */
     private PicketBoxManager createManager() {

@@ -73,13 +73,13 @@ public class DelegatingSecurityFilterHTTPBasicUnitTestCase extends EmbeddedWebSe
          * Thread.currentThread().setContextClassLoader(context.getClassLoader());
          */
         WebAppContext webapp = createWebApp(CONTEXTPATH, warUrlString);
-        server.setHandler(webapp);
+        this.server.setHandler(webapp);
 
         System.setProperty(PicketBoxConstants.USERNAME, "Aladdin");
         System.setProperty(PicketBoxConstants.CREDENTIAL, "Open Sesame");
 
         FilterHolder filterHolder = new FilterHolder(DelegatingSecurityFilter.class);
-        
+
         webapp.setInitParameter(PicketBoxConstants.AUTHENTICATION_KEY, PicketBoxConstants.BASIC);
         webapp.setInitParameter(PicketBoxConstants.HTTP_CONFIGURATION_PROVIDER, HTTPDigestConfigurationProvider.class.getName());
 
@@ -91,7 +91,7 @@ public class DelegatingSecurityFilterHTTPBasicUnitTestCase extends EmbeddedWebSe
 
     @Test
     public void testBasicAuth() throws Exception {
-        URL url = new URL(urlStr);
+        URL url = new URL(this.urlStr);
 
         DefaultHttpClient httpclient = null;
         try {

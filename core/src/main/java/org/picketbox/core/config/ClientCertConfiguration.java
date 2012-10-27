@@ -20,35 +20,31 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.config;
-
-import org.picketbox.core.config.SessionManagerConfig;
+package org.picketbox.core.config;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPSessionManagerConfiguration extends SessionManagerConfig {
+public class ClientCertConfiguration {
 
-    private String sessionAttributeName;
+    private boolean useCNAsPrincipal;
+    private boolean useCertificateValidation;
 
-    /**
-     * @return the sessionAttributeName
-     */
-    public String getSessionAttributeName() {
-        return this.sessionAttributeName;
+    public boolean isUseCNAsPrincipal() {
+        return this.useCNAsPrincipal;
     }
 
-    public HTTPSessionManagerConfiguration(String sessionAttributeName, SessionManagerConfig defaultConfiguration) {
-        super(defaultConfiguration.getManager(), defaultConfiguration.getStore(), defaultConfiguration.getSessionTimeout());
-        this.sessionAttributeName = sessionAttributeName;
+    public void setUseCNAsPrincipal(boolean useCNAsPrincipal) {
+        this.useCNAsPrincipal = useCNAsPrincipal;
     }
 
-    /**
-     * @param sessionAttributeName the sessionAttributeName to set
-     */
-    public void setSessionAttributeName(String sessionAttributeName) {
-        this.sessionAttributeName = sessionAttributeName;
+    public boolean isUseCertificateValidation() {
+        return this.useCertificateValidation;
+    }
+
+    public void setUseCertificateValidation(boolean useCertificateValidation) {
+        this.useCertificateValidation = useCertificateValidation;
     }
 
 }

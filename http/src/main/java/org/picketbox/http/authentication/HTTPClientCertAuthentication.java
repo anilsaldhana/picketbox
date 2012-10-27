@@ -35,9 +35,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
-import org.picketbox.http.config.HTTPClientCertConfiguration;
 import org.picketlink.idm.credential.X509CertificateCredential;
 import org.picketlink.idm.model.User;
 
@@ -111,22 +111,25 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
                 username = prop.getProperty("CN");
             }
 
-            User user = getIdentityManager().getUser(getCertificatePrincipal(clientCertificate).getName());
+            User user = getIdentityManager().getUser(username);
 
             if (user != null) {
                 if (isUseCertificateValidation()) {
-                    if (getIdentityManager().validateCredential(user, certCredential.getCredential())) {
-                        return new PicketBoxPrincipal(user.getKey());
+                    if (!getIdentityManager().validateCredential(user, certCredential.getCredential())) {
+                        return null;
                     }
                 }
 
-                if (isUseCNAsPrincipal()) {
-                    return new PicketBoxPrincipal(username);
-                }
+                return new PicketBoxPrincipal(username);
             }
         }
 
         return null;
+    }
+
+    @Override
+    protected void challengeClient(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+
     }
 
     private Principal getCertificatePrincipal(X509Certificate cert) {
@@ -138,13 +141,8 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
         return certprincipal;
     }
 
-    @Override
-    protected void challengeClient(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
-    }
-
     public boolean isUseCertificateValidation() {
-        HTTPClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
+        ClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
 
         if (clientCertConfig != null) {
             this.useCertificateValidation = clientCertConfig.isUseCertificateValidation();
@@ -153,18 +151,18 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
         return this.useCertificateValidation;
     }
 
-    private HTTPClientCertConfiguration getClientCertAuthenticationConfig() {
+    private ClientCertConfiguration getClientCertAuthenticationConfig() {
         HTTPAuthenticationConfiguration authenticationConfig = getAuthenticationConfig();
 
         if (authenticationConfig != null) {
-            return authenticationConfig.getClientCertConfiguration();
+            return authenticationConfig.getCertConfiguration();
         }
 
         return null;
     }
 
     public boolean isUseCNAsPrincipal() {
-        HTTPClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
+        ClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
 
         if (clientCertConfig != null) {
             this.useCNAsPrincipal = clientCertConfig.isUseCNAsPrincipal();

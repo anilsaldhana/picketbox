@@ -38,15 +38,21 @@ import org.picketbox.core.authentication.impl.UserNamePasswordAuthenticationMech
 public class AuthenticationConfigurationBuilder extends AbstractConfigurationBuilder<AuthenticationConfiguration> {
 
     protected List<AuthenticationMechanism> mechanisms;
+    protected ClientCertConfigurationBuilder certAuthentication;
 
     public AuthenticationConfigurationBuilder(ConfigurationBuilder builder) {
         super(builder);
         this.mechanisms = new ArrayList<AuthenticationMechanism>();
+        this.certAuthentication = new ClientCertConfigurationBuilder(builder);
     }
 
     public AuthenticationConfigurationBuilder mechanism(AuthenticationMechanism mechanism) {
         this.mechanisms.add(mechanism);
         return this;
+    }
+
+    public ClientCertConfigurationBuilder clientCert() {
+        return this.certAuthentication;
     }
 
     @Override
@@ -59,6 +65,6 @@ public class AuthenticationConfigurationBuilder extends AbstractConfigurationBui
 
     @Override
     public AuthenticationConfiguration doBuild() {
-        return new AuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build());
+        return new AuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build(), this.certAuthentication.build());
     }
 }

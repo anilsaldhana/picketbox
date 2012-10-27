@@ -65,7 +65,7 @@ public class ProtectedResourceConfig {
      */
     @SuppressWarnings("rawtypes")
     public ProtectedResourceManager getManager() {
-        return manager;
+        return this.manager;
     }
 
     /**
@@ -74,7 +74,7 @@ public class ProtectedResourceConfig {
      * @return
      */
     public List<ProtectedResource> getResources() {
-        return Collections.unmodifiableList(resources);
+        return Collections.unmodifiableList(this.resources);
     }
 
     /**
@@ -99,6 +99,6 @@ public class ProtectedResourceConfig {
      * Remove all the resources
      */
     public void removeAllResource() {
-        resources.clear();
+        this.resources.clear();
     }
 }

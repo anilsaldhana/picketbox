@@ -22,9 +22,13 @@
 
 package org.picketbox.core.authentication.impl;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.UserCredential;
@@ -32,7 +36,10 @@ import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.CertificateCredential;
+import org.picketbox.core.config.AuthenticationConfiguration;
+import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketlink.idm.credential.X509CertificateCredential;
 import org.picketlink.idm.model.User;
 
 /**
@@ -44,6 +51,9 @@ import org.picketlink.idm.model.User;
  *
  */
 public class CertificateAuthenticationMechanism extends AbstractAuthenticationMechanism {
+
+    private boolean useCertificateValidation;
+    private boolean useCNAsPrincipal;
 
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
@@ -58,18 +68,77 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
 
     @Override
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
-        boolean isValidCredential = false;
+        if (credential.getCredential() != null) {
+            CertificateCredential certCredential = (CertificateCredential) credential;
+            X509CertificateCredential x509Credential = (X509CertificateCredential) certCredential.getCredential();
+            X509Certificate clientCertificate = x509Credential.getCertificate();
 
-        User user = getIdentityManager().getUser(credential.getUserName());
+            String username = getCertificatePrincipal(clientCertificate).getName();
 
-        if (user != null) {
-            isValidCredential = getIdentityManager().validateCredential(user, credential.getCredential());
+            if (isUseCNAsPrincipal()) {
+                Properties prop = new Properties();
+                try {
+                    prop.load(new StringReader(username.replaceAll(",", "\n")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                username = prop.getProperty("CN");
+            }
+
+            User user = getIdentityManager().getUser(username);
+
+            if (user != null) {
+                if (isUseCertificateValidation()) {
+                    if (!getIdentityManager().validateCredential(user, certCredential.getCredential())) {
+                        return null;
+                    }
+                }
+
+                return new PicketBoxPrincipal(username);
+            }
         }
 
-        if (!isValidCredential) {
-            return null;
-        }
-
-        return new PicketBoxPrincipal(user.getKey());
+        return null;
     }
+
+    private Principal getCertificatePrincipal(X509Certificate cert) {
+        Principal certprincipal = cert.getSubjectDN();
+
+        if (certprincipal == null) {
+            certprincipal = cert.getIssuerDN();
+        }
+        return certprincipal;
+    }
+
+    public boolean isUseCertificateValidation() {
+        ClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
+
+        if (clientCertConfig != null) {
+            this.useCertificateValidation = clientCertConfig.isUseCertificateValidation();
+        }
+
+        return this.useCertificateValidation;
+    }
+
+    private ClientCertConfiguration getClientCertAuthenticationConfig() {
+        AuthenticationConfiguration authenticationConfig = getPicketBoxManager().getConfiguration().getAuthentication();
+
+        if (authenticationConfig != null) {
+            return authenticationConfig.getCertConfiguration();
+        }
+
+        return null;
+    }
+
+    public boolean isUseCNAsPrincipal() {
+        ClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
+
+        if (clientCertConfig != null) {
+            this.useCNAsPrincipal = clientCertConfig.isUseCNAsPrincipal();
+        }
+
+        return this.useCNAsPrincipal;
+    }
+
 }

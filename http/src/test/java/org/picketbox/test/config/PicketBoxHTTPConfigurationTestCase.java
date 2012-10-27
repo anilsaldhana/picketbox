@@ -108,7 +108,7 @@ public class PicketBoxHTTPConfigurationTestCase {
         HTTPUserContext authenticationUserContext = new HTTPUserContext(req, resp, new UsernamePasswordCredential(
                 "admin", "admin"));
 
-        UserContext subject = picketBoxManager.authenticate(authenticationUserContext);
+        UserContext subject = this.picketBoxManager.authenticate(authenticationUserContext);
 
         Assert.assertNotNull(subject);
     }
@@ -137,7 +137,7 @@ public class PicketBoxHTTPConfigurationTestCase {
         HTTPUserContext authenticationUserContext = new HTTPUserContext(req, resp, new UsernamePasswordCredential(
                 "admin", "admin"));
 
-        UserContext subject = picketBoxManager.authenticate(authenticationUserContext);
+        UserContext subject = this.picketBoxManager.authenticate(authenticationUserContext);
 
         Assert.assertNotNull(subject);
         Assert.assertFalse(subject.isAuthenticated());
@@ -168,7 +168,7 @@ public class PicketBoxHTTPConfigurationTestCase {
         HTTPUserContext authenticationUserContext = new HTTPUserContext(req, resp, new UsernamePasswordCredential(
                 "admin", "admin"));
 
-        UserContext subject = picketBoxManager.authenticate(authenticationUserContext);
+        UserContext subject = this.picketBoxManager.authenticate(authenticationUserContext);
 
         Assert.assertNotNull(subject);
 

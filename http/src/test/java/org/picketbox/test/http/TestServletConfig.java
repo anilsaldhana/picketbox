@@ -40,18 +40,22 @@ public class TestServletConfig implements ServletConfig {
         this.sc = sc;
     }
 
+    @Override
     public String getInitParameter(String name) {
-        return sc.getInitParameter(name);
+        return this.sc.getInitParameter(name);
     }
 
+    @Override
     public Enumeration getInitParameterNames() {
         return null;
     }
 
+    @Override
     public ServletContext getServletContext() {
-        return sc;
+        return this.sc;
     }
 
+    @Override
     public String getServletName() {
         return null;
     }

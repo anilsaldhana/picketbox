@@ -22,6 +22,8 @@
 
 package org.picketbox.core.session;
 
+import static org.picketbox.core.PicketBoxMessages.MESSAGES;
+
 import java.io.Serializable;
 
 import org.picketbox.core.AbstractPicketBoxLifeCycle;
@@ -64,11 +66,6 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         registerDefaultEventHandler();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.session.SessionManager#create(org.picketbox.core.UserContext)
-     */
     @Override
     public PicketBoxSession create(UserContext authenticatedUserContext) {
         checkIfStarted();
@@ -102,11 +99,6 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         return session;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.session.SessionManager#retrieve(org.picketbox.core.session.SessionId)
-     */
     @Override
     public PicketBoxSession retrieve(SessionId<? extends Serializable> id) {
         checkIfStarted();
@@ -120,11 +112,24 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         return session;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.session.SessionManager#remove(org.picketbox.core.session.PicketBoxSession)
-     */
+    @Override
+    public PicketBoxSession restoreSession(UserContext userContext) {
+        PicketBoxSession session = null;
+
+        if (userContext.getSession() != null && userContext.getSession().getId() != null) {
+            session = retrieve(userContext.getSession().getId());
+        }
+
+        // check if the provided subject is marked as authenticated and if the session is valid
+        if (userContext.isAuthenticated()) {
+            if (session == null || !session.isValid()) {
+                throw MESSAGES.invalidUserSession();
+            }
+        }
+
+        return session;
+    }
+
     @Override
     public void remove(PicketBoxSession session) {
         checkIfStarted();
@@ -134,11 +139,6 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.session.SessionManager#update(org.picketbox.core.session.PicketBoxSession)
-     */
     @Override
     public void update(PicketBoxSession session) {
         checkIfStarted();
@@ -155,11 +155,6 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         this.sessionStore.start();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.AbstractPicketBoxLifeCycle#doStop()
-     */
     @Override
     protected void doStop() {
         this.sessionStore.stop();

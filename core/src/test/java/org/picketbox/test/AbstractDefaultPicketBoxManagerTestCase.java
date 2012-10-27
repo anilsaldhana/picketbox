@@ -22,11 +22,17 @@
 
 package org.picketbox.test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+
 import org.picketbox.core.DefaultPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.credential.X509CertificateCredential;
 import org.picketlink.idm.file.internal.FileUser;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
@@ -72,6 +78,8 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         identityManager.updateCredential(adminUser, new PasswordCredential("admin"));
 
+        identityManager.updateCredential(adminUser, new X509CertificateCredential(getTestingCertificate()));
+
         Role roleDeveloper = identityManager.createRole("developer");
         Role roleAdmin = identityManager.createRole("admin");
 
@@ -79,6 +87,27 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         identityManager.grantRole(roleDeveloper, adminUser, groupCoreDeveloper);
         identityManager.grantRole(roleAdmin, adminUser, groupCoreDeveloper);
+    }
+
+    protected X509Certificate getTestingCertificate() {
+        // Certificate
+        InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/servercert.txt");
+        X509Certificate cert = null;
+
+        try {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            cert = (X509Certificate) cf.generateCertificate(bis);
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not load testing certificate.", e);
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return cert;
     }
 
 }

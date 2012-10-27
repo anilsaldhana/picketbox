@@ -44,7 +44,7 @@ import org.picketbox.test.http.TestServletResponse;
 
 /**
  * Unit test the {@link HTTPClientCertAuthentication} class
- * 
+ *
  * @author anil saldhana
  * @since July 9, 2012
  */
@@ -65,7 +65,7 @@ public class HTTPClientCertValidationAuthenticationTestCase extends AbstractAuth
      * Tests if the authentication is successful when validating the certificate. By default, the
      * {@link HTTPClientCertAuthentication} is configured with useCertificateValidation == false.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test

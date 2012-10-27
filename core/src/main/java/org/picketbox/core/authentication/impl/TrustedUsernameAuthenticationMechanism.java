@@ -37,7 +37,8 @@ import org.picketlink.idm.model.User;
 
 /**
  * <p>
- * A {@link AuthenticationMechanism} implementation for a X.509 Certificate based authentication.
+ * A {@link AuthenticationMechanism} implementation that trusts the provided username. Basically, this mechanism only checks the
+ * Identity Store for a valid user with the given name and trusts. No credential validation is done.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -45,11 +46,6 @@ import org.picketlink.idm.model.User;
  */
 public class TrustedUsernameAuthenticationMechanism extends AbstractAuthenticationMechanism {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.api.AuthenticationService#getAuthenticationInfo()
-     */
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
         List<AuthenticationInfo> arrayList = new ArrayList<AuthenticationInfo>();
@@ -61,12 +57,6 @@ public class TrustedUsernameAuthenticationMechanism extends AbstractAuthenticati
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism#doAuthenticate(org.picketbox.core.Credential,
-     * org.picketbox.core.authentication.AuthenticationResult)
-     */
     @Override
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         User user = getIdentityManager().getUser(credential.getUserName());

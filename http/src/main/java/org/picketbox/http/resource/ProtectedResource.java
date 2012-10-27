@@ -83,14 +83,14 @@ public class ProtectedResource {
     }
 
     public String[] getRoles() {
-        return roles;
+        return this.roles;
     }
 
     /**
      * @return the pattern
      */
     public String getPattern() {
-        return pattern;
+        return this.pattern;
     }
 
     /**
@@ -104,7 +104,7 @@ public class ProtectedResource {
      * @return the constraint
      */
     public String getConstraint() {
-        return constraint;
+        return this.constraint;
     }
 
     /**

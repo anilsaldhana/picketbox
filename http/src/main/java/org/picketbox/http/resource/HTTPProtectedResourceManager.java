@@ -44,6 +44,7 @@ public class HTTPProtectedResourceManager extends AbstractProtectedResourceManag
     /**
      * @return the resources
      */
+    @Override
     public List<ProtectedResource> getResources() {
         return Collections.unmodifiableList(this.resources);
     }
@@ -51,6 +52,7 @@ public class HTTPProtectedResourceManager extends AbstractProtectedResourceManag
     /**
      * @param resources the resources to set
      */
+    @Override
     public void setResources(List<ProtectedResource> resources) {
         this.resources = resources;
     }
@@ -64,6 +66,7 @@ public class HTTPProtectedResourceManager extends AbstractProtectedResourceManag
      * @param servletReq
      * @return
      */
+    @Override
     public ProtectedResource getProtectedResource(WebResource servletReq) {
         checkIfStarted();
 
@@ -109,6 +112,7 @@ public class HTTPProtectedResourceManager extends AbstractProtectedResourceManag
      * @param pattern
      * @param constraint
      */
+    @Override
     public void addProtectedResource(String pattern, ProtectedResourceConstraint constraint) {
         if (started()) {
             throw PicketBoxMessages.MESSAGES.instanceAlreadyStarted();

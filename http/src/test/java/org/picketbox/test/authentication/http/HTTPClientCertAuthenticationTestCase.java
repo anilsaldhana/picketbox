@@ -44,7 +44,7 @@ import org.picketbox.test.http.TestServletResponse;
 
 /**
  * Unit test the {@link HTTPClientCertAuthentication} class
- * 
+ *
  * @author anil saldhana
  * @since July 9, 2012
  */
@@ -57,7 +57,7 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractAuthentication
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.picketbox.test.authentication.http.AbstractAuthenticationTest#doConfigureManager(org.picketbox.http.config.
      * HTTPConfigurationBuilder)
      */
@@ -71,7 +71,7 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractAuthentication
      * Tests if the authentication is successful when validating the Subject CN from the provided certificate. By default, the
      * {@link HTTPClientCertAuthentication} is configured with useCNAsPrincipal == true.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test
