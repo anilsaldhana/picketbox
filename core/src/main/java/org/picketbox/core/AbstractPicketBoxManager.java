@@ -225,6 +225,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
             String[] mechanisms = this.authenticationProvider.getSupportedMechanisms();
 
+            boolean supportedCredential = false;
+
             for (String mechanismName : mechanisms) {
                 AuthenticationMechanism mechanism = this.authenticationProvider.getMechanism(mechanismName);
 
@@ -233,10 +235,15 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
                     try {
                         result = mechanism.authenticate(credential);
+                        supportedCredential = true;
                     } catch (AuthenticationException e) {
                         throw MESSAGES.authenticationFailed(e);
                     }
                 }
+            }
+
+            if (!supportedCredential) {
+                throw MESSAGES.unsupportedCredentialType(credential);
             }
         } else {
             LOGGER.tracef("authentication will not me performed. doPreAuthentication method returned false. user is [%s]", userContext);
