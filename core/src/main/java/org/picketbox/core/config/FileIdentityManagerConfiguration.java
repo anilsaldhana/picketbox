@@ -32,7 +32,7 @@ import org.picketlink.idm.spi.IdentityStore;
 public class FileIdentityManagerConfiguration implements IdentityManagerConfiguration {
 
     private String workingDir;
-    private boolean alwaysCreateFiles;
+    private boolean alwaysCreateFiles = true;
 
     /*
      * (non-Javadoc)
