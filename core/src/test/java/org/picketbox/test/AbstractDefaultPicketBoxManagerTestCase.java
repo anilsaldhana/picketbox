@@ -22,14 +22,28 @@
 
 package org.picketbox.test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+
 import org.picketbox.core.DefaultPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.UserContext;
+import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.credential.X509CertificateCredential;
 import org.picketlink.idm.file.internal.FileUser;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
+import org.picketlink.idm.model.SimpleGroup;
+import org.picketlink.idm.model.SimpleRole;
 
 /**
  * <p>
@@ -53,6 +67,25 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         return this.picketboxManager;
     }
+    
+    /**
+     * <p>
+     * Creates a {@link PicketBoxManager}.
+     * </p>
+     *
+     * @return
+     */
+    protected PicketBoxManager createManager(ConfigurationBuilder... builder) {
+        ConfigurationBuilder configBuilder = null;
+
+        if (builder.length == 0) {
+            configBuilder = new ConfigurationBuilder();
+        } else {
+            configBuilder = builder[0];
+        }
+
+        return getPicketBoxManager(configBuilder.build());
+    }
 
     /**
      * <p>
@@ -63,14 +96,15 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
      */
     private void initialize(IdentityManager identityManager) {
         FileUser adminUser = new FileUser("admin");
-        
+
         identityManager.createUser(adminUser);
 
         adminUser.setEmail("admin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
-        
+
         identityManager.updateCredential(adminUser, new PasswordCredential("admin"));
+        identityManager.updateCredential(adminUser, new X509CertificateCredential(getTestingCertificate()));
 
         Role roleDeveloper = identityManager.createRole("developer");
         Role roleAdmin = identityManager.createRole("admin");
@@ -79,6 +113,55 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         identityManager.grantRole(roleDeveloper, adminUser, groupCoreDeveloper);
         identityManager.grantRole(roleAdmin, adminUser, groupCoreDeveloper);
+        
+        FileUser jbidTestUser = new FileUser("jbid test");
+
+        identityManager.createUser(jbidTestUser);
+
+        identityManager.updateCredential(jbidTestUser, new X509CertificateCredential(getTestingCertificate()));
+
+        identityManager.grantRole(roleDeveloper, jbidTestUser, groupCoreDeveloper);
+        identityManager.grantRole(roleAdmin, jbidTestUser, groupCoreDeveloper);
+
+        FileUser certUser = new FileUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
+
+        identityManager.createUser(certUser);
+        
+        identityManager.updateCredential(certUser, new X509CertificateCredential(getTestingCertificate()));
+        
+        identityManager.grantRole(roleDeveloper, certUser, groupCoreDeveloper);
+        identityManager.grantRole(roleAdmin, certUser, groupCoreDeveloper);
+    }
+    
+    protected void assertRoles(UserContext authenticatedUser) {
+        assertFalse(authenticatedUser.getRoles().isEmpty());
+        assertTrue(authenticatedUser.getRoles().containsAll(Arrays.asList(new Role[] {new SimpleRole("developer"), new SimpleRole("admin")})));
+    }
+
+    protected void assertGroups(UserContext authenticatedUser) {
+        assertFalse(authenticatedUser.getGroups().isEmpty());
+        assertTrue(authenticatedUser.getGroups().containsAll(Arrays.asList(new Group[] {new SimpleGroup("PicketBox Group","PicketBox Group",null)})));
+    }
+
+    protected X509Certificate getTestingCertificate() {
+        // Certificate
+        InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/servercert.txt");
+        X509Certificate cert = null;
+
+        try {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            cert = (X509Certificate) cf.generateCertificate(bis);
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not load testing certificate.", e);
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return cert;
     }
 
 }

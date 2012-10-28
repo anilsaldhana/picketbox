@@ -75,7 +75,7 @@ public class DelegatingSecurityFilterHTTPDigestUnitTestCase extends EmbeddedWebS
          */
 
         WebAppContext webapp = createWebApp(CONTEXTPATH, warUrlString);
-        server.setHandler(webapp);
+        this.server.setHandler(webapp);
 
         // Thread.currentThread().setContextClassLoader(context.getClassLoader());
 
@@ -106,7 +106,7 @@ public class DelegatingSecurityFilterHTTPDigestUnitTestCase extends EmbeddedWebS
 
     @Test
     public void testDigestAuth() throws Exception {
-        URL url = new URL(urlStr);
+        URL url = new URL(this.urlStr);
 
         DefaultHttpClient httpclient = null;
         try {

@@ -36,13 +36,11 @@ import org.picketbox.http.authentication.HTTPFormAuthentication;
  */
 public class HTTPAuthenticationConfigurationBuilder extends AuthenticationConfigurationBuilder {
 
-    private final HTTPClientCertConfigurationBuilder clientCertAuthentication;
     private final HTTPDigestConfigurationBuilder digestAuthentication;
     private HTTPFormConfigurationBuilder formAuthentication;
 
     public HTTPAuthenticationConfigurationBuilder(ConfigurationBuilder builder) {
         super(builder);
-        this.clientCertAuthentication = new HTTPClientCertConfigurationBuilder(builder);
         this.digestAuthentication = new HTTPDigestConfigurationBuilder(builder);
         this.formAuthentication = new HTTPFormConfigurationBuilder(builder);
     }
@@ -61,10 +59,6 @@ public class HTTPAuthenticationConfigurationBuilder extends AuthenticationConfig
         this.mechanisms.add(new HTTPClientCertAuthentication());
     }
 
-    public HTTPClientCertConfigurationBuilder clientCert() {
-        return this.clientCertAuthentication;
-    }
-
     public HTTPDigestConfigurationBuilder digest() {
         return this.digestAuthentication;
     }
@@ -79,7 +73,7 @@ public class HTTPAuthenticationConfigurationBuilder extends AuthenticationConfig
     @Override
     public AuthenticationConfiguration doBuild() {
         return new HTTPAuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build(),
-                this.clientCertAuthentication.build(), this.digestAuthentication.build(), this.formAuthentication.build());
+                super.certAuthentication.build(), this.digestAuthentication.build(), this.formAuthentication.build());
     }
 
 }

@@ -43,23 +43,21 @@ public class IdentityManagerInitializer {
 
     public static void initializeIdentityStore() {
         FileBasedIdentityStore theStore = new FileBasedIdentityStore();
-        
-        theStore.setAlwaysCreateFiles(false);
-        
+
         IdentityManager identityManager = new DefaultIdentityManager(theStore);
-        
+
         FileUser jbidTestUser = new FileUser("jbid test");
-        
+
         identityManager.createUser(jbidTestUser);
-        
+
         FileUser certUser = new FileUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
-        
+
         identityManager.createUser(certUser);
-        
+
         InputStream bis = Thread.currentThread().getContextClassLoader().getResourceAsStream("cert/servercert.txt");
 
         CertificateFactory cf = null;
-        
+
         try {
             cf = CertificateFactory.getInstance("X.509");
             X509Certificate cert = (X509Certificate) cf.generateCertificate(bis);
@@ -69,9 +67,9 @@ public class IdentityManagerInitializer {
         } catch (Exception e) {
             throw new RuntimeException("Error updating user certificate.", e);
         }
-        
+
         FileUser adminUser = new FileUser("Aladdin");
-        
+
         identityManager.createUser(adminUser);
 
         adminUser.setEmail("Aladdin@picketbox.com");
@@ -88,5 +86,5 @@ public class IdentityManagerInitializer {
         identityManager.grantRole(roleManager, adminUser, groupCoreDeveloper);
         identityManager.grantRole(roleConfidencial, adminUser, groupCoreDeveloper);
     }
-    
+
 }

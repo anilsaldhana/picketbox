@@ -42,14 +42,14 @@ public class LDAPIdentityManagerConfiguration implements IdentityManagerConfigur
      * @return the storeConfig
      */
     public LDAPConfiguration getStoreConfig() {
-        return ldapConfig;
+        return this.ldapConfig;
     }
 
     /**
      * @return the searchConfig
      */
     public LDAPConfiguration getSearchConfig() {
-        return ldapConfig;
+        return this.ldapConfig;
     }
 
     @Override

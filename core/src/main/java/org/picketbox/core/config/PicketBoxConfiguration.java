@@ -48,21 +48,21 @@ public class PicketBoxConfiguration {
      * @return the authentication
      */
     public AuthenticationConfiguration getAuthentication() {
-        return authentication;
+        return this.authentication;
     }
 
     /**
      * @return the authorization
      */
     public AuthorizationConfiguration getAuthorization() {
-        return authorization;
+        return this.authorization;
     }
 
     /**
      * @return the identityManager
      */
     public GlobalIdentityManagerConfiguration getIdentityManager() {
-        return identityManager;
+        return this.identityManager;
     }
 
     public SessionManagerConfig getSessionManager() {

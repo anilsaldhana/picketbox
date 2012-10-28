@@ -56,6 +56,7 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
      *
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#authentication()
      */
+    @Override
     public AuthenticationConfigurationBuilder authentication() {
         return this.authentication;
     }
@@ -65,6 +66,7 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
      *
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#authorization()
      */
+    @Override
     public AuthorizationConfigurationBuilder authorization() {
         return this.authorization;
     }
@@ -74,6 +76,7 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
      *
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#identityManager()
      */
+    @Override
     public IdentityManagerConfigurationBuilder identityManager() {
         return this.identityManager;
     }

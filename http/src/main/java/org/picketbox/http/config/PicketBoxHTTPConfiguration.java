@@ -50,7 +50,7 @@ public class PicketBoxHTTPConfiguration extends PicketBoxConfiguration {
      * @return the protected resource config
      */
     public ProtectedResourceConfig getProtectedResource() {
-        return protectedResource;
+        return this.protectedResource;
     }
 
     @Override

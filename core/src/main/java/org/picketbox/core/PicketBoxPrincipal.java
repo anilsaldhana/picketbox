@@ -42,7 +42,7 @@ public class PicketBoxPrincipal implements Principal, Serializable {
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
 }

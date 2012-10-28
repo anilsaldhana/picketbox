@@ -34,10 +34,12 @@ import org.picketbox.core.authentication.AuthenticationMechanism;
 public class AuthenticationConfiguration {
     private EventManagerConfiguration eventManager;
     private List<AuthenticationMechanism> mechanisms;
+    private ClientCertConfiguration certConfiguration;
 
-    public AuthenticationConfiguration(List<AuthenticationMechanism> mechanisms, EventManagerConfiguration eventManager) {
+    public AuthenticationConfiguration(List<AuthenticationMechanism> mechanisms, EventManagerConfiguration eventManager, ClientCertConfiguration certConfiguration) {
         this.eventManager = eventManager;
         this.mechanisms = mechanisms;
+        this.certConfiguration = certConfiguration;
     }
 
     /**
@@ -56,5 +58,9 @@ public class AuthenticationConfiguration {
      */
     public EventManagerConfiguration getEventManager() {
         return this.eventManager;
+    }
+
+    public ClientCertConfiguration getCertConfiguration() {
+        return this.certConfiguration;
     }
 }

@@ -72,4 +72,9 @@ public class DefaultSessionId implements SessionId<String> {
     public int hashCode() {
         return this.getId().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Identifier: " + this.id;
+    }
 }

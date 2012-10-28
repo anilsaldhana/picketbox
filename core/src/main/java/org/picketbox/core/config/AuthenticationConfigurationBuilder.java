@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.impl.CertificateAuthenticationMechanism;
+import org.picketbox.core.authentication.impl.OTPAuthenticationMechanism;
 import org.picketbox.core.authentication.impl.TrustedUsernameAuthenticationMechanism;
 import org.picketbox.core.authentication.impl.UserNamePasswordAuthenticationMechanism;
 
@@ -38,10 +39,12 @@ import org.picketbox.core.authentication.impl.UserNamePasswordAuthenticationMech
 public class AuthenticationConfigurationBuilder extends AbstractConfigurationBuilder<AuthenticationConfiguration> {
 
     protected List<AuthenticationMechanism> mechanisms;
+    protected ClientCertConfigurationBuilder certAuthentication;
 
     public AuthenticationConfigurationBuilder(ConfigurationBuilder builder) {
         super(builder);
         this.mechanisms = new ArrayList<AuthenticationMechanism>();
+        this.certAuthentication = new ClientCertConfigurationBuilder(builder);
     }
 
     public AuthenticationConfigurationBuilder mechanism(AuthenticationMechanism mechanism) {
@@ -49,16 +52,20 @@ public class AuthenticationConfigurationBuilder extends AbstractConfigurationBui
         return this;
     }
 
+    public ClientCertConfigurationBuilder clientCert() {
+        return this.certAuthentication;
+    }
+
     @Override
     protected void setDefaults() {
         this.mechanisms.add(new UserNamePasswordAuthenticationMechanism());
-//        this.mechanisms.add(new DigestAuthenticationMechanism());
         this.mechanisms.add(new CertificateAuthenticationMechanism());
         this.mechanisms.add(new TrustedUsernameAuthenticationMechanism());
+        this.mechanisms.add(new OTPAuthenticationMechanism());
     }
 
     @Override
     public AuthenticationConfiguration doBuild() {
-        return new AuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build());
+        return new AuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build(), this.certAuthentication.build());
     }
 }

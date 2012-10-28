@@ -29,7 +29,7 @@ import org.picketbox.test.config.IdentityManagerInitializer;
 
 /**
  * Base class
- * 
+ *
  * @author anil saldhana
  * @since Aug 1, 2012
  */
@@ -38,13 +38,13 @@ public class AbstractAuthenticationTest {
     protected PicketBoxHTTPManager picketBoxManager;
 
     public void initialize() throws Exception {
-        configuration = new HTTPConfigurationBuilder();
-        configuration.identityManager().fileStore().preserveState();
+        this.configuration = new HTTPConfigurationBuilder();
+        this.configuration.identityManager().fileStore().preserveState();
         IdentityManagerInitializer.initializeIdentityStore();
 
-        doConfigureManager(configuration);
+        doConfigureManager(this.configuration);
 
-        this.picketBoxManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
+        this.picketBoxManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) this.configuration.build());
 
         this.picketBoxManager.start();
     }
@@ -54,7 +54,7 @@ public class AbstractAuthenticationTest {
      * Tests cases can override this method to provide additional configuration before creating and starting the
      * {@link PicketBoxManager} instance.
      * </p>
-     * 
+     *
      * @param configuration
      */
     protected void doConfigureManager(HTTPConfigurationBuilder configuration) {

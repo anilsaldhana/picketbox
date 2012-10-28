@@ -45,7 +45,7 @@ import org.picketbox.test.http.TestServletResponse;
 
 /**
  * Unit test the {@link HTTPFormAuthentication} class
- * 
+ *
  * @author anil saldhana
  * @since July 9, 2012
  */
@@ -64,7 +64,7 @@ public class HTTPDefaultFormAuthenticationTestCase extends AbstractAuthenticatio
      * <p>
      * Tests if the authentication when using the default configuration.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -103,7 +103,7 @@ public class HTTPDefaultFormAuthenticationTestCase extends AbstractAuthenticatio
         Assert.assertEquals(authenticatedUser.getAuthenticationResult().getStatus(), AuthenticationStatus.CONTINUE);
 
         // We will test that the request dispatcher is set on the form login page
-        TestRequestDispatcher rd = sc.getLast();
+        TestRequestDispatcher rd = this.sc.getLast();
         assertEquals(rd.getRequest(), req);
 
         assertEquals("/login.jsp", rd.getRequestUri());

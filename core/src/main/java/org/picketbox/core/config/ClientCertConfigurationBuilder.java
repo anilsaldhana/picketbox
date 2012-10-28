@@ -20,20 +20,18 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.config;
+package org.picketbox.core.config;
 
-import org.picketbox.core.config.AbstractConfigurationBuilder;
-import org.picketbox.core.config.ConfigurationBuilder;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPClientCertConfigurationBuilder extends AbstractConfigurationBuilder<HTTPClientCertConfiguration> {
+public class ClientCertConfigurationBuilder extends AbstractConfigurationBuilder<ClientCertConfiguration> {
 
-    private HTTPClientCertConfiguration configuration = new HTTPClientCertConfiguration();
+    private ClientCertConfiguration configuration = new ClientCertConfiguration();
 
-    public HTTPClientCertConfigurationBuilder(ConfigurationBuilder builder) {
+    public ClientCertConfigurationBuilder(ConfigurationBuilder builder) {
         super(builder);
     }
 
@@ -41,16 +39,16 @@ public class HTTPClientCertConfigurationBuilder extends AbstractConfigurationBui
     protected void setDefaults() {
     }
 
-    public HTTPClientCertConfigurationBuilder clientCert() {
+    public ClientCertConfigurationBuilder clientCert() {
         return this;
     }
 
-    public HTTPClientCertConfigurationBuilder useCNAsPrincipal() {
+    public ClientCertConfigurationBuilder useCNAsPrincipal() {
         this.configuration.setUseCNAsPrincipal(true);
         return this;
     }
 
-    public HTTPClientCertConfigurationBuilder useCertificateValidation() {
+    public ClientCertConfigurationBuilder useCertificateValidation() {
         this.configuration.setUseCertificateValidation(true);
         return this;
     }
@@ -59,7 +57,7 @@ public class HTTPClientCertConfigurationBuilder extends AbstractConfigurationBui
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
      */
     @Override
-    public HTTPClientCertConfiguration doBuild() {
+    public ClientCertConfiguration doBuild() {
         return this.configuration ;
     }
 }

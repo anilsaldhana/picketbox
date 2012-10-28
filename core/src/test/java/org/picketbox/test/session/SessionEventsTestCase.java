@@ -79,7 +79,7 @@ public class SessionEventsTestCase {
         assertTrue(this.testEventHandler.onSetAttributeCalled);
         assertEquals("b", session.getAttribute("a"));
     }
-    
+
     @Test
     public void testOnGetAttribute() throws Exception {
         PicketBoxSession session = createSession();
@@ -141,14 +141,14 @@ public class SessionEventsTestCase {
 
         @Override
         public void onCreate(SessionEvent sessionEvent) {
-            onCreateCalled = true;
+            this.onCreateCalled = true;
             assertNotNull(sessionEvent);
             assertNotNull(sessionEvent.getSession());
         }
 
         @Override
         public void onSetAttribute(SessionEvent sessionEvent, String key, Object val) {
-            onSetAttributeCalled = true;
+            this.onSetAttributeCalled = true;
             assertNotNull(sessionEvent);
             assertNotNull(sessionEvent.getSession());
             assertNotNull(key);
@@ -157,7 +157,7 @@ public class SessionEventsTestCase {
 
         @Override
         public void onGetAttribute(SessionEvent sessionEvent, String key) {
-            onGetAttributeCalled = true;
+            this.onGetAttributeCalled = true;
             assertNotNull(sessionEvent);
             assertNotNull(sessionEvent.getSession());
             assertNotNull(key);
@@ -165,14 +165,14 @@ public class SessionEventsTestCase {
 
         @Override
         public void onInvalidate(SessionEvent sessionEvent) {
-            onInvalidateCalled = true;
+            this.onInvalidateCalled = true;
             assertNotNull(sessionEvent);
             assertNotNull(sessionEvent.getSession());
         }
 
         @Override
         public void onExpiration(SessionEvent sessionEvent) {
-            onExpirationCalled = true;
+            this.onExpirationCalled = true;
             assertNotNull(sessionEvent);
             assertNotNull(sessionEvent.getSession());
         }

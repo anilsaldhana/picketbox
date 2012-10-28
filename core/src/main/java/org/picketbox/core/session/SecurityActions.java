@@ -37,6 +37,7 @@ class SecurityActions {
             return theClass.getClassLoader();
         }
         return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            @Override
             public ClassLoader run() {
                 return theClass.getClassLoader();
             }
@@ -67,6 +68,7 @@ class SecurityActions {
         }
 
         return AccessController.doPrivileged(new PrivilegedAction<Class<?>>() {
+            @Override
             public Class<?> run() {
                 ClassLoader classLoader = theClass.getClassLoader();
 
@@ -89,6 +91,7 @@ class SecurityActions {
             return null;
         }
         return AccessController.doPrivileged(new PrivilegedAction<Class<?>>() {
+            @Override
             public Class<?> run() {
                 try {
                     return cl.loadClass(fqn);
@@ -111,6 +114,7 @@ class SecurityActions {
             return System.getProperty(key, defaultValue);
         }
         return AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
             public String run() {
                 return System.getProperty(key, defaultValue);
             }

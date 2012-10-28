@@ -47,7 +47,7 @@ public class WebResource extends AbstractPicketBoxResource {
      * @return
      */
     public HttpServletRequest getRequest() {
-        return request;
+        return this.request;
     }
 
     /**
@@ -65,7 +65,7 @@ public class WebResource extends AbstractPicketBoxResource {
      * @return
      */
     public HttpServletResponse getResponse() {
-        return response;
+        return this.response;
     }
 
     /**
@@ -83,7 +83,7 @@ public class WebResource extends AbstractPicketBoxResource {
      * @return
      */
     public ServletContext getContext() {
-        return context;
+        return this.context;
     }
 
     /**

@@ -36,7 +36,7 @@ public class HTTPSessionManagerConfiguration extends SessionManagerConfig {
      * @return the sessionAttributeName
      */
     public String getSessionAttributeName() {
-        return sessionAttributeName;
+        return this.sessionAttributeName;
     }
 
     public HTTPSessionManagerConfiguration(String sessionAttributeName, SessionManagerConfig defaultConfiguration) {

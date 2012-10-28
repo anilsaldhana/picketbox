@@ -51,7 +51,7 @@ public class RequestCache {
      * @param request
      */
     public void saveRequest(HttpServletRequest request) {
-        requestCache.put(getCurrentSession(request).getId(), new SavedRequest(request));
+        this.requestCache.put(getCurrentSession(request).getId(), new SavedRequest(request));
     }
 
     /**

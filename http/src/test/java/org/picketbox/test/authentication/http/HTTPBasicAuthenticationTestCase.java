@@ -54,7 +54,7 @@ public class HTTPBasicAuthenticationTestCase extends AbstractAuthenticationTest 
     public void setup() throws Exception {
         super.initialize();
     }
-    
+
     @Override
     protected void doConfigureManager(HTTPConfigurationBuilder configuration) {
         configuration.authentication().digest().realm("Custom Realm");
@@ -83,7 +83,7 @@ public class HTTPBasicAuthenticationTestCase extends AbstractAuthenticationTest 
         req.setRequestURI(req.getContextPath() + "/index.html");
 
         UserContext authenticatedUser = this.picketBoxManager.authenticate(new HTTPUserContext(req, resp, new HTTPBasicCredential(req, resp)));
-        
+
         assertNotNull(authenticatedUser);
         Assert.assertTrue(authenticatedUser.isAuthenticated());
         Assert.assertNotNull(authenticatedUser.getAuthenticationResult().getStatus());
@@ -95,7 +95,7 @@ public class HTTPBasicAuthenticationTestCase extends AbstractAuthenticationTest 
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Basic " + getNegative());
 
         authenticatedUser = this.picketBoxManager.authenticate(new HTTPUserContext(req, resp, new HTTPBasicCredential(req, resp)));
-        
+
         assertNotNull(authenticatedUser);
         Assert.assertFalse(authenticatedUser.isAuthenticated());
         Assert.assertNotNull(authenticatedUser.getAuthenticationResult().getStatus());

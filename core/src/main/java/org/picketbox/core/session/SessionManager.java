@@ -75,4 +75,12 @@ public interface SessionManager extends PicketBoxLifecycle {
      * @param session
      */
     void update(PicketBoxSession session);
+
+    /**
+     * <p>Restores a {@link PicketBoxSession} for the given {@link UserContext}.</p>
+     *
+     * @param userContext
+     * @return
+     */
+    PicketBoxSession restoreSession(UserContext userContext);
 }

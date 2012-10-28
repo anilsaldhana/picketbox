@@ -178,4 +178,7 @@ public interface PicketBoxMessages {
 
     @Message(id = 53, value = "Unexpected credential type. Expected %s got %s.")
     RuntimeException unexpectedCredentialType(UserCredential credential, Class<? extends UserCredential> class1);
+
+    @Message(id = 54, value = "Unsupported credential type [%s].")
+    AuthenticationException unsupportedCredentialType(UserCredential credential);
 }

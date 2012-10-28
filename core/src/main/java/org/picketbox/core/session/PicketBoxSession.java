@@ -23,6 +23,7 @@ package org.picketbox.core.session;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -45,12 +46,10 @@ public class PicketBoxSession implements Serializable {
     private static final long serialVersionUID = 2149908831443524877L;
 
     protected ConcurrentMap<String, Object> attributes = new ConcurrentHashMap<String, Object>();
-
     protected SessionId<? extends Serializable> id;
-
     protected boolean invalid = false;
-
-    protected UserContext subject;
+    protected UserContext userContext;
+    private Date creationDate = new Date();
 
     private transient PicketBoxEventManager eventManager;
 
@@ -60,7 +59,7 @@ public class PicketBoxSession implements Serializable {
 
     public PicketBoxSession(UserContext subject, SessionId<? extends Serializable> id) {
         this(id);
-        this.subject = subject;
+        this.userContext = subject;
     }
 
     /**
@@ -76,7 +75,7 @@ public class PicketBoxSession implements Serializable {
      * @return
      */
     public SessionId<? extends Serializable> getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -86,7 +85,7 @@ public class PicketBoxSession implements Serializable {
      */
     public void removeAttribute(String key) throws PicketBoxSessionException {
         checkIfIsInvalid();
-        attributes.remove(key);
+        this.attributes.remove(key);
     }
 
     /**
@@ -99,7 +98,7 @@ public class PicketBoxSession implements Serializable {
     public void setAttribute(final String key, final Object val) throws PicketBoxSessionException {
         checkIfIsInvalid();
 
-        attributes.put(key, val);
+        this.attributes.put(key, val);
 
         this.eventManager.raiseEvent(new SessionEvent(this) {
             @Override
@@ -117,7 +116,7 @@ public class PicketBoxSession implements Serializable {
      */
     public Map<String, Object> getAttributes() throws PicketBoxSessionException {
         checkIfIsInvalid();
-        return Collections.unmodifiableMap(attributes);
+        return Collections.unmodifiableMap(this.attributes);
     }
 
     /**
@@ -137,7 +136,7 @@ public class PicketBoxSession implements Serializable {
             }
         });
 
-        return attributes.get(key);
+        return this.attributes.get(key);
     }
 
     /**
@@ -146,7 +145,7 @@ public class PicketBoxSession implements Serializable {
      * @return
      */
     public boolean isValid() {
-        return !invalid;
+        return !this.invalid;
     }
 
     /**
@@ -178,8 +177,8 @@ public class PicketBoxSession implements Serializable {
         }
         this.attributes.clear();
         this.invalid = true;
-        if (this.subject != null && this.subject.isAuthenticated()) {
-            this.subject.invalidate();
+        if (this.userContext != null && this.userContext.isAuthenticated()) {
+            this.userContext.invalidate();
         }
     }
 
@@ -202,7 +201,14 @@ public class PicketBoxSession implements Serializable {
      * @return the subject
      */
     public UserContext getUserContext() {
-        return subject;
+        return this.userContext;
+    }
+
+    /**
+     * @return the creationDate
+     */
+    public Date getCreationDate() {
+        return this.creationDate;
     }
 
     /**
@@ -213,7 +219,7 @@ public class PicketBoxSession implements Serializable {
      * @throws PicketBoxSessionException in the case this instance is marked as invalid.
      */
     private void checkIfIsInvalid() throws PicketBoxSessionException {
-        if (invalid)
+        if (this.invalid)
             throw PicketBoxMessages.MESSAGES.invalidatedSession();
     }
 
@@ -221,4 +227,8 @@ public class PicketBoxSession implements Serializable {
         this.eventManager = eventManager;
     }
 
+    @Override
+    public String toString() {
+        return "SessionId: " + this.id + " / Creation Date: " + getCreationDate();
+    }
 }

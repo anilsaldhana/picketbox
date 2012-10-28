@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.config.AuthenticationConfiguration;
+import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.config.EventManagerConfiguration;
 
 /**
@@ -34,20 +35,14 @@ import org.picketbox.core.config.EventManagerConfiguration;
  */
 public class HTTPAuthenticationConfiguration extends AuthenticationConfiguration {
 
-    private HTTPClientCertConfiguration clientCertConfiguration;
     private HTTPDigestConfiguration digestConfiguration;
     private HTTPFormConfiguration formConfiguration;
 
     public HTTPAuthenticationConfiguration(List<AuthenticationMechanism> mechanisms, EventManagerConfiguration eventManager,
-            HTTPClientCertConfiguration clientCertConfiguration, HTTPDigestConfiguration digestConfiguration, HTTPFormConfiguration formConfiguration) {
-        super(mechanisms, eventManager);
-        this.clientCertConfiguration = clientCertConfiguration;
+            ClientCertConfiguration clientCertConfiguration, HTTPDigestConfiguration digestConfiguration, HTTPFormConfiguration formConfiguration) {
+        super(mechanisms, eventManager, clientCertConfiguration);
         this.digestConfiguration = digestConfiguration;
         this.formConfiguration = formConfiguration;
-    }
-
-    public HTTPClientCertConfiguration getClientCertConfiguration() {
-        return this.clientCertConfiguration;
     }
 
     public HTTPDigestConfiguration getDigestConfiguration() {

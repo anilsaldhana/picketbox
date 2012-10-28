@@ -85,22 +85,22 @@ public class FileDirectoryEntitlementsUseCase {
         EntitlementCollection r = EntitlementCollection.create("rwx", new Entitlement[] { readEntitlement });
 
         EntitlementStore store = dm.store();
-        store.addUserEntitlements(fileA, useranil, rwx);
-        store.addUserEntitlements(fileB, useranil, rwx);
-        store.addUserEntitlements(fileC, useranil, rwx);
-        store.addUserEntitlements(work, useranil, rwx);
+        store.addUserEntitlements(fileA, this.useranil, rwx);
+        store.addUserEntitlements(fileB, this.useranil, rwx);
+        store.addUserEntitlements(fileC, this.useranil, rwx);
+        store.addUserEntitlements(work, this.useranil, rwx);
 
-        store.addRoleEntitlements(fileA, employee, rw);
-        store.addRoleEntitlements(fileA, employee, rw);
-        store.addRoleEntitlements(fileA, employee, rw);
-        store.addRoleEntitlements(fileA, employee, rw);
+        store.addRoleEntitlements(fileA, this.employee, rw);
+        store.addRoleEntitlements(fileA, this.employee, rw);
+        store.addRoleEntitlements(fileA, this.employee, rw);
+        store.addRoleEntitlements(fileA, this.employee, rw);
 
-        store.addGroupEntitlements(fileA, jboss, r);
-        store.addGroupEntitlements(fileA, jboss, r);
-        store.addGroupEntitlements(fileA, jboss, r);
-        store.addGroupEntitlements(fileA, jboss, r);
+        store.addGroupEntitlements(fileA, this.jboss, r);
+        store.addGroupEntitlements(fileA, this.jboss, r);
+        store.addGroupEntitlements(fileA, this.jboss, r);
+        store.addGroupEntitlements(fileA, this.jboss, r);
 
-        mgr = dm;
+        this.mgr = dm;
     }
 
     @Test
@@ -108,14 +108,14 @@ public class FileDirectoryEntitlementsUseCase {
         Resource fileA = new FileResource("filea");
         UserContext userContext = new UserContext();
         List<Role> roles = new ArrayList<Role>();
-        roles.add(employee);
+        roles.add(this.employee);
 
         List<Group> groups = new ArrayList<Group>();
-        groups.add(jboss);
+        groups.add(this.jboss);
 
-        userContext.setUser(useranil).setRoles(roles).setGroups(groups);
+        userContext.setUser(this.useranil).setRoles(roles).setGroups(groups);
 
-        EntitlementCollection enCollection = mgr.entitlements(fileA, userContext);
+        EntitlementCollection enCollection = this.mgr.entitlements(fileA, userContext);
         assertTrue(enCollection.contains(new SimpleEntitlement("read")));
         assertTrue(enCollection.contains(new SimpleEntitlement("write")));
         assertTrue(enCollection.contains(new SimpleEntitlement("execute")));
@@ -123,7 +123,7 @@ public class FileDirectoryEntitlementsUseCase {
         // Change the user context a bit to check roles have write permission
         userContext = new UserContext();
         userContext.setUser(new SimpleUser("Bond")).setRoles(roles).setGroups(groups);
-        enCollection = mgr.entitlements(fileA, userContext);
+        enCollection = this.mgr.entitlements(fileA, userContext);
         assertTrue(enCollection.contains(new SimpleEntitlement("read")));
         assertTrue(enCollection.contains(new SimpleEntitlement("write")));
         assertFalse(enCollection.contains(new SimpleEntitlement("execute")));
@@ -131,7 +131,7 @@ public class FileDirectoryEntitlementsUseCase {
         // Change the user context a bit to check groups have read permission
         userContext = new UserContext();
         userContext.setUser(null).setRoles(null).setGroups(groups);
-        enCollection = mgr.entitlements(fileA, userContext);
+        enCollection = this.mgr.entitlements(fileA, userContext);
         assertTrue(enCollection.contains(new SimpleEntitlement("read")));
         assertFalse(enCollection.contains(new SimpleEntitlement("write")));
         assertFalse(enCollection.contains(new SimpleEntitlement("execute")));
@@ -149,7 +149,7 @@ public class FileDirectoryEntitlementsUseCase {
 
         userContext.setUser(new SimpleUser("baduser")).setRoles(roles).setGroups(groups);
 
-        EntitlementCollection enCollection = mgr.entitlements(fileA, userContext);
+        EntitlementCollection enCollection = this.mgr.entitlements(fileA, userContext);
         assertFalse(enCollection.contains(new SimpleEntitlement("read")));
     }
 

@@ -39,7 +39,7 @@ public class SimpleResource implements Resource {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SimpleResource implements Resource {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         return result;
     }
 
@@ -68,10 +68,10 @@ public class SimpleResource implements Resource {
         if (getClass() != obj.getClass())
             return false;
         SimpleResource other = (SimpleResource) obj;
-        if (name == null) {
+        if (this.name == null) {
             if (other.name != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!this.name.equals(other.name))
             return false;
         return true;
     }

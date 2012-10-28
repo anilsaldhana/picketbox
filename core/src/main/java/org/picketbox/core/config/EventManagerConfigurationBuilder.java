@@ -50,8 +50,8 @@ public class EventManagerConfigurationBuilder extends AbstractConfigurationBuild
      */
     @Override
     protected void setDefaults() {
-        if (manager == null) {
-            manager = new DefaultEventManager(this.handlers);
+        if (this.manager == null) {
+            this.manager = new DefaultEventManager(this.handlers);
         }
     }
 

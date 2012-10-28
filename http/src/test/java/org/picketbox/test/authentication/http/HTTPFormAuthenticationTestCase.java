@@ -53,14 +53,14 @@ import org.picketbox.test.http.TestServletResponse;
 public class HTTPFormAuthenticationTestCase extends AbstractAuthenticationTest {
 
     private static final String CONTEXT_PATH = "/msite";
-    
+
     private TestServletContext sc = new TestServletContext(new HashMap<String, String>());
 
     @Before
     public void setup() throws Exception {
         super.initialize();
     }
-    
+
     /* (non-Javadoc)
      * @see org.picketbox.test.authentication.http.AbstractAuthenticationTest#doConfigureManager(org.picketbox.http.config.HTTPConfigurationBuilder)
      */
@@ -73,7 +73,7 @@ public class HTTPFormAuthenticationTestCase extends AbstractAuthenticationTest {
 
     /**
      * <p>Tests if the authentication when using a custom configuration.</p>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -109,9 +109,9 @@ public class HTTPFormAuthenticationTestCase extends AbstractAuthenticationTest {
         Assert.assertFalse(authenticatedUser.isAuthenticated());
         Assert.assertNotNull(authenticatedUser.getAuthenticationResult().getStatus());
         Assert.assertEquals(authenticatedUser.getAuthenticationResult().getStatus(), AuthenticationStatus.CONTINUE);
-        
+
         // We will test that the request dispatcher is set on the form login page
-        TestRequestDispatcher rd = sc.getLast();
+        TestRequestDispatcher rd = this.sc.getLast();
         assertEquals(rd.getRequest(), req);
 
         assertEquals("/customLogin.jsp", rd.getRequestUri());
@@ -135,7 +135,7 @@ public class HTTPFormAuthenticationTestCase extends AbstractAuthenticationTest {
         Assert.assertTrue(authenticatedUser.isAuthenticated());
         Assert.assertNotNull(authenticatedUser.getAuthenticationResult().getStatus());
         Assert.assertEquals(authenticatedUser.getAuthenticationResult().getStatus(), AuthenticationStatus.SUCCESS);
-        
+
         // After authentication, we should be redirected to the default page
         assertEquals(resp.getSendRedirectedURI(), CONTEXT_PATH + "/home.jsp");
     }

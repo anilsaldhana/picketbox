@@ -44,10 +44,10 @@ public class InMemoryEntitlementStore implements EntitlementStore {
 
     @Override
     public boolean addUserEntitlements(Resource resource, User user, EntitlementCollection collection) {
-        Holder holder = map.get(resource);
+        Holder holder = this.map.get(resource);
         if (holder == null) {
             holder = new Holder();
-            map.put(resource, holder);
+            this.map.put(resource, holder);
         }
         holder.userMap.put(user, collection);
         return true;
@@ -55,10 +55,10 @@ public class InMemoryEntitlementStore implements EntitlementStore {
 
     @Override
     public boolean addRoleEntitlements(Resource resource, Role role, EntitlementCollection collection) {
-        Holder holder = map.get(resource);
+        Holder holder = this.map.get(resource);
         if (holder == null) {
             holder = new Holder();
-            map.put(resource, holder);
+            this.map.put(resource, holder);
         }
         holder.roleMap.put(role, collection);
         return true;
@@ -66,10 +66,10 @@ public class InMemoryEntitlementStore implements EntitlementStore {
 
     @Override
     public boolean addGroupEntitlements(Resource resource, Group group, EntitlementCollection collection) {
-        Holder holder = map.get(resource);
+        Holder holder = this.map.get(resource);
         if (holder == null) {
             holder = new Holder();
-            map.put(resource, holder);
+            this.map.put(resource, holder);
         }
         holder.groupMap.put(group, collection);
         return true;
@@ -78,7 +78,7 @@ public class InMemoryEntitlementStore implements EntitlementStore {
     @Override
     public EntitlementCollection entitlements(Resource resource, User user) {
         EntitlementCollection coll = null;
-        Holder holder = map.get(resource);
+        Holder holder = this.map.get(resource);
         if (holder != null) {
             coll = holder.userMap.get(user);
         }
@@ -91,7 +91,7 @@ public class InMemoryEntitlementStore implements EntitlementStore {
     @Override
     public EntitlementCollection entitlements(Resource resource, Role role) {
         EntitlementCollection coll = null;
-        Holder holder = map.get(resource);
+        Holder holder = this.map.get(resource);
         if (holder != null) {
             coll = holder.roleMap.get(role);
         }
@@ -104,7 +104,7 @@ public class InMemoryEntitlementStore implements EntitlementStore {
     @Override
     public EntitlementCollection entitlements(Resource resource, Group group) {
         EntitlementCollection coll = null;
-        Holder holder = map.get(resource);
+        Holder holder = this.map.get(resource);
         if (holder != null) {
             coll = holder.groupMap.get(group);
         }

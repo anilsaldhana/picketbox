@@ -72,7 +72,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
         final String warUrlString = warUrl.toExternalForm();
 
         WebAppContext webapp = createWebApp(CONTEXTPATH, warUrlString);
-        server.setHandler(webapp);
+        this.server.setHandler(webapp);
 
         /*
          * Context context = new WebAppContext(warUrlString, CONTEXTPATH); server.setHandler(context);
@@ -113,7 +113,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
 
     @Test
     public void testDigestAuth() throws Exception {
-        URL url = new URL(urlStr + "onlyManagers");
+        URL url = new URL(this.urlStr + "onlyManagers");
 
         DefaultHttpClient httpclient = null;
         try {
@@ -175,7 +175,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
 
     @Test
     public void testUnprotectedResource() throws Exception {
-        URL url = new URL(urlStr + "notProtected");
+        URL url = new URL(this.urlStr + "notProtected");
 
         DefaultHttpClient httpclient = null;
 
@@ -194,7 +194,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
 
     @Test
     public void testProtectedResource() throws Exception {
-        URL url = new URL(urlStr + "onlyManagers");
+        URL url = new URL(this.urlStr + "onlyManagers");
 
         DefaultHttpClient httpclient = null;
 
@@ -213,7 +213,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
 
     @Test
     public void testNotAuthorizedResource() throws Exception {
-        URL url = new URL(urlStr + "confidentialResource");
+        URL url = new URL(this.urlStr + "confidentialResource");
 
         DefaultHttpClient httpclient = null;
         try {

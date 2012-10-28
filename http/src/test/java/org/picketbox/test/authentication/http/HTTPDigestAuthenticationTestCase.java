@@ -46,7 +46,7 @@ import org.picketlink.idm.credential.DigestCredential;
 
 /**
  * Unit test the {@link HTTPDigestAuthentication} class
- * 
+ *
  * @author anil saldhana
  * @since July 6, 2012
  */

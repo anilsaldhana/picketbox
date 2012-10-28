@@ -51,6 +51,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      *
      * @see org.picketbox.core.authentication.spi.AuthenticationProvider#getSupportedMechanisms()
      */
+    @Override
     public String[] getSupportedMechanisms() {
         String[] mechanisms = new String[this.mechanisms.size()];
 
@@ -68,6 +69,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      *
      * @see org.picketbox.core.authentication.spi.AuthenticationProvider#supports(java.lang.String)
      */
+    @Override
     public boolean supports(String mechanismName) {
         for (AuthenticationMechanism mechanism : this.mechanisms) {
             if (mechanism.getClass().getName().equals(mechanismName)) {
@@ -82,6 +84,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      *
      * @see org.picketbox.core.authentication.spi.AuthenticationProvider#getMechanism(java.lang.String)
      */
+    @Override
     public AuthenticationMechanism getMechanism(String mechanismName) {
         for (AuthenticationMechanism currentMechanism : this.mechanisms) {
 

@@ -46,7 +46,7 @@ public abstract class AbstractConfigurationBuilder<T> {
      * @see org.picketbox.core.config.ConfigurationBuilder#authentication()
      */
     public AuthenticationConfigurationBuilder authentication() {
-        return builder.authentication();
+        return this.builder.authentication();
     }
 
     /**
@@ -54,7 +54,7 @@ public abstract class AbstractConfigurationBuilder<T> {
      * @see org.picketbox.core.config.ConfigurationBuilder#authorization()
      */
     public AuthorizationConfigurationBuilder authorization() {
-        return builder.authorization();
+        return this.builder.authorization();
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class AbstractConfigurationBuilder<T> {
      * @see org.picketbox.core.config.ConfigurationBuilder#identityManager()
      */
     public IdentityManagerConfigurationBuilder identityManager() {
-        return builder.identityManager();
+        return this.builder.identityManager();
     }
 
     /**

@@ -20,13 +20,13 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.config;
+package org.picketbox.core.config;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPClientCertConfiguration {
+public class ClientCertConfiguration {
 
     private boolean useCNAsPrincipal;
     private boolean useCertificateValidation;

@@ -102,7 +102,7 @@ public class SavedRequest {
      * </p>
      */
     public String getMethod() {
-        return method;
+        return this.method;
     }
 
     /**
@@ -111,7 +111,7 @@ public class SavedRequest {
      * </p>
      */
     public String getQueryString() {
-        return queryString;
+        return this.queryString;
     }
 
     /**
@@ -120,7 +120,7 @@ public class SavedRequest {
      * </p>
      */
     public String getRequestURI() {
-        return requestURI;
+        return this.requestURI;
     }
 
     /**
@@ -129,7 +129,7 @@ public class SavedRequest {
      * </p>
      */
     public String getScheme() {
-        return scheme;
+        return this.scheme;
     }
 
     /**
@@ -138,7 +138,7 @@ public class SavedRequest {
      * </p>
      */
     public String getContextPath() {
-        return contextPath;
+        return this.contextPath;
     }
 
     /**

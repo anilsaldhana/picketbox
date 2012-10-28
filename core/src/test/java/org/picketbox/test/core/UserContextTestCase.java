@@ -30,7 +30,7 @@ public class UserContextTestCase {
 
     @Before
     public void setUp() throws Exception {
-        userContext.setRoles(buildRoles(roleNames));
+        this.userContext.setRoles(buildRoles(this.roleNames));
     }
 
     private Collection<Role> buildRoles(List<String> roleNames) {
@@ -45,11 +45,11 @@ public class UserContextTestCase {
 
     @Test
     public void testGetRoleNames() throws Exception {
-        assertTrue(userContext.getRoleNames().containsAll(roleNames));
+        assertTrue(this.userContext.getRoleNames().containsAll(this.roleNames));
     }
 
     @Test
     public void testNonExistentRole() throws Exception {
-        assertFalse(userContext.getRoleNames().contains("guest"));
+        assertFalse(this.userContext.getRoleNames().contains("guest"));
     }
 }

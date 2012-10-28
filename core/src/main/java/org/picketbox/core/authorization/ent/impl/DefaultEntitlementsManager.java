@@ -61,17 +61,17 @@ public class DefaultEntitlementsManager implements EntitlementsManager {
     @Override
     public EntitlementCollection entitlements(Resource resource, UserContext userContext) {
         EntitlementCollection collection = new EntitlementCollection("ALL");
-        collection.add(store.entitlements(resource, userContext.getUser()));
+        collection.add(this.store.entitlements(resource, userContext.getUser()));
         Collection<Role> roles = userContext.getRoles();
         if (roles != null) {
             for (Role role : roles) {
-                collection.add(store.entitlements(resource, role));
+                collection.add(this.store.entitlements(resource, role));
             }
         }
         Collection<Group> groups = userContext.getGroups();
         if (groups != null) {
             for (Group group : groups) {
-                collection.add(store.entitlements(resource, group));
+                collection.add(this.store.entitlements(resource, group));
             }
         }
         return collection;

@@ -65,6 +65,7 @@ public class HTTPLogoutManager implements LogoutManager<HttpServletRequest, Http
      * @param request
      * @param response
      */
+    @Override
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         if (isLogoutRequest(request)) {
             HttpSession session = request.getSession(false);
@@ -110,6 +111,7 @@ public class HTTPLogoutManager implements LogoutManager<HttpServletRequest, Http
     /**
      * @return the logoutUrl
      */
+    @Override
     public String getLogoutUrl() {
         return this.logoutUrl;
     }
@@ -117,6 +119,7 @@ public class HTTPLogoutManager implements LogoutManager<HttpServletRequest, Http
     /**
      * @param logoutUrl the logoutUrl to set
      */
+    @Override
     public void setLogoutUrl(String logoutUrl) {
         this.logoutUrl = logoutUrl;
     }
@@ -124,6 +127,7 @@ public class HTTPLogoutManager implements LogoutManager<HttpServletRequest, Http
     /**
      * @return the logoutPage
      */
+    @Override
     public String getLogoutPage() {
         return this.logoutPage;
     }
@@ -131,6 +135,7 @@ public class HTTPLogoutManager implements LogoutManager<HttpServletRequest, Http
     /**
      * @param logoutPage the logoutPage to set
      */
+    @Override
     public void setLogoutPage(String logoutPage) {
         this.logoutPage = logoutPage;
     }

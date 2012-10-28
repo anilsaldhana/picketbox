@@ -90,7 +90,7 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
             result.setStatus(AuthenticationStatus.SUCCESS);
         } else {
             if (result.getStatus() == null || result.getStatus().equals(AuthenticationStatus.NONE)) {
-                result.setStatus(AuthenticationStatus.FAILED);
+                result.setStatus(AuthenticationStatus.INVALID_CREDENTIALS);
             }
         }
 
