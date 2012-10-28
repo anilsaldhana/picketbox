@@ -24,13 +24,16 @@ package org.picketbox.core.identity.impl;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
+import org.picketlink.idm.query.GroupQuery;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -62,6 +65,14 @@ public class DefaultUserContextPopulator implements UserContextPopulator {
 
         authenticatedUserContext.setUser(userFromIDM);
         authenticatedUserContext.setRoles(rolesFromIDM);
+
+        GroupQuery groupQuery = getIdentityManager().createGroupQuery();
+
+        groupQuery.setRelatedUser(userFromIDM);
+
+        List<Group> groups = groupQuery.executeQuery();
+
+        authenticatedUserContext.setGroups(groups);
 
         return authenticatedUserContext;
     }
