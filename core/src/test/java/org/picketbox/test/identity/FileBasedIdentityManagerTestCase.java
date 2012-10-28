@@ -44,11 +44,7 @@ public class FileBasedIdentityManagerTestCase extends AbstractDefaultPicketBoxMa
 
     @Test
     public void testIdentity() throws Exception {
-        ConfigurationBuilder builder = new ConfigurationBuilder();
-
-        builder.identityManager().fileStore();
-
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager();
 
         UserContext subject = new UserContext();
 
