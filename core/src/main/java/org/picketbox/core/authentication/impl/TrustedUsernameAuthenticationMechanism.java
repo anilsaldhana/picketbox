@@ -62,7 +62,7 @@ public class TrustedUsernameAuthenticationMechanism extends AbstractAuthenticati
         User user = getIdentityManager().getUser(credential.getUserName());
 
         if (user != null) {
-            return new PicketBoxPrincipal(user.getKey());
+            return new PicketBoxPrincipal(user.getId());
         }
 
         return null;
