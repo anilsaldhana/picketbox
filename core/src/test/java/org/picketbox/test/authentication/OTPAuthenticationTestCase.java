@@ -34,7 +34,6 @@ import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.credential.OTPCredential;
-import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
@@ -75,6 +74,8 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
         
         picketBoxManager.logout(authenticatedUser);
         
@@ -90,6 +91,8 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
     }
     
     /**
@@ -149,25 +152,6 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         return TimeBasedOTP.generateTOTP(serialNumber, 6);
     }
     
-    /**
-     * <p>
-     * Creates a {@link PicketBoxManager}.
-     * </p>
-     *
-     * @return
-     */
-    private PicketBoxManager createManager(ConfigurationBuilder... builder) {
-        ConfigurationBuilder configBuilder = null;
-
-        if (builder.length == 0) {
-            configBuilder = new ConfigurationBuilder();
-        } else {
-            configBuilder = builder[0];
-        }
-
-        return getPicketBoxManager(configBuilder.build());
-    }
-
     private String toHexString(byte[] ba) {
         StringBuilder str = new StringBuilder();
         for(int i = 0; i < ba.length; i++)

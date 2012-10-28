@@ -30,7 +30,6 @@ import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.credential.TrustedUsernameCredential;
-import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
@@ -64,24 +63,7 @@ public class TrustedUsernameAuthenticationTestCase extends AbstractDefaultPicket
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
-    }
-    
-    /**
-     * <p>
-     * Creates a {@link PicketBoxManager}.
-     * </p>
-     *
-     * @return
-     */
-    private PicketBoxManager createManager(ConfigurationBuilder... builder) {
-        ConfigurationBuilder configBuilder = null;
-
-        if (builder.length == 0) {
-            configBuilder = new ConfigurationBuilder();
-        } else {
-            configBuilder = builder[0];
-        }
-
-        return getPicketBoxManager(configBuilder.build());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
     }
 }

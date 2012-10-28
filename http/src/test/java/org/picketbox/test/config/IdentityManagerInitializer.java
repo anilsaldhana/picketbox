@@ -44,8 +44,6 @@ public class IdentityManagerInitializer {
     public static void initializeIdentityStore() {
         FileBasedIdentityStore theStore = new FileBasedIdentityStore();
 
-        theStore.setAlwaysCreateFiles(false);
-
         IdentityManager identityManager = new DefaultIdentityManager(theStore);
 
         FileUser jbidTestUser = new FileUser("jbid test");

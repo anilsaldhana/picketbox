@@ -68,6 +68,8 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
     }
 
     /**
@@ -95,6 +97,8 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
     }
 
     /**
@@ -122,24 +126,8 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
     }
 
-    /**
-     * <p>
-     * Creates a {@link PicketBoxManager}.
-     * </p>
-     *
-     * @return
-     */
-    private PicketBoxManager createManager(ConfigurationBuilder... builder) {
-        ConfigurationBuilder configBuilder = null;
-
-        if (builder.length == 0) {
-            configBuilder = new ConfigurationBuilder();
-        } else {
-            configBuilder = builder[0];
-        }
-
-        return getPicketBoxManager(configBuilder.build());
-    }
 }

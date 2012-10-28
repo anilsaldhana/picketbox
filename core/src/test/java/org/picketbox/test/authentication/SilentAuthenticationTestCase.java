@@ -72,6 +72,8 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
 
         // let's check if the user session was properly created
         PicketBoxSession userSession = authenticatedUser.getSession();
@@ -87,6 +89,8 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
 
         assertNotNull(silentAuthenticatedUser);
         assertTrue(silentAuthenticatedUser.isAuthenticated());
+        assertRoles(authenticatedUser);
+        assertGroups(authenticatedUser);
 
         // let's check if the user session was properly created
         PicketBoxSession silentUserSession = silentAuthenticatedUser.getSession();
@@ -98,6 +102,8 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
         Assert.assertNotSame(authenticatedUser, silentAuthenticatedUser);
         assertEquals(userSession, silentUserSession);
         assertEquals(userSession.getCreationDate(), silentUserSession.getCreationDate());
+        assertRoles(silentAuthenticatedUser);
+        assertGroups(authenticatedUser);
     }
 
     /**

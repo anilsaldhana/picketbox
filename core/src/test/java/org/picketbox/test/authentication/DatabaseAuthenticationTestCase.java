@@ -25,23 +25,32 @@ package org.picketbox.test.authentication;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
-import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
+import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.core.identity.impl.EntityManagerContext;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
  * <p>
- * Tests the different ways to authenticate users using a {@link UserCredential} instance..
+ * Tests the authenticaiton using a JPA-based Identity Store.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class UserNamePasswordAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
+public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
+
+    private EntityManagerFactory entityManagerFactory;
 
     /**
      * <p>
@@ -52,8 +61,13 @@ public class UserNamePasswordAuthenticationTestCase extends AbstractDefaultPicke
      */
     @Test
     public void testUserNamePasswordCredential() throws AuthenticationException {
-        PicketBoxManager picketBoxManager = createManager();
-
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+        
+        // configure the JPA identity store
+        builder.identityManager().jpaStore();
+        
+        PicketBoxManager picketBoxManager = createManager(builder);
+        
         UserContext authenticatingUser = new UserContext();
 
         authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "admin"));
@@ -65,6 +79,30 @@ public class UserNamePasswordAuthenticationTestCase extends AbstractDefaultPicke
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
+    }
+
+
+    @Before
+    public void onSetup() throws Exception {
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("picketbox-testing-pu");
+        
+        EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+        
+        entityManager.getTransaction().begin();
+        
+        EntityManagerContext.set(entityManager);
+    }
+    
+    @After
+    public void onFinish() throws Exception {
+        EntityManager entityManager = EntityManagerContext.get();
+        
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        
+        EntityManagerContext.clear();
+        this.entityManagerFactory.close();
     }
 
 }
