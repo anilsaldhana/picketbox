@@ -62,6 +62,11 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
                 @Override
                 public Object execute(JPACallback callback) {
                     EntityManager entityManager = EntityManagerContext.get();
+
+                    if (entityManager == null) {
+                        throw new RuntimeException("Null EntityManager. Did you forget to provide a JPATemplate implementation that knows how to get the current EntityManager instance ?");
+                    }
+
                     return callback.execute(entityManager);
                 }
             };
