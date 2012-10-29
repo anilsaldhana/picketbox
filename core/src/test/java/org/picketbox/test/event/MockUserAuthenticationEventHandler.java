@@ -31,7 +31,7 @@ import org.picketbox.core.event.PicketBoxEventHandler;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class MockUserAuthenticatedEventHandler implements UserAuthenticationEventHandler {
+public class MockUserAuthenticationEventHandler implements UserAuthenticationEventHandler {
 
     private boolean successfulAuthentication;
 
