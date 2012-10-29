@@ -106,15 +106,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         performAuthentication(userContext);
 
         if (userContext.isAuthenticated()) {
-            LOGGER.trace("user is authenticated. configuring security context.");
-
-            // creates a fresh new session if none was retrieved from the session manager
-            if (userSession == null) {
-                userSession = createSession(userContext);
-            }
-
-            performSuccessfulAuthentication(userContext, userSession);
-
+            performSuccessfulAuthentication(userContext);
             LOGGER.tracef("authenticated user is: [%s]", userContext);
         } else {
             LOGGER.tracef("user not authenticated: [%s]", userContext);
@@ -264,12 +256,21 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      * @param session
      * @return
      */
-    protected UserContext performSuccessfulAuthentication(UserContext userContext, PicketBoxSession session) {
+    protected UserContext performSuccessfulAuthentication(UserContext userContext) {
         if (!userContext.isAuthenticated()) {
             throw MESSAGES.userNotAuthenticated();
         }
 
-        userContext.setSession(session);
+        LOGGER.trace("user is authenticated. configuring security context.");
+
+        PicketBoxSession userSession = null;
+
+        // creates a fresh new session if none was retrieved from the session manager
+        if (userSession == null) {
+            userSession = createSession(userContext);
+        }
+
+        userContext.setSession(userSession);
         userContext.setCredential(null);
 
         LOGGER.tracef("populating user context with populator [%s]", this.userContextPopulator);
