@@ -84,6 +84,15 @@ public abstract class AbstractConfigurationBuilder<T> {
     }
 
     /**
+     * Return the session manager configuration builder
+     *
+     * @return
+     */
+    public AuditConfigurationBuilder audit() {
+        return this.builder.audit();
+    }
+
+    /**
      * <p>
      * Subclasses should override to provide default values for missing configurations.
      * </p>

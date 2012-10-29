@@ -27,6 +27,8 @@ import static org.picketbox.core.PicketBoxMessages.MESSAGES;
 
 import java.security.Principal;
 
+import org.picketbox.core.audit.AuditProvider;
+import org.picketbox.core.audit.AuditUserAuthenticationEventHandler;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
 import org.picketbox.core.authentication.AuthenticationResult;
@@ -68,6 +70,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     private IdentityManager identityManager;
     private PicketBoxConfiguration configuration;
     private PicketBoxEventManager eventManager;
+    private AuditProvider auditProvider;
 
     @SuppressWarnings("unused")
     // TODO: handle entitlements
@@ -360,6 +363,11 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 this.sessionManager.start();
             }
 
+            if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
+                this.auditProvider = this.configuration.getAuditConfig().getProvider();
+                this.eventManager.addHandler(new AuditUserAuthenticationEventHandler(this.auditProvider));
+            }
+
             doConfigure();
         }
 
@@ -437,6 +445,11 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         return this.sessionManager;
     }
 
+    @Override
+    public AuditProvider getAuditProvider() {
+        return this.auditProvider;
+    }
+
     protected void setSessionManager(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
@@ -472,6 +485,12 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             LOGGER.debugInstanceUsage(" Session Store", this.configuration.getSessionManager().getStore());
         } else {
             LOGGER.trace("Session Management is DISABLED.");
+        }
+
+        if (this.auditProvider != null) {
+            LOGGER.debugInstanceUsage("Audit Provider", this.auditProvider);
+        } else {
+            LOGGER.trace("Auditing is DISABLED.");
         }
     }
 }
