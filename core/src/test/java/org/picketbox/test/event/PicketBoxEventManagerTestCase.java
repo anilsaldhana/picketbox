@@ -22,16 +22,19 @@
 
 package org.picketbox.test.event;
 
-import junit.framework.Assert;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.authentication.event.UserAuthenticationEvent;
+import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.event.PicketBoxEventManager;
-import org.picketbox.core.logout.UserLoggedOutEvent;
+import org.picketbox.core.logout.event.UserLoggedOutEvent;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
@@ -55,7 +58,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     public void testSuccesfulUserAuthenticatedEvent() throws Exception {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
-        MockUserAuthenticatedEventHandler authenticationEventHandler = new MockUserAuthenticatedEventHandler();
+        MockUserAuthenticationEventHandler authenticationEventHandler = new MockUserAuthenticationEventHandler();
 
         configurationBuilder.authentication().eventManager().handler(authenticationEventHandler);
 
@@ -67,9 +70,9 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         UserContext subject = picketBoxManager.authenticate(authenticatingUserContext);
 
-        Assert.assertNotNull(subject);
-        Assert.assertTrue(subject.isAuthenticated());
-        Assert.assertTrue(authenticationEventHandler.isSuccessfulAuthentication());
+        assertNotNull(subject);
+        assertTrue(subject.isAuthenticated());
+        assertTrue(authenticationEventHandler.isSuccessfulAuthentication());
     }
 
     /**
@@ -83,7 +86,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     public void testUnSuccessfulUserAuthenticatedEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        MockUserAuthenticatedEventHandler authenticationEventHandler = new MockUserAuthenticatedEventHandler();
+        MockUserAuthenticationEventHandler authenticationEventHandler = new MockUserAuthenticationEventHandler();
 
         builder.authentication().eventManager().handler(authenticationEventHandler);
 
@@ -95,9 +98,9 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         UserContext subject = picketBoxManager.authenticate(authenticatingUserContext);
 
-        Assert.assertNotNull(subject);
-        Assert.assertFalse(subject.isAuthenticated());
-        Assert.assertFalse(authenticationEventHandler.isSuccessfulAuthentication());
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
+        assertFalse(authenticationEventHandler.isSuccessfulAuthentication());
     }
 
     /**
@@ -123,12 +126,41 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         UserContext subject = picketBoxManager.authenticate(authenticatingUserContext);
 
-        Assert.assertNotNull(subject);
-        Assert.assertTrue(subject.isAuthenticated());
+        assertNotNull(subject);
+        assertTrue(subject.isAuthenticated());
 
         picketBoxManager.logout(subject);
 
-        Assert.assertTrue(logoutEventHandler.isLoggedOut());
+        assertTrue(logoutEventHandler.isLoggedOut());
+    }
+    
+    /**
+     * <p>
+     * Tests is the {@link UserPreAuthenticationEvent} is properly handled when the user is being authenticated.
+     * </p>
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testUserPreAuthenticationEvent() throws Exception {
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+
+        MockUserPreAuthenticationEventHandler preAuthenticationEventHandler = new MockUserPreAuthenticationEventHandler();
+
+        builder.authentication().eventManager().handler(preAuthenticationEventHandler);
+
+        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+
+        UserContext authenticatingUserContext = new UserContext();
+
+        authenticatingUserContext.setCredential(new UsernamePasswordCredential("admin", "admin"));
+
+        UserContext subject = picketBoxManager.authenticate(authenticatingUserContext);
+
+        assertNotNull(subject);
+        assertTrue(subject.isAuthenticated());
+        assertTrue(preAuthenticationEventHandler.isInvoked());
+        assertNotNull(subject.getContextData().get(MockUserPreAuthenticationEventHandler.PRE_AUTH_CONTEXT_DATA));
     }
 
 }

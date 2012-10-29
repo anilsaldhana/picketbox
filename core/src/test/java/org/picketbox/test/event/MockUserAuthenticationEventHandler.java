@@ -20,34 +20,38 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.event;
+package org.picketbox.test.event;
 
-import org.picketbox.core.UserContext;
+import org.picketbox.core.authentication.event.UserAuthenticationEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
 import org.picketbox.core.event.PicketBoxEvent;
+import org.picketbox.core.event.PicketBoxEventHandler;
 
 /**
- *  {@link PicketBoxEvent} implementation to be handled when a successful or unsuccessful authentication happens.
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public class UserAuthenticationEvent implements PicketBoxEvent<UserAuthenticationEventHandler> {
+public class MockUserAuthenticationEventHandler implements UserAuthenticationEventHandler {
 
-    private UserContext subject;
+    private boolean successfulAuthentication;
 
-    public UserAuthenticationEvent(UserContext subject) {
-        this.subject = subject;
+    @Override
+    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
+        return UserAuthenticationEvent.class;
     }
 
     @Override
-    public void dispatch(UserAuthenticationEventHandler handler) {
-        if (this.subject.isAuthenticated()) {
-            handler.onSuccessfulAuthentication(this);
-        } else {
-            handler.onUnSuccessfulAuthentication(this);
-        }
+    public void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
+        this.successfulAuthentication = true;
     }
 
-    public UserContext getUserContext() {
-        return this.subject;
+    @Override
+    public void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
+        this.successfulAuthentication = false;
     }
+
+    public boolean isSuccessfulAuthentication() {
+        return this.successfulAuthentication;
+    }
+
 }

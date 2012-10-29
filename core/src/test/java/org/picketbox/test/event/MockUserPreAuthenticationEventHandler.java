@@ -20,34 +20,45 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.event;
+package org.picketbox.test.event;
 
-import org.picketbox.core.UserContext;
+import java.util.HashMap;
+
+import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
+import org.picketbox.core.authentication.event.UserPreAuthenticationEventHandler;
 import org.picketbox.core.event.PicketBoxEvent;
+import org.picketbox.core.event.PicketBoxEventHandler;
 
 /**
- *  {@link PicketBoxEvent} implementation to be handled when a successful or unsuccessful authentication happens.
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public class UserAuthenticationEvent implements PicketBoxEvent<UserAuthenticationEventHandler> {
+public class MockUserPreAuthenticationEventHandler implements UserPreAuthenticationEventHandler {
 
-    private UserContext subject;
+    public static final String PRE_AUTH_CONTEXT_DATA = "PRE_AUTH_CONTEXT_DATA";
+    
+    private boolean invoked;
 
-    public UserAuthenticationEvent(UserContext subject) {
-        this.subject = subject;
+    /* (non-Javadoc)
+     * @see org.picketbox.core.event.PicketBoxEventHandler#getEventType()
+     */
+    @Override
+    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
+        return UserPreAuthenticationEvent.class;
     }
+
 
     @Override
-    public void dispatch(UserAuthenticationEventHandler handler) {
-        if (this.subject.isAuthenticated()) {
-            handler.onSuccessfulAuthentication(this);
-        } else {
-            handler.onUnSuccessfulAuthentication(this);
-        }
+    public void onPreAuthentication(UserPreAuthenticationEvent event) {
+        this.invoked = true;
+        HashMap<String, Object> contextData = new HashMap<String, Object>();
+        
+        contextData.put(PRE_AUTH_CONTEXT_DATA, PRE_AUTH_CONTEXT_DATA);
+        
+        event.getUserContext().setContextData(contextData);
     }
-
-    public UserContext getUserContext() {
-        return this.subject;
+    
+    public boolean isInvoked() {
+        return invoked;
     }
 }

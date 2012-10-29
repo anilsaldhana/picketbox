@@ -22,32 +22,14 @@
 
 package org.picketbox.core.authentication.event;
 
-import org.picketbox.core.UserContext;
-import org.picketbox.core.event.PicketBoxEvent;
+import org.picketbox.core.event.PicketBoxEventHandler;
 
 /**
- *  {@link PicketBoxEvent} implementation to be handled when a successful or unsuccessful authentication happens.
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public class UserAuthenticationEvent implements PicketBoxEvent<UserAuthenticationEventHandler> {
+public interface UserPreAuthenticationEventHandler extends PicketBoxEventHandler {
 
-    private UserContext subject;
+    void onPreAuthentication(UserPreAuthenticationEvent event);
 
-    public UserAuthenticationEvent(UserContext subject) {
-        this.subject = subject;
-    }
-
-    @Override
-    public void dispatch(UserAuthenticationEventHandler handler) {
-        if (this.subject.isAuthenticated()) {
-            handler.onSuccessfulAuthentication(this);
-        } else {
-            handler.onUnSuccessfulAuthentication(this);
-        }
-    }
-
-    public UserContext getUserContext() {
-        return this.subject;
-    }
 }

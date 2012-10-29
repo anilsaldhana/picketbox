@@ -24,8 +24,8 @@ package org.picketbox.test.event;
 
 import org.picketbox.core.event.PicketBoxEvent;
 import org.picketbox.core.event.PicketBoxEventHandler;
-import org.picketbox.core.logout.UserLoggedOutEvent;
-import org.picketbox.core.logout.UserLoggedOutEventHandler;
+import org.picketbox.core.logout.event.UserLoggedOutEvent;
+import org.picketbox.core.logout.event.UserLoggedOutEventHandler;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

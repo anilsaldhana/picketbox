@@ -20,38 +20,22 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.event;
+package org.picketbox.core.logout.event;
 
-import org.picketbox.core.authentication.event.UserAuthenticationEvent;
-import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
-import org.picketbox.core.event.PicketBoxEvent;
 import org.picketbox.core.event.PicketBoxEventHandler;
 
+
 /**
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ * An Event Handler for the User Logging Out
  *
+ * @author anil saldhana
  */
-public class MockUserAuthenticatedEventHandler implements UserAuthenticationEventHandler {
+public interface UserLoggedOutEventHandler extends PicketBoxEventHandler {
 
-    private boolean successfulAuthentication;
-
-    @Override
-    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-        return UserAuthenticationEvent.class;
-    }
-
-    @Override
-    public void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
-        this.successfulAuthentication = true;
-    }
-
-    @Override
-    public void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
-        this.successfulAuthentication = false;
-    }
-
-    public boolean isSuccessfulAuthentication() {
-        return this.successfulAuthentication;
-    }
-
+    /**
+     * User Logged Out
+     *
+     * @param userAuthenticatedEvent
+     */
+    void onLogOut(UserLoggedOutEvent userLogOutEvent);
 }

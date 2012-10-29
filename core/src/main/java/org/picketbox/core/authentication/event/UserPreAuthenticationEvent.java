@@ -20,31 +20,29 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.logout;
+package org.picketbox.core.authentication.event;
 
+import org.picketbox.core.UserContext;
 import org.picketbox.core.event.PicketBoxEvent;
 
 /**
- * Event to indicate an user is authenticated
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public class UserLoggedOutEvent implements PicketBoxEvent<UserLoggedOutEventHandler> {
+public class UserPreAuthenticationEvent implements PicketBoxEvent<UserPreAuthenticationEventHandler> {
 
-    /**
-     * @param result
-     */
-    public UserLoggedOutEvent() {
+    private UserContext userContext;
+
+    public UserPreAuthenticationEvent(UserContext userContext) {
+        this.userContext = userContext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.api.AuthenticationEvent#dispatch(org.picketbox.core.authentication.api.
-     * AuthenticationEventHandler)
-     */
     @Override
-    public void dispatch(UserLoggedOutEventHandler handler) {
-        handler.onLogOut(this);
+    public void dispatch(UserPreAuthenticationEventHandler handler) {
+        handler.onPreAuthentication(this);
+    }
+
+    public UserContext getUserContext() {
+        return this.userContext;
     }
 }

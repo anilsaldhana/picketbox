@@ -32,6 +32,7 @@ import org.picketbox.core.authentication.AuthenticationProvider;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.TrustedUsernameCredential;
 import org.picketbox.core.authentication.event.UserAuthenticationEvent;
+import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
 import org.picketbox.core.authentication.impl.PicketBoxAuthenticationProvider;
 import org.picketbox.core.authorization.AuthorizationManager;
 import org.picketbox.core.authorization.Resource;
@@ -41,7 +42,7 @@ import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketbox.core.identity.impl.DefaultUserContextPopulator;
-import org.picketbox.core.logout.UserLoggedOutEvent;
+import org.picketbox.core.logout.event.UserLoggedOutEvent;
 import org.picketbox.core.session.DefaultSessionManager;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionManager;
@@ -214,6 +215,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         if (doPreAuthentication(userContext)) {
             LOGGER.tracef("performing authentication for credential [%s]", credential);
+
+            getEventManager().raiseEvent(new UserPreAuthenticationEvent(userContext));
 
             String[] mechanisms = this.authenticationProvider.getSupportedMechanisms();
 
