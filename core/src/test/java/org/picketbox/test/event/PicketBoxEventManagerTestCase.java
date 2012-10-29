@@ -28,14 +28,10 @@ import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
-import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
-import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
+import org.picketbox.core.authentication.event.UserAuthenticationEvent;
 import org.picketbox.core.config.ConfigurationBuilder;
-import org.picketbox.core.event.PicketBoxEvent;
-import org.picketbox.core.event.PicketBoxEventHandler;
 import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.logout.UserLoggedOutEvent;
-import org.picketbox.core.logout.UserLoggedOutEventHandler;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
@@ -50,7 +46,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
     /**
      * <p>
-     * Tests is the {@link UserAuthenticatedEvent} is properly handled when the user is successfully authenticated.
+     * Tests is the {@link UserAuthenticationEvent} is properly handled when the user is successfully authenticated.
      * </p>
      *
      * @throws Exception
@@ -58,28 +54,10 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     @Test
     public void testSuccesfulUserAuthenticatedEvent() throws Exception {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-        final StringBuffer eventStatus = new StringBuffer();
 
-        configurationBuilder.authentication().eventManager().handler(new UserAuthenticationEventHandler() {
+        MockUserAuthenticatedEventHandler authenticationEventHandler = new MockUserAuthenticatedEventHandler();
 
-            @Override
-            public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-                return UserAuthenticatedEvent.class;
-            }
-
-            @Override
-            public void onSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
-                eventStatus.delete(0, eventStatus.length());
-                eventStatus.append("SUCCESS");
-            }
-
-            @Override
-            public void onUnSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
-                eventStatus.delete(0, eventStatus.length());
-                eventStatus.append("FAILED");
-            }
-
-        });
+        configurationBuilder.authentication().eventManager().handler(authenticationEventHandler);
 
         PicketBoxManager picketBoxManager = getPicketBoxManager(configurationBuilder.build());
 
@@ -91,12 +69,12 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         Assert.assertNotNull(subject);
         Assert.assertTrue(subject.isAuthenticated());
-        Assert.assertEquals("SUCCESS", eventStatus.toString());
+        Assert.assertTrue(authenticationEventHandler.isSuccessfulAuthentication());
     }
 
     /**
      * <p>
-     * Tests is the {@link UserAuthenticatedEvent} is properly handled when the user authentication fail.
+     * Tests is the {@link UserAuthenticationEvent} is properly handled when the user authentication fail.
      * </p>
      *
      * @throws Exception
@@ -104,28 +82,10 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     @Test
     public void testUnSuccessfulUserAuthenticatedEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        final StringBuffer eventStatus = new StringBuffer();
 
-        builder.authentication().eventManager().handler(new UserAuthenticationEventHandler() {
+        MockUserAuthenticatedEventHandler authenticationEventHandler = new MockUserAuthenticatedEventHandler();
 
-            @Override
-            public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-                return UserAuthenticatedEvent.class;
-            }
-
-            @Override
-            public void onSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
-                eventStatus.delete(0, eventStatus.length());
-                eventStatus.append("SUCCESS");
-            }
-
-            @Override
-            public void onUnSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
-                eventStatus.delete(0, eventStatus.length());
-                eventStatus.append("FAILED");
-            }
-
-        });
+        builder.authentication().eventManager().handler(authenticationEventHandler);
 
         PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
 
@@ -137,7 +97,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         Assert.assertNotNull(subject);
         Assert.assertFalse(subject.isAuthenticated());
-        Assert.assertEquals("FAILED", eventStatus.toString());
+        Assert.assertFalse(authenticationEventHandler.isSuccessfulAuthentication());
     }
 
     /**
@@ -150,20 +110,10 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     @Test
     public void testUserLoggedOutEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        final StringBuffer eventStatus = new StringBuffer();
 
-        builder.authentication().eventManager().handler(new UserLoggedOutEventHandler() {
+        MockUserLoggedOutEventHandler logoutEventHandler = new MockUserLoggedOutEventHandler();
 
-            @Override
-            public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-                return UserLoggedOutEvent.class;
-            }
-
-            @Override
-            public void onLogOut(UserLoggedOutEvent userLogOutEvent) {
-                eventStatus.append("LOGGED_OUT");
-            }
-        });
+        builder.authentication().eventManager().handler(logoutEventHandler);
 
         PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
 
@@ -178,7 +128,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         picketBoxManager.logout(subject);
 
-        Assert.assertEquals("LOGGED_OUT", eventStatus.toString());
+        Assert.assertTrue(logoutEventHandler.isLoggedOut());
     }
 
 }

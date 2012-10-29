@@ -20,28 +20,38 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.event;
+package org.picketbox.test.event;
 
+import org.picketbox.core.authentication.event.UserAuthenticationEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
+import org.picketbox.core.event.PicketBoxEvent;
 import org.picketbox.core.event.PicketBoxEventHandler;
 
 /**
- * An Event Handler for the User Authentication
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public interface UserAuthenticationEventHandler extends PicketBoxEventHandler {
+public class MockUserAuthenticatedEventHandler implements UserAuthenticationEventHandler {
 
-    /**
-     * Successful Authentication
-     *
-     * @param userAuthenticatedEvent
-     */
-    void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent);
+    private boolean successfulAuthentication;
 
-    /**
-     * Unsuccessful Authentication
-     *
-     * @param userAuthenticatedEvent
-     */
-    void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent);
+    @Override
+    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
+        return UserAuthenticationEvent.class;
+    }
+
+    @Override
+    public void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
+        this.successfulAuthentication = true;
+    }
+
+    @Override
+    public void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
+        this.successfulAuthentication = false;
+    }
+
+    public boolean isSuccessfulAuthentication() {
+        return this.successfulAuthentication;
+    }
+
 }
