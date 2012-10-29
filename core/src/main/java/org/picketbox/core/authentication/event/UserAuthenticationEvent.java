@@ -26,7 +26,7 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.event.PicketBoxEvent;
 
 /**
- * Event to indicate an user is authenticated
+ *  {@link PicketBoxEvent} implementation to be handled when a successful or unsuccessful authentication happens.
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
@@ -34,19 +34,10 @@ public class UserAuthenticationEvent implements PicketBoxEvent<UserAuthenticatio
 
     private UserContext subject;
 
-    /**
-     * @param subject
-     */
     public UserAuthenticationEvent(UserContext subject) {
         this.subject = subject;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.api.AuthenticationEvent#dispatch(org.picketbox.core.authentication.api.
-     * AuthenticationEventHandler)
-     */
     @Override
     public void dispatch(UserAuthenticationEventHandler handler) {
         if (this.subject.isAuthenticated()) {
