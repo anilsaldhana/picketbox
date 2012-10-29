@@ -33,6 +33,7 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
     private AuthorizationConfigurationBuilder authorization;
     private EventManagerConfigurationBuilder eventManager;
     private SessionManagerConfigurationBuilder sessionManager;
+    private AuditConfigurationBuilder audit;
 
     public ConfigurationBuilder() {
         this.builder = this;
@@ -41,6 +42,7 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
         this.identityManager = createIdentityManager();
         this.eventManager = new EventManagerConfigurationBuilder(this);
         this.sessionManager = new SessionManagerConfigurationBuilder(this);
+        this.audit = new AuditConfigurationBuilder(this);
     }
 
     protected IdentityManagerConfigurationBuilder createIdentityManager() {
@@ -96,6 +98,12 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
         return this.sessionManager;
     }
 
+    @Override
+    public AuditConfigurationBuilder audit() {
+        return this.audit;
+    }
+
+
     /*
      * (non-Javadoc)
      *
@@ -108,7 +116,7 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
     @Override
     public PicketBoxConfiguration doBuild() {
         return new PicketBoxConfiguration(this.authentication.build(), this.authorization.build(),
-                this.identityManager.build(), this.sessionManager.build(), this.eventManager.build());
+                this.identityManager.build(), this.sessionManager.build(), this.eventManager.build(), this.audit.build());
     }
 
 }

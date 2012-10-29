@@ -22,6 +22,7 @@
 
 package org.picketbox.http.config;
 
+import org.picketbox.core.config.AuditConfig;
 import org.picketbox.core.config.AuthenticationConfiguration;
 import org.picketbox.core.config.AuthorizationConfiguration;
 import org.picketbox.core.config.EventManagerConfiguration;
@@ -39,8 +40,8 @@ public class PicketBoxHTTPConfiguration extends PicketBoxConfiguration {
     private ProtectedResourceConfig protectedResource;
 
     public PicketBoxHTTPConfiguration(AuthenticationConfiguration authentication, AuthorizationConfiguration authorization,
-            GlobalIdentityManagerConfiguration identityManager, ProtectedResourceConfig protectedResource, SessionManagerConfig sessionManager, EventManagerConfiguration eventManager) {
-        super(authentication, authorization, identityManager, sessionManager, eventManager);
+            GlobalIdentityManagerConfiguration identityManager, ProtectedResourceConfig protectedResource, SessionManagerConfig sessionManager, EventManagerConfiguration eventManager, AuditConfig auditConfig) {
+        super(authentication, authorization, identityManager, sessionManager, eventManager, auditConfig);
         this.protectedResource = protectedResource;
     }
 

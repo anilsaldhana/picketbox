@@ -22,6 +22,7 @@
 
 package org.picketbox.core;
 
+import org.picketbox.core.audit.AuditProvider;
 import org.picketbox.core.authorization.Resource;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.event.PicketBoxEventManager;
@@ -106,5 +107,12 @@ public interface PicketBoxManager extends PicketBoxLifecycle {
      * @return
      */
     SessionManager getSessionManager();
+
+    /**
+     * <p>Returns the configured {@link AuditProvider} instance.</p>
+     *
+     * @return
+     */
+    AuditProvider getAuditProvider();
 
 }
