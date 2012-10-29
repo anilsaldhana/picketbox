@@ -22,7 +22,7 @@
 
 package org.picketbox.test.event;
 
-import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationEvent;
 import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
 import org.picketbox.core.event.PicketBoxEvent;
 import org.picketbox.core.event.PicketBoxEventHandler;
@@ -37,16 +37,16 @@ public class MockUserAuthenticatedEventHandler implements UserAuthenticationEven
 
     @Override
     public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-        return UserAuthenticatedEvent.class;
+        return UserAuthenticationEvent.class;
     }
 
     @Override
-    public void onSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
+    public void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
         this.successfulAuthentication = true;
     }
 
     @Override
-    public void onUnSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
+    public void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
         this.successfulAuthentication = false;
     }
 

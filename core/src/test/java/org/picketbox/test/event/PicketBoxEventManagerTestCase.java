@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
-import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationEvent;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.logout.UserLoggedOutEvent;
@@ -46,7 +46,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
     /**
      * <p>
-     * Tests is the {@link UserAuthenticatedEvent} is properly handled when the user is successfully authenticated.
+     * Tests is the {@link UserAuthenticationEvent} is properly handled when the user is successfully authenticated.
      * </p>
      *
      * @throws Exception
@@ -74,7 +74,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
     /**
      * <p>
-     * Tests is the {@link UserAuthenticatedEvent} is properly handled when the user authentication fail.
+     * Tests is the {@link UserAuthenticationEvent} is properly handled when the user authentication fail.
      * </p>
      *
      * @throws Exception

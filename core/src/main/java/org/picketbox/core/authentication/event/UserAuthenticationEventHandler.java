@@ -36,12 +36,12 @@ public interface UserAuthenticationEventHandler extends PicketBoxEventHandler {
      *
      * @param userAuthenticatedEvent
      */
-    void onSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent);
+    void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent);
 
     /**
      * Unsuccessful Authentication
      *
      * @param userAuthenticatedEvent
      */
-    void onUnSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent);
+    void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent);
 }

@@ -30,14 +30,14 @@ import org.picketbox.core.event.PicketBoxEvent;
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public class UserAuthenticatedEvent implements PicketBoxEvent<UserAuthenticationEventHandler> {
+public class UserAuthenticationEvent implements PicketBoxEvent<UserAuthenticationEventHandler> {
 
     private UserContext subject;
 
     /**
      * @param subject
      */
-    public UserAuthenticatedEvent(UserContext subject) {
+    public UserAuthenticationEvent(UserContext subject) {
         this.subject = subject;
     }
 
