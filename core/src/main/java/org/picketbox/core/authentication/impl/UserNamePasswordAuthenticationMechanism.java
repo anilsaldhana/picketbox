@@ -60,6 +60,7 @@ public class UserNamePasswordAuthenticationMechanism extends AbstractAuthenticat
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         UsernamePasswordCredential userCredential = (UsernamePasswordCredential) credential;
 
+        // try to retrieve the user from the configured identity store
         User user = getIdentityManager().getUser(userCredential.getUserName());
 
         if (user != null && getIdentityManager().validateCredential(user, userCredential.getCredential())) {
