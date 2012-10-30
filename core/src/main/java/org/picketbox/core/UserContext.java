@@ -34,7 +34,6 @@ import javax.security.auth.Subject;
 
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.AuthenticationStatus;
-import org.picketbox.core.authentication.credential.TrustedUsernameCredential;
 import org.picketbox.core.exceptions.PicketBoxSessionException;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionId;
@@ -82,7 +81,7 @@ public class UserContext implements Serializable {
         this.session = new PicketBoxSession(sessionId);
     }
 
-    public UserContext(TrustedUsernameCredential credential) {
+    public UserContext(UserCredential credential) {
         this.credential = credential;
     }
 
