@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.impl;
+package org.picketbox.test.authentication;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -29,44 +29,40 @@ import java.util.List;
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
-import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationResult;
-import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
+import org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketlink.idm.model.User;
 
 /**
- * <p>
- * A {@link AuthenticationMechanism} implementation for a UserName/Password based authentication.
- * </p>
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class UserNamePasswordAuthenticationMechanism extends AbstractAuthenticationMechanism {
+public class CustomAuthenticationMechanism extends AbstractAuthenticationMechanism {
 
+    private boolean invoked;
+    
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
-        List<AuthenticationInfo> arrayList = new ArrayList<AuthenticationInfo>();
-
-        arrayList.add(new AuthenticationInfo("Username and Password authentication service.",
-                "A simple authentication service using a username and password as credentials.",
-                UsernamePasswordCredential.class));
-
-        return arrayList;
+        ArrayList<AuthenticationInfo> info = new ArrayList<AuthenticationInfo>();
+        
+        info.add(new AuthenticationInfo("Custom Authentication Mechanism for testing.", "Custom Authentication Mechanism for testing.", CustomCredential.class));
+        
+        return info;
     }
 
     @Override
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
-        UsernamePasswordCredential userCredential = (UsernamePasswordCredential) credential;
-
-        // try to retrieve the user from the configured identity store
-        User user = getIdentityManager().getUser(userCredential.getUserName());
-
-        if (user != null && getIdentityManager().validateCredential(user, userCredential.getCredential())) {
-            return new PicketBoxPrincipal(user.getId());
-        }
-
+        CustomCredential customCredential = (CustomCredential) credential;
+        
+        if ("admin".equals(customCredential.getUserName())) {
+            invoked = true;
+            return new PicketBoxPrincipal(customCredential.getUserName());
+        }        
+        
         return null;
+    }
+    
+    public boolean isInvoked() {
+        return invoked;
     }
 }
