@@ -24,7 +24,6 @@ package org.picketbox.core.config;
 
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.internal.DefaultIdentityManager;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -48,10 +47,6 @@ public class IdentityManagerConfigurationBuilder extends AbstractConfigurationBu
 
     @Override
     protected void setDefaults() {
-        if (this.identityManager == null) {
-            this.identityManager = new DefaultIdentityManager();
-        }
-
         if (this.identityManagerBuilder == null) {
             fileStore();
         }
