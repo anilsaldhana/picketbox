@@ -85,6 +85,19 @@ public class AuthenticationResult implements Serializable {
         this.principal = principal;
     }
 
+    public AuthenticationResult immutable() {
+        AuthenticationResult clone = new AuthenticationResult();
+
+        clone.setPrincipal(getPrincipal());
+        clone.setStatus(getStatus());
+
+        for (String message : getMessages()) {
+            clone.addMessage(message);
+        }
+
+        return clone;
+    }
+
     @Override
     public String toString() {
         return "Principal: " + getPrincipal() + " / Status: " + getStatus() + " / Messages: " + getMessages();

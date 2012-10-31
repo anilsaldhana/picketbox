@@ -290,13 +290,16 @@ public class UserContext implements Serializable {
         return Collections.unmodifiableCollection(this.groups);
     }
 
-    protected UserContext setAuthenticationResult(AuthenticationResult result) {
+    protected void setAuthenticationResult(AuthenticationResult result) {
         this.authenticationResult = result;
-        return this;
     }
 
     public AuthenticationResult getAuthenticationResult() {
-        return this.authenticationResult;
+        if (this.authenticationResult != null) {
+            return this.authenticationResult.immutable();
+        }
+
+        return null;
     }
 
     @Override
