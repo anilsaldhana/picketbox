@@ -83,7 +83,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         } else {
             configBuilder = builder[0];
         }
-
+        
         return getPicketBoxManager(configBuilder.build());
     }
 
