@@ -25,7 +25,7 @@ package org.picketbox.test.authentication;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
-import javax.security.cert.X509Certificate;
+import java.security.cert.X509Certificate;
 
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
@@ -35,7 +35,6 @@ import org.picketbox.core.authentication.credential.CertificateCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
-import org.picketlink.idm.credential.X509CertificateCredential;
 
 /**
  * <p>
@@ -61,7 +60,11 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
 
         UserContext authenticatingUser = new UserContext();
 
-        authenticatingUser.setCredential(new CertificateCredential(new X509CertificateCredential(getTestingCertificate())));
+        X509Certificate certificate = getTestingCertificate();
+        
+        UserCredential credential = new CertificateCredential(certificate);
+        
+        authenticatingUser.setCredential(credential);
 
         // let's authenticate the user
         UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
@@ -90,7 +93,7 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
 
         UserContext authenticatingUser = new UserContext();
 
-        authenticatingUser.setCredential(new CertificateCredential(new X509CertificateCredential(getTestingCertificate())));
+        authenticatingUser.setCredential(new CertificateCredential(getTestingCertificate()));
 
         // let's authenticate the user
         UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
@@ -119,7 +122,7 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
 
         UserContext authenticatingUser = new UserContext();
 
-        authenticatingUser.setCredential(new CertificateCredential(new X509CertificateCredential(getTestingCertificate())));
+        authenticatingUser.setCredential(new CertificateCredential(getTestingCertificate()));
 
         // let's authenticate the user
         UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);

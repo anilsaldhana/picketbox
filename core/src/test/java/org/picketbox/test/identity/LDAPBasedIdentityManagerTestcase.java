@@ -22,8 +22,8 @@
 package org.picketbox.test.identity;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.picketbox.core.DefaultPicketBoxManager;
@@ -53,24 +53,29 @@ public class LDAPBasedIdentityManagerTestcase extends AbstractLDAPTest {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         builder.identityManager().ldapStore().url("ldap://localhost:10389/").bindDN("uid=jduke,ou=People,dc=jboss,dc=org")
-                .bindCredential("theduke").userDNSuffix("ou=People,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org");
+                .bindCredential("theduke").userDNSuffix("ou=People,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org").groupDNSuffix("ou=Groups,dc=jboss,dc=org");
 
         PicketBoxManager picketBoxManager = new DefaultPicketBoxManager(builder.build());
 
         picketBoxManager.start();
 
-        UserContext subject = new UserContext();
+        UserContext authenticatingContext = new UserContext();
 
-        subject.setCredential(new UsernamePasswordCredential("admin", "admin"));
+        authenticatingContext.setCredential(new UsernamePasswordCredential("admin", "admin"));
 
-        subject = picketBoxManager.authenticate(subject);
+        UserContext authenticatedContext = picketBoxManager.authenticate(authenticatingContext);
 
-        assertNotNull(subject);
+        assertNotNull(authenticatedContext);
+        assertNotNull(authenticatedContext.isAuthenticated());
 
         // user was loaded by the identity manager ?
-        assertNotNull(subject.getUser());
-
-        Assert.assertTrue(subject.hasRole("Echo"));
-        Assert.assertTrue(subject.hasRole("TheDuke"));
+        assertNotNull(authenticatedContext.getUser());
+        
+        // check the configured roles
+        assertTrue(authenticatedContext.hasRole("Echo"));
+        assertTrue(authenticatedContext.hasRole("TheDuke"));
+        
+        // check the configured group
+        assertTrue(authenticatedContext.hasGroup("The PicketBox Group"));
     }
 }

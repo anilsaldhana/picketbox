@@ -214,7 +214,7 @@ public class UserContext implements Serializable {
 
     /**
      * <p>
-     * Checks if this subject has the specified role.
+     * Checks if the user has the specified role.
      * </p>
      *
      * @param role
@@ -233,6 +233,29 @@ public class UserContext implements Serializable {
 
         return false;
     }
+
+    /**
+     * <p>
+     * Checks if the user is member of the specified group.
+     * </p>
+     *
+     * @param role
+     * @return
+     */
+    public boolean hasGroup(String group) {
+        if (!isAuthenticated()) {
+            throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
+        }
+
+        for (Group userGroup: getGroups()) {
+            if (group.equals(userGroup.getName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /**
      * Get the role names
@@ -314,4 +337,5 @@ public class UserContext implements Serializable {
 
         return " Username: " + userName + "/ IsAuthenticated: " + this.isAuthenticated() + " / Credential: [" + this.credential + "] / Authentication Result: [" + this.authenticationResult + "] / Session: [" + this.session + "]";
     }
+
 }

@@ -29,7 +29,6 @@ import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
-import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
@@ -46,19 +45,20 @@ public class FileBasedIdentityManagerTestCase extends AbstractDefaultPicketBoxMa
     public void testIdentity() throws Exception {
         PicketBoxManager picketBoxManager = createManager();
 
-        UserContext subject = new UserContext();
+        UserContext authenticatingContext = new UserContext();
 
-        subject.setCredential(new UsernamePasswordCredential("admin", "admin"));
+        authenticatingContext.setCredential(new UsernamePasswordCredential("admin", "admin"));
 
-        subject = picketBoxManager.authenticate(subject);
+        UserContext authenticatedContext = picketBoxManager.authenticate(authenticatingContext);
 
-        assertNotNull(subject);
+        assertNotNull(authenticatedContext);
+        assertNotNull(authenticatedContext.isAuthenticated());
 
         // user was loaded by the identity manager ?
-        assertNotNull(subject.getUser());
+        assertNotNull(authenticatedContext.getUser());
 
-        assertTrue(subject.hasRole("admin"));
-        assertTrue(subject.hasRole("developer"));
+        assertTrue(authenticatedContext.hasRole("admin"));
+        assertTrue(authenticatedContext.hasRole("developer"));
     }
 
 }

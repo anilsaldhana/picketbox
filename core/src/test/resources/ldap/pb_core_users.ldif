@@ -47,3 +47,17 @@ cn: TheDuke
 description: TheDuke role context
 member: uid=jduke,ou=People,dc=jboss,dc=org
 member: uid=admin,ou=People,dc=jboss,dc=org
+
+dn: ou=Groups,dc=jboss,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: Roles
+
+dn: cn=The PicketBox Group,ou=Groups,dc=jboss,dc=org
+objectClass: top
+objectClass: groupOfNames
+cn: The PicketBox Group
+description: The PicketBox Group
+member: uid=jduke,ou=People,dc=jboss,dc=org
+member: uid=admin,ou=People,dc=jboss,dc=org
+

@@ -30,7 +30,7 @@ import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
-import org.picketbox.core.identity.impl.EntityManagerContext;
+import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.PasswordCredential;
 import org.picketlink.idm.model.Group;
@@ -55,7 +55,7 @@ public class JPABasedIdentityManagerTestcase extends AbstractJPAIdentityManagerT
 
         picketBoxManager.start();
 
-        EntityManagerContext.set(this.entityManager);
+        JPAIdentityStoreContext.set(this.entityManager);
 
         IdentityManager identityManager = picketBoxManager.getIdentityManager();
 
@@ -89,6 +89,6 @@ public class JPABasedIdentityManagerTestcase extends AbstractJPAIdentityManagerT
         assertTrue(subject.hasRole("admin"));
         assertTrue(subject.hasRole("developer"));
 
-        EntityManagerContext.clear();
+        JPAIdentityStoreContext.clear();
     }
 }

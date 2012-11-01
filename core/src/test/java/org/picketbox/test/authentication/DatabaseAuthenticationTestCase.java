@@ -37,7 +37,7 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketbox.core.identity.impl.EntityManagerContext;
+import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
@@ -90,18 +90,18 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         
         entityManager.getTransaction().begin();
         
-        EntityManagerContext.set(entityManager);
+        JPAIdentityStoreContext.set(entityManager);
     }
     
     @After
     public void onFinish() throws Exception {
-        EntityManager entityManager = EntityManagerContext.get();
+        EntityManager entityManager = JPAIdentityStoreContext.get();
         
         entityManager.flush();
         entityManager.getTransaction().commit();
         entityManager.close();
         
-        EntityManagerContext.clear();
+        JPAIdentityStoreContext.clear();
         this.entityManagerFactory.close();
     }
 

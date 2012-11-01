@@ -25,7 +25,7 @@ package org.picketbox.core.config;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.picketbox.core.identity.impl.EntityManagerContext;
+import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
 import org.picketlink.idm.jpa.schema.internal.JPACallback;
 import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 import org.picketlink.idm.jpa.schema.internal.SimpleJPAIdentityStore;
@@ -61,7 +61,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
             this.template = new JPATemplate() {
                 @Override
                 public Object execute(JPACallback callback) {
-                    EntityManager entityManager = EntityManagerContext.get();
+                    EntityManager entityManager = JPAIdentityStoreContext.get();
 
                     if (entityManager == null) {
                         throw new RuntimeException("Null EntityManager. Did you forget to provide a JPATemplate implementation that knows how to get the current EntityManager instance ?");

@@ -56,7 +56,9 @@ public class TrustedUsernameAuthenticationTestCase extends AbstractDefaultPicket
 
         UserContext authenticatingUser = new UserContext();
 
-        authenticatingUser.setCredential(new TrustedUsernameCredential("admin"));
+        UserCredential credential = new TrustedUsernameCredential("admin");
+        
+        authenticatingUser.setCredential(credential);
 
         // let's authenticate the user
         UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);

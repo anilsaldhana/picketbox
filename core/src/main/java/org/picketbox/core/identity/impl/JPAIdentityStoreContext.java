@@ -28,7 +28,7 @@ import javax.persistence.EntityManager;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class EntityManagerContext {
+public final class JPAIdentityStoreContext {
 
     public static final ThreadLocal<EntityManager> entityManagerStore = new ThreadLocal<EntityManager>();
 
