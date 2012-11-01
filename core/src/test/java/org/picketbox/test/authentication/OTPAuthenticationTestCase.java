@@ -65,9 +65,13 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         
         UserContext authenticatingUser = new UserContext();
         
-        String firstOTP = generateOTP(identityManager);
+        String token = generateOTP(identityManager);
+        String userName = "admin";
+        String password = "admin";
         
-        authenticatingUser.setCredential(new OTPCredential("admin", "admin", firstOTP));
+        UserCredential credential = new OTPCredential(userName, password, token);
+        
+        authenticatingUser.setCredential(credential);
 
         // let's authenticate the user
         UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
@@ -83,9 +87,9 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         
         String secondOTP = generateOTP(identityManager);
         
-        assertFalse(firstOTP.equals(secondOTP));
+        assertFalse(token.equals(secondOTP));
         
-        authenticatingUser.setCredential(new OTPCredential("admin", "admin", secondOTP));
+        authenticatingUser.setCredential(new OTPCredential(userName, userName, secondOTP));
         
         authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
         
