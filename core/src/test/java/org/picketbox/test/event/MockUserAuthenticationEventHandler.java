@@ -37,17 +37,17 @@ public class MockUserAuthenticationEventHandler {
     private boolean authenticationFailed;
 
     @EventObserver
-    public void onSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
+    public void onSuccessful(UserAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = true;
     }
 
     @EventObserver
-    public void onUnSuccessfulAuthentication(UserNotAuthenticatedEvent userAuthenticatedEvent) {
+    public void onUnSuccessful(UserNotAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = false;
     }
     
     @EventObserver
-    public void onUnSuccessfulAuthentication(UserAuthenticationFailedEvent userAuthenticatedEvent) {
+    public void onFailed(UserAuthenticationFailedEvent userAuthenticatedEvent) {
         this.authenticationFailed = false;
     }
 
