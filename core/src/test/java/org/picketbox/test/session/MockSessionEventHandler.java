@@ -20,10 +20,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.session;
+package org.picketbox.test.session;
+
+import static org.junit.Assert.assertNotNull;
 
 import org.picketbox.core.event.EventObserver;
-import org.picketbox.core.exceptions.PicketBoxSessionException;
 import org.picketbox.core.session.event.SessionCreatedEvent;
 import org.picketbox.core.session.event.SessionExpiredEvent;
 import org.picketbox.core.session.event.SessionGetAttributeEvent;
@@ -31,52 +32,53 @@ import org.picketbox.core.session.event.SessionInvalidatedEvent;
 import org.picketbox.core.session.event.SessionSetAttributeEvent;
 
 /**
- * <p>
- * Built-in implementation for {@link SessionEventHandler} that delegate the processing for the {@link SessionManager}.
- * </p>
- *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class DefaultSessionEventHandler {
+public class MockSessionEventHandler {
 
-    private SessionManager sessionManager;
-
-    public DefaultSessionEventHandler(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-
+    boolean onCreateCalled = false;
+    boolean onSetAttributeCalled = false;
+    boolean onGetAttributeCalled = false;
+    boolean onInvalidateCalled = false;
+    boolean onExpirationCalled = false;
+    
     @EventObserver
     public void onCreate(SessionCreatedEvent event) {
-
+        this.onCreateCalled = true;
+        assertNotNull(event);
+        assertNotNull(event.getSession());
     }
 
     @EventObserver
     public void onSetAttribute(SessionSetAttributeEvent event) {
-        this.sessionManager.update(event.getSession());
+        this.onSetAttributeCalled = true;
+        assertNotNull(event);
+        assertNotNull(event.getSession());
+        assertNotNull(event.getAttributeName());
+        assertNotNull(event.getAttributeValue());
     }
 
     @EventObserver
     public void onGetAttribute(SessionGetAttributeEvent event) {
-        PicketBoxSession storedSession = this.sessionManager.retrieve(event.getSession().getId());
-
-        if (storedSession != null) {
-            try {
-                event.getSession().setAttribute(event.getAttributeName(), storedSession.getAttributes().get(event.getAttributeName()));
-            } catch (PicketBoxSessionException e) {
-                throw new IllegalStateException("Unable to update session with stored attribute.", e);
-            }
-        }
+        this.onGetAttributeCalled = true;
+        assertNotNull(event);
+        assertNotNull(event.getSession());
+        assertNotNull(event.getAttributeName());
     }
 
     @EventObserver
     public void onInvalidate(SessionInvalidatedEvent event) {
-        this.sessionManager.remove(event.getSession());
+        this.onInvalidateCalled = true;
+        assertNotNull(event);
+        assertNotNull(event.getSession());
     }
 
     @EventObserver
     public void onExpiration(SessionExpiredEvent event) {
-        this.sessionManager.remove(event.getSession());
+        this.onExpirationCalled = true;
+        assertNotNull(event);
+        assertNotNull(event.getSession());
     }
-
+    
 }

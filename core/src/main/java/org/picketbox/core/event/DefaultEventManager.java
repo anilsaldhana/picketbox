@@ -22,6 +22,7 @@
 
 package org.picketbox.core.event;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,11 +35,10 @@ import java.util.Map;
  */
 public class DefaultEventManager implements PicketBoxEventManager {
 
-    @SuppressWarnings("rawtypes")
-    private Map<Class<? extends PicketBoxEvent>, List<PicketBoxEventHandler>> observers = new HashMap<Class<? extends PicketBoxEvent>, List<PicketBoxEventHandler>>();
+    private Map<Object, List<EventHandlerDefinition>> observers = new HashMap<Object, List<EventHandlerDefinition>>();
 
-    public DefaultEventManager(List<PicketBoxEventHandler> handlers) {
-        for (PicketBoxEventHandler handler : handlers) {
+    public DefaultEventManager(List<Object> handlers) {
+        for (Object handler : handlers) {
             addHandler(handler);
         }
     }
@@ -49,31 +49,55 @@ public class DefaultEventManager implements PicketBoxEventManager {
      * @see org.picketbox.core.authentication.api.AuthenticationEventManager#raiseEvent(org.picketbox.core.authentication.api.
      * AuthenticationEvent)
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void raiseEvent(PicketBoxEvent event) {
-        List<PicketBoxEventHandler> handlers = this.observers.get(event.getClass());
+    public void raiseEvent(Object event) {
+        List<EventHandlerDefinition> handlers = this.observers.get(event.getClass());
 
         if (handlers == null) {
             handlers = this.observers.get(event.getClass().getSuperclass());
         }
 
         if (handlers != null) {
-            for (PicketBoxEventHandler authenticationEventHandler : handlers) {
-                event.dispatch(authenticationEventHandler);
+            for (EventHandlerDefinition handler : handlers) {
+                try {
+                    Method methodHandler = handler.getMethodHandler();
+                    Object handlerInstance = handler.getInstance();
+
+                    methodHandler.invoke(handlerInstance, event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     @Override
-    public void addHandler(PicketBoxEventHandler handler) {
-        if (!this.observers.containsKey(handler.getEventType())) {
-            this.observers.put(handler.getEventType(), new ArrayList<PicketBoxEventHandler>());
+    public void addHandler(Object handler) {
+        Method[] declaredMethods = handler.getClass().getDeclaredMethods();
+
+        for (Method method : declaredMethods) {
+            EventObserver eventHandler = method.getAnnotation(EventObserver.class);
+
+            if (eventHandler == null) {
+                continue;
+            }
+
+            Class<?>[] parameterTypes = method.getParameterTypes();
+
+            if (parameterTypes.length != 1) {
+                throw new RuntimeException("EventHandler annotation should be used with single-parametrized methods only.");
+            }
+
+            Class<? extends Object> eventType = parameterTypes[0];
+
+            if (!this.observers.containsKey(eventType)) {
+                this.observers.put(eventType, new ArrayList<EventHandlerDefinition>());
+            }
+
+            List<EventHandlerDefinition> handlers = this.observers.get(eventType);
+
+            handlers.add(new EventHandlerDefinition(eventType, handler, method));
         }
-
-        List<PicketBoxEventHandler> handlers = this.observers.get(handler.getEventType());
-
-        handlers.add(handler);
     }
 
 }

@@ -20,37 +20,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.session.event;
 
-import org.picketbox.core.identity.UserContextPopulator;
-import org.picketlink.idm.IdentityManager;
+import org.picketbox.core.session.PicketBoxSession;
 
 /**
+ * <p>This class represents a event fired when a session attribute changes.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class GlobalIdentityManagerConfiguration {
+public class SessionSetAttributeEvent {
 
-    private IdentityManagerConfiguration identityManagerConfiguration;
-    private UserContextPopulator userPopulator;
-    private IdentityManager identityManager;
+    private PicketBoxSession session;
+    private String attributeName;
+    private Object attributeValue;
 
-    public GlobalIdentityManagerConfiguration(IdentityManager identityManager, IdentityManagerConfiguration identityManagerConfiguration,
-            UserContextPopulator userPopulator) {
-        this.identityManager = identityManager;
-        this.identityManagerConfiguration = identityManagerConfiguration;
-        this.userPopulator = userPopulator;
+    public SessionSetAttributeEvent(PicketBoxSession session, String attributeName, Object attributeValue) {
+        this.session = session;
+        this.attributeName = attributeName;
+        this.attributeValue = attributeValue;
     }
 
-    public IdentityManagerConfiguration getIdentityManagerConfiguration() {
-        return this.identityManagerConfiguration;
+    public PicketBoxSession getSession() {
+        return this.session;
     }
 
-    public UserContextPopulator getUserPopulator() {
-        return this.userPopulator;
+    public String getAttributeName() {
+        return this.attributeName;
     }
 
-    public IdentityManager getIdentityManager() {
-        return this.identityManager;
+    public Object getAttributeValue() {
+        return this.attributeValue;
     }
 }

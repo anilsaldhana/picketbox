@@ -23,23 +23,19 @@
 package org.picketbox.core.authentication.event;
 
 import org.picketbox.core.UserContext;
-import org.picketbox.core.event.PicketBoxEvent;
 
 /**
+ * <p>This class represents a event fired when a user is about to be authenticated.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class UserPreAuthenticationEvent implements PicketBoxEvent<UserPreAuthenticationEventHandler> {
+public class UserPreAuthenticationEvent {
 
     private UserContext userContext;
 
     public UserPreAuthenticationEvent(UserContext userContext) {
         this.userContext = userContext;
-    }
-
-    @Override
-    public void dispatch(UserPreAuthenticationEventHandler handler) {
-        handler.onPreAuthentication(this);
     }
 
     public UserContext getUserContext() {

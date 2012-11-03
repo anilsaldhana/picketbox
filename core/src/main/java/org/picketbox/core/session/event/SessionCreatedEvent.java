@@ -20,37 +20,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.session.event;
 
-import org.picketbox.core.identity.UserContextPopulator;
-import org.picketlink.idm.IdentityManager;
+import org.picketbox.core.session.PicketBoxSession;
 
 /**
+ * <p>This class represents a event fired when a session is created.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class GlobalIdentityManagerConfiguration {
+public class SessionCreatedEvent {
 
-    private IdentityManagerConfiguration identityManagerConfiguration;
-    private UserContextPopulator userPopulator;
-    private IdentityManager identityManager;
+    private PicketBoxSession session;
 
-    public GlobalIdentityManagerConfiguration(IdentityManager identityManager, IdentityManagerConfiguration identityManagerConfiguration,
-            UserContextPopulator userPopulator) {
-        this.identityManager = identityManager;
-        this.identityManagerConfiguration = identityManagerConfiguration;
-        this.userPopulator = userPopulator;
+    public SessionCreatedEvent(PicketBoxSession session) {
+        this.session = session;
     }
 
-    public IdentityManagerConfiguration getIdentityManagerConfiguration() {
-        return this.identityManagerConfiguration;
-    }
-
-    public UserContextPopulator getUserPopulator() {
-        return this.userPopulator;
-    }
-
-    public IdentityManager getIdentityManager() {
-        return this.identityManager;
+    public PicketBoxSession getSession() {
+        return this.session;
     }
 }

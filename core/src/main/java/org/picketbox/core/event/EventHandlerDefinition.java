@@ -20,37 +20,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.event;
 
-import org.picketbox.core.identity.UserContextPopulator;
-import org.picketlink.idm.IdentityManager;
+import java.lang.reflect.Method;
 
 /**
+ * <p>Helper class that holds the definitions for event handlers.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class GlobalIdentityManagerConfiguration {
+public class EventHandlerDefinition {
 
-    private IdentityManagerConfiguration identityManagerConfiguration;
-    private UserContextPopulator userPopulator;
-    private IdentityManager identityManager;
+    private Object instance;
+    private Method methodHandler;
+    private Class<?> event;
 
-    public GlobalIdentityManagerConfiguration(IdentityManager identityManager, IdentityManagerConfiguration identityManagerConfiguration,
-            UserContextPopulator userPopulator) {
-        this.identityManager = identityManager;
-        this.identityManagerConfiguration = identityManagerConfiguration;
-        this.userPopulator = userPopulator;
+    public EventHandlerDefinition(Class<?> event, Object instance, Method handler) {
+        this.event = event;
+        this.instance = instance;
+        this.methodHandler = handler;
     }
 
-    public IdentityManagerConfiguration getIdentityManagerConfiguration() {
-        return this.identityManagerConfiguration;
+    public Object getInstance() {
+        return this.instance;
     }
 
-    public UserContextPopulator getUserPopulator() {
-        return this.userPopulator;
+    public Method getMethodHandler() {
+        return this.methodHandler;
     }
 
-    public IdentityManager getIdentityManager() {
-        return this.identityManager;
+    public Class<?> getEvent() {
+        return this.event;
     }
 }

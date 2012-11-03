@@ -32,8 +32,10 @@ import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.exceptions.PicketBoxSessionException;
-import org.picketbox.core.session.event.SessionEvent;
-import org.picketbox.core.session.event.SessionEventHandler;
+import org.picketbox.core.session.event.SessionExpiredEvent;
+import org.picketbox.core.session.event.SessionGetAttributeEvent;
+import org.picketbox.core.session.event.SessionInvalidatedEvent;
+import org.picketbox.core.session.event.SessionSetAttributeEvent;
 
 /**
  * A session that is capable of storing attributes
@@ -100,12 +102,7 @@ public class PicketBoxSession implements Serializable {
 
         this.attributes.put(key, val);
 
-        this.eventManager.raiseEvent(new SessionEvent(this) {
-            @Override
-            public void dispatch(SessionEventHandler handler) {
-                handler.onSetAttribute(this, key, val);
-            }
-        });
+        this.eventManager.raiseEvent(new SessionSetAttributeEvent(this, key, val));
     }
 
     /**
@@ -129,12 +126,7 @@ public class PicketBoxSession implements Serializable {
     public Object getAttribute(final String key) throws PicketBoxSessionException {
         checkIfIsInvalid();
 
-        this.eventManager.raiseEvent(new SessionEvent(this) {
-            @Override
-            public void dispatch(SessionEventHandler handler) {
-                handler.onGetAttribute(this, key);
-            }
-        });
+        this.eventManager.raiseEvent(new SessionGetAttributeEvent(this, key));
 
         return this.attributes.get(key);
     }
@@ -168,12 +160,7 @@ public class PicketBoxSession implements Serializable {
     public void invalidate(boolean raiseEvent) throws PicketBoxSessionException {
         checkIfIsInvalid();
         if (raiseEvent) {
-            this.eventManager.raiseEvent(new SessionEvent(this) {
-                @Override
-                public void dispatch(SessionEventHandler handler) {
-                    handler.onInvalidate(this);
-                }
-            });
+            this.eventManager.raiseEvent(new SessionInvalidatedEvent(this));
         }
         this.attributes.clear();
         this.invalid = true;
@@ -189,12 +176,7 @@ public class PicketBoxSession implements Serializable {
      */
     public void expire() throws PicketBoxSessionException {
         invalidate();
-        this.eventManager.raiseEvent(new SessionEvent(this) {
-            @Override
-            public void dispatch(SessionEventHandler handler) {
-                handler.onExpiration(this);
-            }
-        });
+        this.eventManager.raiseEvent(new SessionExpiredEvent(this));
     }
 
     /**

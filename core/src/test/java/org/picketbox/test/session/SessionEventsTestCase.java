@@ -32,12 +32,8 @@ import org.picketbox.core.DefaultPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.config.ConfigurationBuilder;
-import org.picketbox.core.event.PicketBoxEvent;
-import org.picketbox.core.event.PicketBoxEventHandler;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionManager;
-import org.picketbox.core.session.event.SessionEvent;
-import org.picketbox.core.session.event.SessionEventHandler;
 
 /**
  * Unit test the handling of session related events.
@@ -48,13 +44,13 @@ import org.picketbox.core.session.event.SessionEventHandler;
 public class SessionEventsTestCase {
 
     private SessionManager sessionManager;
-    private TestSessionEventHandler testEventHandler;
+    private MockSessionEventHandler testEventHandler;
 
     @Before
     public void onSetup() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        this.testEventHandler = new TestSessionEventHandler();
+        this.testEventHandler = new MockSessionEventHandler();
 
         builder.sessionManager().fileSessionStore().eventManager().handler(this.testEventHandler);
 
@@ -127,55 +123,4 @@ public class SessionEventsTestCase {
         return session;
     }
 
-    private class TestSessionEventHandler implements SessionEventHandler {
-        private boolean onCreateCalled = false;
-        private boolean onSetAttributeCalled = false;
-        private boolean onGetAttributeCalled = false;
-        private boolean onInvalidateCalled = false;
-        private boolean onExpirationCalled = false;
-
-        @Override
-        public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-            return SessionEvent.class;
-        }
-
-        @Override
-        public void onCreate(SessionEvent sessionEvent) {
-            this.onCreateCalled = true;
-            assertNotNull(sessionEvent);
-            assertNotNull(sessionEvent.getSession());
-        }
-
-        @Override
-        public void onSetAttribute(SessionEvent sessionEvent, String key, Object val) {
-            this.onSetAttributeCalled = true;
-            assertNotNull(sessionEvent);
-            assertNotNull(sessionEvent.getSession());
-            assertNotNull(key);
-            assertNotNull(val);
-        }
-
-        @Override
-        public void onGetAttribute(SessionEvent sessionEvent, String key) {
-            this.onGetAttributeCalled = true;
-            assertNotNull(sessionEvent);
-            assertNotNull(sessionEvent.getSession());
-            assertNotNull(key);
-        }
-
-        @Override
-        public void onInvalidate(SessionEvent sessionEvent) {
-            this.onInvalidateCalled = true;
-            assertNotNull(sessionEvent);
-            assertNotNull(sessionEvent.getSession());
-        }
-
-        @Override
-        public void onExpiration(SessionEvent sessionEvent) {
-            this.onExpirationCalled = true;
-            assertNotNull(sessionEvent);
-            assertNotNull(sessionEvent.getSession());
-        }
-
-    }
 }

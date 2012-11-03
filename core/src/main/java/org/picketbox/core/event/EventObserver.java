@@ -20,37 +20,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.event;
 
-import org.picketbox.core.identity.UserContextPopulator;
-import org.picketlink.idm.IdentityManager;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
+ * <p>Indicates that a specific method should be used as an event handler.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class GlobalIdentityManagerConfiguration {
+@Target({ METHOD })
+@Retention(RUNTIME)
+@Documented
+public @interface EventObserver {
 
-    private IdentityManagerConfiguration identityManagerConfiguration;
-    private UserContextPopulator userPopulator;
-    private IdentityManager identityManager;
-
-    public GlobalIdentityManagerConfiguration(IdentityManager identityManager, IdentityManagerConfiguration identityManagerConfiguration,
-            UserContextPopulator userPopulator) {
-        this.identityManager = identityManager;
-        this.identityManagerConfiguration = identityManagerConfiguration;
-        this.userPopulator = userPopulator;
-    }
-
-    public IdentityManagerConfiguration getIdentityManagerConfiguration() {
-        return this.identityManagerConfiguration;
-    }
-
-    public UserContextPopulator getUserPopulator() {
-        return this.userPopulator;
-    }
-
-    public IdentityManager getIdentityManager() {
-        return this.identityManager;
-    }
 }
