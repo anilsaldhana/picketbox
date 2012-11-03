@@ -20,34 +20,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.event;
+package org.picketbox.core.event;
 
-import org.picketbox.core.UserContext;
-import org.picketbox.core.event.PicketBoxEvent;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
- *  {@link PicketBoxEvent} implementation to be handled when a successful or unsuccessful authentication happens.
+ * <p>Indicates that a specific method should be used as an event handler.</p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public class UserAuthenticationEvent implements PicketBoxEvent<UserAuthenticationEventHandler> {
+@Target({ METHOD })
+@Retention(RUNTIME)
+@Documented
+public @interface EventObserver {
 
-    private UserContext subject;
-
-    public UserAuthenticationEvent(UserContext subject) {
-        this.subject = subject;
-    }
-
-    @Override
-    public void dispatch(UserAuthenticationEventHandler handler) {
-        if (this.subject.isAuthenticated()) {
-            handler.onSuccessfulAuthentication(this);
-        } else {
-            handler.onUnSuccessfulAuthentication(this);
-        }
-    }
-
-    public UserContext getUserContext() {
-        return this.subject;
-    }
 }

@@ -22,36 +22,41 @@
 
 package org.picketbox.test.event;
 
-import org.picketbox.core.authentication.event.UserAuthenticationEvent;
-import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
-import org.picketbox.core.event.PicketBoxEvent;
-import org.picketbox.core.event.PicketBoxEventHandler;
+import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationFailedEvent;
+import org.picketbox.core.authentication.event.UserNotAuthenticatedEvent;
+import org.picketbox.core.event.EventObserver;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class MockUserAuthenticationEventHandler implements UserAuthenticationEventHandler {
+public class MockUserAuthenticationEventHandler {
 
     private boolean successfulAuthentication;
+    private boolean authenticationFailed;
 
-    @Override
-    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-        return UserAuthenticationEvent.class;
-    }
-
-    @Override
-    public void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
+    @EventObserver
+    public void onSuccessfulAuthentication(UserAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = true;
     }
 
-    @Override
-    public void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent) {
+    @EventObserver
+    public void onUnSuccessfulAuthentication(UserNotAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = false;
+    }
+    
+    @EventObserver
+    public void onUnSuccessfulAuthentication(UserAuthenticationFailedEvent userAuthenticatedEvent) {
+        this.authenticationFailed = false;
     }
 
     public boolean isSuccessfulAuthentication() {
         return this.successfulAuthentication;
+    }
+    
+    public boolean isAuthenticationFailed() {
+        return this.authenticationFailed;
     }
 
 }

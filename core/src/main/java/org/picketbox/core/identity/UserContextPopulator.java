@@ -26,7 +26,7 @@ import org.picketbox.core.UserContext;
 
 /**
  * <p>
- * This interface defines the contract for Identity Manager implementations used to populate {@link UserContext} instances with
+ * This interface defines the contract for implementations used to populate {@link UserContext} instances with
  * the informations retrieved from an specific identity store or IDM solution.
  * </p>
  *

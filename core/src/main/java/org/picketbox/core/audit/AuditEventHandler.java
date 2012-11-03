@@ -25,46 +25,55 @@ package org.picketbox.core.audit;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.picketbox.core.authentication.event.UserAuthenticationEvent;
-import org.picketbox.core.authentication.event.UserAuthenticationEventHandler;
-import org.picketbox.core.event.PicketBoxEvent;
-import org.picketbox.core.event.PicketBoxEventHandler;
+import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationFailedEvent;
+import org.picketbox.core.authentication.event.UserNotAuthenticatedEvent;
+import org.picketbox.core.event.EventObserver;
 
 /**
+ * <p>This class represents acts as a handler for security related events, auditing each event using a specific {@link AuditProvider}.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class AuditUserAuthenticationEventHandler implements UserAuthenticationEventHandler {
+public class AuditEventHandler {
 
     private AuditProvider auditProvider;
 
-    public AuditUserAuthenticationEventHandler(AuditProvider auditProvider) {
+    public AuditEventHandler(AuditProvider auditProvider) {
         this.auditProvider = auditProvider;
     }
 
-    @Override
-    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-        return UserAuthenticationEvent.class;
-    }
-
-    @Override
-    public void onSuccessfulAuthentication(UserAuthenticationEvent event) {
+    @EventObserver
+    public void onSuccessfulAuthentication(UserAuthenticatedEvent event) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
         map.put("creationDate", new Date());
         map.put("user", event.getUserContext());
-        map.put("details", "User authenticated.");
+        map.put("details", "User authenticated");
 
         this.auditProvider.audit(new AuditEvent(AuditType.AUTHENTICATION, map));
     }
 
-    @Override
-    public void onUnSuccessfulAuthentication(UserAuthenticationEvent event) {
+    @EventObserver
+    public void onUnSuccessfulAuthentication(UserNotAuthenticatedEvent event) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+        map.put("creationDate", new Date());
+        map.put("user", event.getUserContext());
+        map.put("details", "Invalid user");
+
+        this.auditProvider.audit(new AuditEvent(AuditType.AUTHENTICATION, map));
+    }
+
+    @EventObserver
+    public void onAuthenticationFailed(UserAuthenticationFailedEvent event) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
         map.put("creationDate", new Date());
         map.put("user", event.getUserContext());
         map.put("details", "Authentication failed.");
+        map.put("exception", event.getException());
 
         this.auditProvider.audit(new AuditEvent(AuditType.AUTHENTICATION, map));
     }

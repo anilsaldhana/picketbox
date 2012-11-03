@@ -20,34 +20,30 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.event;
+package org.picketbox.core.authentication.event;
 
-import java.util.HashMap;
-
-import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
-import org.picketbox.core.event.EventObserver;
+import org.picketbox.core.UserContext;
 
 /**
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *  <p>This class represents a event fired when the authentication fails.</p>
  *
+ * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public class MockUserPreAuthenticationEventHandler {
+public class UserAuthenticationFailedEvent {
 
-    public static final String PRE_AUTH_CONTEXT_DATA = "PRE_AUTH_CONTEXT_DATA";
-    
-    private boolean invoked;
+    private UserContext userContext;
+    private Throwable exception;
 
-    @EventObserver
-    public void onPreAuthentication(UserPreAuthenticationEvent event) {
-        this.invoked = true;
-        HashMap<String, Object> contextData = new HashMap<String, Object>();
-        
-        contextData.put(PRE_AUTH_CONTEXT_DATA, PRE_AUTH_CONTEXT_DATA);
-        
-        event.getUserContext().setContextData(contextData);
+    public UserAuthenticationFailedEvent(UserContext subject, Throwable exception) {
+        this.userContext = subject;
+        this.exception = exception;
     }
-    
-    public boolean isInvoked() {
-        return invoked;
+
+    public UserContext getUserContext() {
+        return this.userContext;
+    }
+
+    public Throwable getException() {
+        return this.exception;
     }
 }

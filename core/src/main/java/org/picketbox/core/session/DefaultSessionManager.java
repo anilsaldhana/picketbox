@@ -30,9 +30,7 @@ import org.picketbox.core.AbstractPicketBoxLifeCycle;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.config.PicketBoxConfiguration;
-import org.picketbox.core.event.PicketBoxEventHandler;
-import org.picketbox.core.session.event.SessionEvent;
-import org.picketbox.core.session.event.SessionEventHandler;
+import org.picketbox.core.session.event.SessionCreatedEvent;
 
 /**
  * Default implementation of the {@link SessionManager}
@@ -44,7 +42,7 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
     private SessionStore sessionStore;
     private final SessionExpirationManager sessionExpirationManager;
     private PicketBoxManager picketBoxManager;
-    private PicketBoxEventHandler defaultSessionEventHandler = new DefaultSessionEventHandler(this);
+    private DefaultSessionEventHandler defaultSessionEventHandler = new DefaultSessionEventHandler(this);
 
     /**
      * Construct the session manager
@@ -74,12 +72,7 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
 
         session.setEventManager(this.picketBoxManager.getEventManager());
 
-        fireEvent(new SessionEvent(session) {
-            @Override
-            public void dispatch(SessionEventHandler handler) {
-                handler.onCreate(this);
-            }
-        });
+        fireEvent(new SessionCreatedEvent(session));
 
         if (session.getId() == null || session.getId().getId() == null) {
             throw new IllegalStateException("Invalid session id: " + session.getId());
@@ -162,12 +155,12 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
 
     /**
      * <p>
-     * Fires the specified {@link SessionEvent}.
+     * Fires the specified event.
      * </p>
      *
      * @param event
      */
-    protected void fireEvent(SessionEvent event) {
+    protected void fireEvent(Object event) {
         this.picketBoxManager.getEventManager().raiseEvent(event);
     }
 

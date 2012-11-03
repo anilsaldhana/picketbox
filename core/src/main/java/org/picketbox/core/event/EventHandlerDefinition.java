@@ -20,24 +20,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.session.event;
+package org.picketbox.core.event;
 
-import org.picketbox.core.event.PicketBoxEvent;
-import org.picketbox.core.session.PicketBoxSession;
+import java.lang.reflect.Method;
 
 /**
+ * <p>Helper class that holds the definitions for event handlers.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public abstract class SessionEvent implements PicketBoxEvent<SessionEventHandler> {
+public class EventHandlerDefinition {
 
-    private PicketBoxSession session;
+    private Object instance;
+    private Method methodHandler;
+    private Class<?> event;
 
-    public SessionEvent(PicketBoxSession session) {
-        this.session = session;
+    public EventHandlerDefinition(Class<?> event, Object instance, Method handler) {
+        this.event = event;
+        this.instance = instance;
+        this.methodHandler = handler;
     }
 
-    public PicketBoxSession getSession() {
-        return this.session;
+    public Object getInstance() {
+        return this.instance;
+    }
+
+    public Method getMethodHandler() {
+        return this.methodHandler;
+    }
+
+    public Class<?> getEvent() {
+        return this.event;
     }
 }

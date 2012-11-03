@@ -22,7 +22,7 @@
 
 package org.picketbox.core.logout.event;
 
-import org.picketbox.core.event.PicketBoxEvent;
+import org.picketbox.core.UserContext;
 
 
 /**
@@ -30,22 +30,18 @@ import org.picketbox.core.event.PicketBoxEvent;
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public class UserLoggedOutEvent implements PicketBoxEvent<UserLoggedOutEventHandler> {
+public class UserLoggedOutEvent {
+
+    private UserContext userContext;
 
     /**
      * @param result
      */
-    public UserLoggedOutEvent() {
+    public UserLoggedOutEvent(UserContext userContext) {
+        this.userContext = userContext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.authentication.api.AuthenticationEvent#dispatch(org.picketbox.core.authentication.api.
-     * AuthenticationEventHandler)
-     */
-    @Override
-    public void dispatch(UserLoggedOutEventHandler handler) {
-        handler.onLogOut(this);
+    public UserContext getUserContext() {
+        return userContext;
     }
 }

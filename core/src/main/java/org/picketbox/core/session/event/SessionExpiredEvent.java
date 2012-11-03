@@ -20,25 +20,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.event;
+package org.picketbox.core.session.event;
+
+import org.picketbox.core.session.PicketBoxSession;
 
 /**
- * <p>
- * Defines a contract for events.
- * </p>
+ * <p>This class represents a event fired when a session expires.</p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public interface PicketBoxEvent<HANDLER extends PicketBoxEventHandler> {
+public class SessionExpiredEvent {
 
-    /**
-     * <p>
-     * Process a specific handler to handle the corresponding event.
-     * </p>
-     *
-     * @param handler
-     */
-    void dispatch(HANDLER handler);
+    private PicketBoxSession session;
 
+    public SessionExpiredEvent(PicketBoxSession session) {
+        this.session = session;
+    }
+
+    public PicketBoxSession getSession() {
+        return this.session;
+    }
 }

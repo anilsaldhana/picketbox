@@ -39,14 +39,14 @@ public interface PicketBoxEventManager {
      *
      * @param event
      */
-    void raiseEvent(PicketBoxEvent<? extends PicketBoxEventHandler> event);
+    void raiseEvent(Object event);
 
     /**
      * <p>
-     * Adds a {@link PicketBoxEventHandler}.
+     * Adds a event handler. Handler instances should have methods annotated with the {@link EventObserver} annotation.
      * </p>
      *
      * @param defaultSessionEventHandler
      */
-    void addHandler(PicketBoxEventHandler handler);
+    void addHandler(Object handler);
 }

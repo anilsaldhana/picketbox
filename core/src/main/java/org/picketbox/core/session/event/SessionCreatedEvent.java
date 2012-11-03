@@ -20,28 +20,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.event;
+package org.picketbox.core.session.event;
 
-import org.picketbox.core.event.PicketBoxEventHandler;
+import org.picketbox.core.session.PicketBoxSession;
 
 /**
- * An Event Handler for the User Authentication
+ * <p>This class represents a event fired when a session is created.</p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ *
  */
-public interface UserAuthenticationEventHandler extends PicketBoxEventHandler {
+public class SessionCreatedEvent {
 
-    /**
-     * Successful Authentication
-     *
-     * @param userAuthenticatedEvent
-     */
-    void onSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent);
+    private PicketBoxSession session;
 
-    /**
-     * Unsuccessful Authentication
-     *
-     * @param userAuthenticatedEvent
-     */
-    void onUnSuccessfulAuthentication(UserAuthenticationEvent userAuthenticatedEvent);
+    public SessionCreatedEvent(PicketBoxSession session) {
+        this.session = session;
+    }
+
+    public PicketBoxSession getSession() {
+        return this.session;
+    }
 }

@@ -20,19 +20,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.event;
+package org.picketbox.core.authentication.event;
+
+import org.picketbox.core.UserContext;
 
 /**
- * An handler for authentication events
+ *  <p>This class represents a event fired when a user is invalid and not authenticated.</p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public interface PicketBoxEventHandler {
+public class UserNotAuthenticatedEvent {
 
-    /**
-     * Get the Event type
-     *
-     * @return
-     */
-    Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType();
+    private UserContext userContext;
+
+    public UserNotAuthenticatedEvent(UserContext subject) {
+        this.userContext = subject;
+    }
+
+    public UserContext getUserContext() {
+        return this.userContext;
+    }
+
 }

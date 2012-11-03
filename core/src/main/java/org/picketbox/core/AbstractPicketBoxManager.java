@@ -28,12 +28,14 @@ import static org.picketbox.core.PicketBoxMessages.MESSAGES;
 import java.security.Principal;
 
 import org.picketbox.core.audit.AuditProvider;
-import org.picketbox.core.audit.AuditUserAuthenticationEventHandler;
+import org.picketbox.core.audit.AuditEventHandler;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.TrustedUsernameCredential;
-import org.picketbox.core.authentication.event.UserAuthenticationEvent;
+import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
+import org.picketbox.core.authentication.event.UserAuthenticationFailedEvent;
+import org.picketbox.core.authentication.event.UserNotAuthenticatedEvent;
 import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
 import org.picketbox.core.authentication.impl.PicketBoxAuthenticationProvider;
 import org.picketbox.core.authorization.AuthorizationManager;
@@ -89,32 +91,37 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     public UserContext authenticate(UserContext userContext) throws AuthenticationException {
         checkIfStarted();
 
-        LOGGER.tracef("authenticating user [%s]", userContext);
+        try {
+            LOGGER.tracef("authenticating user [%s]", userContext);
 
-        PicketBoxSession userSession = restoreSession(userContext);
+            PicketBoxSession userSession = restoreSession(userContext);
 
-        // if there is a valid session associate it with the subject and performs a silent authentication, trusting the provided
-        // principal.
-        if (userSession != null) {
-            UserContext restoredUserContext = userSession.getUserContext();
-            Principal restoredPrincipal = restoredUserContext.getPrincipal(false);
+            // if there is a valid session associate it with the subject and performs a silent authentication, trusting the provided
+            // principal.
+            if (userSession != null) {
+                UserContext restoredUserContext = userSession.getUserContext();
+                Principal restoredPrincipal = restoredUserContext.getPrincipal(false);
 
-            LOGGER.tracef("performing silent authentication and re-authenticating principal %s", restoredPrincipal.getName());
+                LOGGER.tracef("performing silent authentication and re-authenticating principal %s", restoredPrincipal.getName());
 
-            TrustedUsernameCredential credential = new TrustedUsernameCredential(restoredPrincipal.getName());
+                TrustedUsernameCredential credential = new TrustedUsernameCredential(restoredPrincipal.getName());
 
-            userContext = new UserContext(credential);
-        }
+                userContext = new UserContext(credential);
+            }
 
-        // performs the authentication
-        performAuthentication(userContext);
+            // performs the authentication
+            performAuthentication(userContext);
 
-        if (userContext.isAuthenticated()) {
-            performSuccessfulAuthentication(userContext, userSession);
-            LOGGER.tracef("authenticated user is: [%s]", userContext);
-        } else {
-            LOGGER.tracef("user not authenticated: [%s]", userContext);
-            performUnsuccessfulAuthentication(userContext);
+            if (userContext.isAuthenticated()) {
+                performSuccessfulAuthentication(userContext, userSession);
+                LOGGER.tracef("authenticated user is: [%s]", userContext);
+            } else {
+                LOGGER.tracef("user not authenticated: [%s]", userContext);
+                performUnsuccessfulAuthentication(userContext);
+            }
+        } catch (Exception e) {
+            getEventManager().raiseEvent(new UserAuthenticationFailedEvent(userContext, e));
+            throw PicketBoxMessages.MESSAGES.authenticationFailed(e);
         }
 
         return userContext;
@@ -157,7 +164,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         if (authenticatedUser.isAuthenticated()) {
             LOGGER.tracef("logging out and invalidating user [%s]", authenticatedUser);
             authenticatedUser.invalidate();
-            getEventManager().raiseEvent(new UserLoggedOutEvent());
+            getEventManager().raiseEvent(new UserLoggedOutEvent(authenticatedUser));
         } else {
             throw MESSAGES.invalidUserSession();
         }
@@ -283,7 +290,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         UserContext populatedUserContext = this.userContextPopulator.getIdentity(userContext);
 
-        getEventManager().raiseEvent(new UserAuthenticationEvent(userContext));
+        getEventManager().raiseEvent(new UserAuthenticatedEvent(userContext));
 
         return populatedUserContext;
     }
@@ -296,7 +303,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      * @param subject
      */
     protected void performUnsuccessfulAuthentication(UserContext subject) {
-        getEventManager().raiseEvent(new UserAuthenticationEvent(subject));
+        getEventManager().raiseEvent(new UserNotAuthenticatedEvent(subject));
     }
 
     /**
@@ -346,9 +353,17 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
             IdentityStore identityStore = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
                     .getIdentityStore();
-            this.identityManager = new PicketBoxIdentityManager(this, identityStore);
+
+            IdentityManager providedIdentityManager = this.configuration.getIdentityManager().getIdentityManager();
+
+            if (providedIdentityManager == null) {
+                this.identityManager = new PicketBoxIdentityManager(this, identityStore);
+            } else {
+                this.identityManager = providedIdentityManager;
+            }
 
             this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
+
             if (this.userContextPopulator == null) {
                 this.userContextPopulator = new DefaultUserContextPopulator(this.identityManager);
             }
@@ -365,7 +380,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
             if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
                 this.auditProvider = this.configuration.getAuditConfig().getProvider();
-                this.eventManager.addHandler(new AuditUserAuthenticationEventHandler(this.auditProvider));
+                this.eventManager.addHandler(new AuditEventHandler(this.auditProvider));
             }
 
             doConfigure();

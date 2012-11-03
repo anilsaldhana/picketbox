@@ -22,29 +22,19 @@
 
 package org.picketbox.test.event;
 
-import org.picketbox.core.event.PicketBoxEvent;
-import org.picketbox.core.event.PicketBoxEventHandler;
+import org.picketbox.core.event.EventObserver;
 import org.picketbox.core.logout.event.UserLoggedOutEvent;
-import org.picketbox.core.logout.event.UserLoggedOutEventHandler;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class MockUserLoggedOutEventHandler implements UserLoggedOutEventHandler {
+public class MockUserLoggedOutEventHandler {
 
     private boolean loggedOut;
 
-    /* (non-Javadoc)
-     * @see org.picketbox.core.event.PicketBoxEventHandler#getEventType()
-     */
-    @Override
-    public Class<? extends PicketBoxEvent<? extends PicketBoxEventHandler>> getEventType() {
-        return UserLoggedOutEvent.class;
-    }
-
-    @Override
-    public void onLogOut(UserLoggedOutEvent userLogOutEvent) {
+    @EventObserver
+    public void onLogout(UserLoggedOutEvent userLogOutEvent) {
         this.loggedOut = true;
     }
 

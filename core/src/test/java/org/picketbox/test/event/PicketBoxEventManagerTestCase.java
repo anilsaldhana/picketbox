@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
-import org.picketbox.core.authentication.event.UserAuthenticationEvent;
 import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.event.PicketBoxEventManager;

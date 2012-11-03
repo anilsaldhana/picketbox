@@ -20,16 +20,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.event;
+package org.picketbox.core.session.event;
 
-import org.picketbox.core.event.PicketBoxEventHandler;
+import org.picketbox.core.session.PicketBoxSession;
 
 /**
+ * <p>This class represents a event fired when a session attribute changes.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public interface UserPreAuthenticationEventHandler extends PicketBoxEventHandler {
+public class SessionSetAttributeEvent {
 
-    void onPreAuthentication(UserPreAuthenticationEvent event);
+    private PicketBoxSession session;
+    private String attributeName;
+    private Object attributeValue;
 
+    public SessionSetAttributeEvent(PicketBoxSession session, String attributeName, Object attributeValue) {
+        this.session = session;
+        this.attributeName = attributeName;
+        this.attributeValue = attributeValue;
+    }
+
+    public PicketBoxSession getSession() {
+        return this.session;
+    }
+
+    public String getAttributeName() {
+        return this.attributeName;
+    }
+
+    public Object getAttributeValue() {
+        return this.attributeValue;
+    }
 }
