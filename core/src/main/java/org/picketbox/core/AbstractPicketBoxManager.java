@@ -27,8 +27,9 @@ import static org.picketbox.core.PicketBoxMessages.MESSAGES;
 
 import java.security.Principal;
 
-import org.picketbox.core.audit.AuditProvider;
+import org.picketbox.core.audit.AbstractAuditProvider;
 import org.picketbox.core.audit.AuditEventHandler;
+import org.picketbox.core.audit.AuditProvider;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
 import org.picketbox.core.authentication.AuthenticationResult;
@@ -380,6 +381,11 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
             if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
                 this.auditProvider = this.configuration.getAuditConfig().getProvider();
+
+                if (this.auditProvider instanceof AbstractAuditProvider) {
+                    ((AbstractAuditProvider) this.auditProvider).setPicketBoxManager(this);
+                }
+
                 this.eventManager.addHandler(new AuditEventHandler(this.auditProvider));
             }
 

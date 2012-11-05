@@ -41,7 +41,7 @@ import org.picketbox.core.audit.AuditEvent;
 public class LogAuditProvider extends AbstractAuditProvider {
 
     @Override
-    public void audit(AuditEvent auditEvent) {
+    protected void doAudit(AuditEvent auditEvent) {
         Exception e = auditEvent.getUnderlyingException();
 
         if (e != null) {

@@ -24,10 +24,12 @@ package org.picketbox.test.audit;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
+import org.picketbox.core.audit.AuditType;
 import org.picketbox.core.audit.providers.LogAuditProvider;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
@@ -97,6 +99,46 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
         assertTrue(subject.isAuthenticated());
         
         assertTrue(customAuditProvider.isAudited());
+    }
+    
+    /**
+     * <p>
+     * Tests the default configuration for auditing. By default, PicketBox will use the {@link LogAuditProvider} to log audit
+     * events.
+     * </p>
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testAuditEventsHandling() throws Exception {
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+
+        MockUserAuditEventHandler auditEventHandler = new MockUserAuditEventHandler();
+        
+        builder
+            .audit()
+                .logProvider()
+            .eventManager()
+                .handler(auditEventHandler);
+        
+        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+
+        UserContext authenticatingUserContext = new UserContext();
+
+        authenticatingUserContext.setCredential(new UsernamePasswordCredential("admin", "admin"));
+
+        UserContext subject = picketBoxManager.authenticate(authenticatingUserContext);
+
+        assertNotNull(subject);
+        assertTrue(subject.isAuthenticated());
+        
+        assertTrue(auditEventHandler.isPreAuditEvent());
+        assertTrue(auditEventHandler.isPostAuditEvent());
+        assertNotNull(auditEventHandler.getEvent());
+        assertEquals(AuditType.AUTHENTICATION, auditEventHandler.getEvent().getAuditType());
+        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("creationDate"));
+        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("details"));
+        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("user"));
     }
 
 }
