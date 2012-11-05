@@ -29,6 +29,7 @@ import static org.junit.Assert.assertFalse;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
@@ -122,7 +123,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
 
         assertNotNull(authenticatedUser);
-        assertTrue(authenticatedUser.isAuthenticated());
+        Assert.assertTrue(authenticatedUser.isAuthenticated());
         
         picketBoxManager.logout(authenticatedUser);
         
@@ -134,6 +135,57 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         
         assertNotNull(authenticatedUser);
         assertFalse(authenticatedUser.isAuthenticated());
+    }
+    
+    /**
+     * <p>
+     * Tests if the authentication fail when using a null token.
+     * </p>
+     * @throws Exception 
+     *
+     * @throws AuthenticationException
+     */
+    @Test
+    public void testNullToken() throws Exception {
+        PicketBoxManager picketBoxManager = createManager();
+        IdentityManager identityManager = picketBoxManager.getIdentityManager();
+        
+        UserContext authenticatingUser = new UserContext();
+        
+        // only sets the seed as an user attribute.
+        generateOTP(identityManager);
+        
+        authenticatingUser.setCredential(new OTPCredential("admin", "admin", null));
+
+        // let's authenticate the user
+        UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
+    }
+    
+    /**
+     * <p>
+     * Tests if the authentication fail when authenticating an user without a seed.
+     * </p>
+     * @throws Exception 
+     *
+     * @throws AuthenticationException
+     */
+    @Test
+    public void testUserAuthenticationWithoutSeed() throws Exception {
+        PicketBoxManager picketBoxManager = createManager();
+        
+        UserContext authenticatingUser = new UserContext();
+        
+        authenticatingUser.setCredential(new OTPCredential("admin", "admin", null));
+
+        // let's authenticate the user
+        UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
+        assertFalse(authenticatedUser.getAuthenticationResult().getMessages().isEmpty());
     }
 
     private String generateOTP(IdentityManager identityManager) throws GeneralSecurityException {
