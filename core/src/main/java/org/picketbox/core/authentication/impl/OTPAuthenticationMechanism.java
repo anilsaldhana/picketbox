@@ -31,6 +31,7 @@ import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationResult;
+import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.credential.OTPCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
@@ -82,6 +83,7 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
             if (validation) {
                 // Validate OTP
                 String seed = user.getAttribute("serial");
+
                 if (seed != null) {
                     try {
                         if (this.algorithm.equals(TimeBasedOTP.HMAC_SHA1)) {
@@ -94,8 +96,13 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
                     } catch (GeneralSecurityException e) {
                         throw new AuthenticationException(e);
                     }
+                } else {
+                    validation = false;
+                    result.setStatus(AuthenticationStatus.INVALID_CREDENTIALS);
+                    result.addMessage("User does not have a seed. OTP tokens could not me derived.");
                 }
             }
+
             if (validation) {
                 principal = new PicketBoxPrincipal(username);
             }
