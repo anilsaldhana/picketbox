@@ -22,6 +22,8 @@
 
 package org.picketbox.core.audit;
 
+import org.picketbox.core.PicketBoxManager;
+
 /**
  * Base class for {@link AuditProvider} implementations.
  *
@@ -30,4 +32,24 @@ package org.picketbox.core.audit;
  */
 public abstract class AbstractAuditProvider implements AuditProvider {
 
+    public PicketBoxManager picketBoxManager;
+
+    @Override
+    public void audit(AuditEvent ae) {
+        if (this.picketBoxManager != null) {
+            this.picketBoxManager.getEventManager().raiseEvent(new PreAuditEvent(ae));
+        }
+
+        doAudit(ae);
+
+        if (this.picketBoxManager != null) {
+            this.picketBoxManager.getEventManager().raiseEvent(new PostAuditEvent(ae));
+        }
+    }
+
+    protected abstract void doAudit(AuditEvent ae);
+
+    public void setPicketBoxManager(PicketBoxManager picketBoxManager) {
+        this.picketBoxManager = picketBoxManager;
+    }
 }

@@ -22,23 +22,42 @@
 
 package org.picketbox.test.audit;
 
-import org.picketbox.core.audit.AbstractAuditProvider;
 import org.picketbox.core.audit.AuditEvent;
+import org.picketbox.core.audit.PreAuditEvent;
+import org.picketbox.core.event.EventObserver;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class CustomAuditProvider extends AbstractAuditProvider {
+public class MockUserAuditEventHandler {
 
-    private boolean audited;
+    private AuditEvent event;
     
-    @Override
-    public void doAudit(AuditEvent ae) {
-        this.audited = true;
+    private boolean preAuditEvent;
+    private boolean postAuditEvent;
+
+    @EventObserver
+    public void onPreAudit(PreAuditEvent event) {
+        this.preAuditEvent = true;
+        this.event = event.getEvent();
     }
 
-    public boolean isAudited() {
-        return this.audited;
+    @EventObserver
+    public void onPostAudit(PreAuditEvent event) {
+        this.postAuditEvent = true;
+        this.event = event.getEvent();
+    }
+
+    public AuditEvent getEvent() {
+        return this.event;
+    }
+    
+    public boolean isPreAuditEvent() {
+        return this.preAuditEvent;
+    }
+    
+    public boolean isPostAuditEvent() {
+        return this.postAuditEvent;
     }
 }

@@ -20,25 +20,23 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.audit;
-
-import org.picketbox.core.audit.AbstractAuditProvider;
-import org.picketbox.core.audit.AuditEvent;
+package org.picketbox.core.audit;
 
 /**
+ * <p>This class represents a event fired after an audit record is processed by some specific {@link AuditProvider}.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class CustomAuditProvider extends AbstractAuditProvider {
+public class PostAuditEvent {
 
-    private boolean audited;
-    
-    @Override
-    public void doAudit(AuditEvent ae) {
-        this.audited = true;
+    private AuditEvent event;
+
+    public PostAuditEvent(AuditEvent event) {
+        this.event = event;
     }
 
-    public boolean isAudited() {
-        return this.audited;
+    public AuditEvent getEvent() {
+        return this.event;
     }
 }

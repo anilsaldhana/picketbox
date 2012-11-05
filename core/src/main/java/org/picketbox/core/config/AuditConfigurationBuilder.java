@@ -47,12 +47,14 @@ public class AuditConfigurationBuilder extends AbstractConfigurationBuilder<Audi
         return new AuditConfig(this.provider);
     }
 
-    public void logProvider() {
+    public AuditConfigurationBuilder logProvider() {
         this.provider = new LogAuditProvider();
+        return this;
     }
 
-    public void provider(AuditProvider provider) {
+    public AuditConfigurationBuilder provider(AuditProvider provider) {
         this.provider = provider;
+        return this;
     }
 
 }
