@@ -54,13 +54,30 @@ public class TimeBasedOTPUtil {
         if (!result) {
             timeInMilis -= TIME_INTERVAL;
 
-            generatedTOTP = TimeBasedOTP.generateTOTP(new String(secret), "" + timeInMilis, numDigits);
+            String steps = "0";
+            long T = (timeInMilis - TimeBasedOTP.TIME_ZERO) / TimeBasedOTP.TIME_SLICE_X;
+            steps = Long.toHexString(T).toUpperCase();
+
+            // Just get a 16 digit string
+            while (steps.length() < 16)
+                steps = "0" + steps;
+
+            generatedTOTP = TimeBasedOTP.generateTOTP(new String(secret), "" + steps, numDigits);
             result = generatedTOTP.equals(submittedOTP);
         }
 
         if (!result) {
             timeInMilis += TIME_INTERVAL;
-            generatedTOTP = TimeBasedOTP.generateTOTP(new String(secret), "" + timeInMilis, numDigits);
+
+            String steps = "0";
+            long T = (timeInMilis - TimeBasedOTP.TIME_ZERO) / TimeBasedOTP.TIME_SLICE_X;
+            steps = Long.toHexString(T).toUpperCase();
+
+            // Just get a 16 digit string
+            while (steps.length() < 16)
+                steps = "0" + steps;
+
+            generatedTOTP = TimeBasedOTP.generateTOTP(new String(secret), "" + steps, numDigits);
             result = generatedTOTP.equals(submittedOTP);
         }
 
