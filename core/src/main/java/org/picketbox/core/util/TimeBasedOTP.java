@@ -186,7 +186,8 @@ public class TimeBasedOTP {
         byte[] msg = hexStr2Bytes(time);
 
         // Adding one byte to get the right conversion
-        byte[] k = hexStr2Bytes(key);
+//        byte[] k = hexStr2Bytes(key);
+        byte[] k = key.getBytes();
 
         hash = hmac_sha1(crypto, k, msg);
 
