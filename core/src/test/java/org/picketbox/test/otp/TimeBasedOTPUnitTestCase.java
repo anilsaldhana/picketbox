@@ -24,6 +24,7 @@ package org.picketbox.test.otp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.core.util.TimeBasedOTPUtil;
@@ -84,13 +85,15 @@ public class TimeBasedOTPUnitTestCase {
         }
     }
 
-    // @Test TODO: Fix this test method when running on Jenkins.
+    @Test
+    @Ignore
     public void testTOTPValidity() throws Exception {
         String totp = TimeBasedOTP.generateTOTP(this.seed, this.NUMBER_OF_DIGITS);
 
         System.out.println("We are going to sleep for " + this.SLEEP_TIME + " secs");
         Thread.sleep(this.SLEEP_TIME * 5000); // 10 secs
 
-        assertTrue("TOTP validated", TimeBasedOTPUtil.validate(totp, this.seed.getBytes(), 8));
+        assertTrue("TOTP validated", TimeBasedOTPUtil.validate(totp, this.seed.getBytes(), this.NUMBER_OF_DIGITS));
     }
+    
 }
