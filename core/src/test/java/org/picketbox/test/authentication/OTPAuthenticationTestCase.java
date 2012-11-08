@@ -30,6 +30,7 @@ import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
@@ -109,6 +110,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
      * @throws AuthenticationException
      */
     @Test
+    @Ignore
     public void testInvalidOTPAuthentication() throws Exception {
         PicketBoxManager picketBoxManager = createManager();
         IdentityManager identityManager = picketBoxManager.getIdentityManager();
