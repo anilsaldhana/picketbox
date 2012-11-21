@@ -19,7 +19,7 @@
    <parent>
       <groupId>org.picketbox</groupId>
       <artifactId>picketbox-core-parent</artifactId>
-      <version>5.0.0-2012Nov21</version>
+      <version>5.0.0-SNAPSHOT</version>
       <relativePath>../parent</relativePath>
    </parent>
    <modelVersion>4.0.0</modelVersion>
@@ -29,8 +29,8 @@
    <url>http://jboss.org/picketbox/</url>
    <description>PicketBox Infinispan Integration contains the integration code to use Infinispan.</description>
    <properties>
-      <picketbox.core.version>5.0.0-2012Nov21</picketbox.core.version>
-      <picketbox.http.version>5.0.0-2012Nov21</picketbox.http.version>
+      <picketbox.core.version>5.0.0-SNAPSHOT</picketbox.core.version>
+      <picketbox.http.version>5.0.0-SNAPSHOT</picketbox.http.version>
       <infinispan.version>5.1.5.FINAL</infinispan.version>
    </properties>
    <build>
