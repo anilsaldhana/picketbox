@@ -40,29 +40,29 @@ import org.picketbox.core.exceptions.AuthenticationException;
 public class CustomAuthenticationMechanism extends AbstractAuthenticationMechanism {
 
     private boolean invoked;
-    
+
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
         ArrayList<AuthenticationInfo> info = new ArrayList<AuthenticationInfo>();
-        
+
         info.add(new AuthenticationInfo("Custom Authentication Mechanism for testing.", "Custom Authentication Mechanism for testing.", CustomCredential.class));
-        
+
         return info;
     }
 
     @Override
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         CustomCredential customCredential = (CustomCredential) credential;
-        
+
         if ("admin".equals(customCredential.getUserName())) {
-            invoked = true;
+            this.invoked = true;
             return new PicketBoxPrincipal(customCredential.getUserName());
-        }        
-        
+        }
+
         return null;
     }
-    
+
     public boolean isInvoked() {
-        return invoked;
+        return this.invoked;
     }
 }

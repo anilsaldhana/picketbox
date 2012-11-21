@@ -70,11 +70,11 @@ public class LDAPBasedIdentityManagerTestcase extends AbstractLDAPTest {
 
         // user was loaded by the identity manager ?
         assertNotNull(authenticatedContext.getUser());
-        
+
         // check the configured roles
         assertTrue(authenticatedContext.hasRole("Echo"));
         assertTrue(authenticatedContext.hasRole("TheDuke"));
-        
+
         // check the configured group
         assertTrue(authenticatedContext.hasGroup("The PicketBox Group"));
     }

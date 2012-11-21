@@ -61,9 +61,9 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
         UserContext authenticatingUser = new UserContext();
 
         X509Certificate certificate = getTestingCertificate();
-        
+
         UserCredential credential = new CertificateCredential(certificate);
-        
+
         authenticatingUser.setCredential(credential);
 
         // let's authenticate the user

@@ -32,7 +32,7 @@ import org.picketbox.core.audit.AuditEvent;
 public class CustomAuditProvider extends AbstractAuditProvider {
 
     private boolean audited;
-    
+
     @Override
     public void doAudit(AuditEvent ae) {
         this.audited = true;

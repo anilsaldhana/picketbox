@@ -62,11 +62,15 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
     @Test
     public void testUserNamePasswordCredential() throws AuthenticationException {
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        
+
         // configure the JPA identity store
         builder.identityManager().jpaStore();
-        
+
         PicketBoxManager picketBoxManager = createManager(builder);
+
+        EntityManager entityManager = JPAIdentityStoreContext.get();
+        
+        entityManager.flush();
         
         UserContext authenticatingUser = new UserContext();
 
@@ -85,22 +89,22 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
     @Before
     public void onSetup() throws Exception {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("picketbox-testing-pu");
-        
+
         EntityManager entityManager = this.entityManagerFactory.createEntityManager();
-        
+
         entityManager.getTransaction().begin();
-        
+
         JPAIdentityStoreContext.set(entityManager);
     }
-    
+
     @After
     public void onFinish() throws Exception {
         EntityManager entityManager = JPAIdentityStoreContext.get();
-        
+
         entityManager.flush();
         entityManager.getTransaction().commit();
         entityManager.close();
-        
+
         JPAIdentityStoreContext.clear();
         this.entityManagerFactory.close();
     }

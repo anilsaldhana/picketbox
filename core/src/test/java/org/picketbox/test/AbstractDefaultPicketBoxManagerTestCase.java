@@ -67,7 +67,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         return this.picketboxManager;
     }
-    
+
     /**
      * <p>
      * Creates a {@link PicketBoxManager}.
@@ -83,7 +83,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         } else {
             configBuilder = builder[0];
         }
-        
+
         return getPicketBoxManager(configBuilder.build());
     }
 
@@ -113,7 +113,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         identityManager.grantRole(roleDeveloper, adminUser, groupCoreDeveloper);
         identityManager.grantRole(roleAdmin, adminUser, groupCoreDeveloper);
-        
+
         FileUser jbidTestUser = new FileUser("jbid test");
 
         identityManager.createUser(jbidTestUser);
@@ -126,13 +126,13 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         FileUser certUser = new FileUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
 
         identityManager.createUser(certUser);
-        
+
         identityManager.updateCredential(certUser, new X509CertificateCredential(getTestingCertificate()));
-        
+
         identityManager.grantRole(roleDeveloper, certUser, groupCoreDeveloper);
         identityManager.grantRole(roleAdmin, certUser, groupCoreDeveloper);
     }
-    
+
     protected void assertRoles(UserContext authenticatedUser) {
         assertFalse(authenticatedUser.getRoles().isEmpty());
         assertTrue(authenticatedUser.getRoles().containsAll(Arrays.asList(new Role[] {new SimpleRole("developer"), new SimpleRole("admin")})));

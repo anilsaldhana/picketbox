@@ -23,6 +23,8 @@
 package org.picketbox.core.audit;
 
 import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.audit.event.PostAuditEvent;
+import org.picketbox.core.audit.event.PreAuditEvent;
 
 /**
  * Base class for {@link AuditProvider} implementations.

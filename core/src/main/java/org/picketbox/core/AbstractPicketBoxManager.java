@@ -28,8 +28,8 @@ import static org.picketbox.core.PicketBoxMessages.MESSAGES;
 import java.security.Principal;
 
 import org.picketbox.core.audit.AbstractAuditProvider;
-import org.picketbox.core.audit.AuditEventHandler;
 import org.picketbox.core.audit.AuditProvider;
+import org.picketbox.core.audit.event.AuditEventHandler;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
 import org.picketbox.core.authentication.AuthenticationResult;

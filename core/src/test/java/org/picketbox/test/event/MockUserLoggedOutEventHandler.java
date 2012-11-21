@@ -39,6 +39,6 @@ public class MockUserLoggedOutEventHandler {
     }
 
     public boolean isLoggedOut() {
-        return loggedOut;
+        return this.loggedOut;
     }
 }

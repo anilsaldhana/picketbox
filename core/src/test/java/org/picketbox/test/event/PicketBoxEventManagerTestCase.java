@@ -132,7 +132,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         assertTrue(logoutEventHandler.isLoggedOut());
     }
-    
+
     /**
      * <p>
      * Tests is the {@link UserPreAuthenticationEvent} is properly handled when the user is being authenticated.

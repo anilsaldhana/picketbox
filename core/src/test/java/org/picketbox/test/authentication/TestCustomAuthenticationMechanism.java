@@ -35,18 +35,18 @@ import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
  * <p>
  * Tests the configuration of a custom {@link AuthenticationMechanism}.
  * </p>
- * 
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  */
 public class TestCustomAuthenticationMechanism extends AbstractDefaultPicketBoxManagerTestCase {
 
     /**
      * <p>
      * Tests if the configuration of a custom {@link AuthenticationMechanism} is working properly. This method configures the
-     * custom mechanism, performs a simple authentication and checks if the mechanisms was invoked. 
+     * custom mechanism, performs a simple authentication and checks if the mechanisms was invoked.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -71,7 +71,7 @@ public class TestCustomAuthenticationMechanism extends AbstractDefaultPicketBoxM
         UserContext authenticatedContext = manager.authenticate(authenticatingContext);
 
         assertTrue(authenticatedContext.isAuthenticated());
-        
+
         // check if the custom mechanisms was invoked during the authentication
         assertTrue(customMechanism.isInvoked());
     }
