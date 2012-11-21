@@ -42,6 +42,6 @@ public class UserLoggedOutEvent {
     }
 
     public UserContext getUserContext() {
-        return userContext;
+        return this.userContext;
     }
 }

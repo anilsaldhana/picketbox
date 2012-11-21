@@ -58,7 +58,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         builder.audit().logProvider();
-        
+
         PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
 
         UserContext authenticatingUserContext = new UserContext();
@@ -70,7 +70,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
         assertNotNull(subject);
         assertTrue(subject.isAuthenticated());
     }
-    
+
     /**
      * <p>
      * Tests the default configuration for auditing. By default, PicketBox will use the {@link LogAuditProvider} to log audit
@@ -84,9 +84,9 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         CustomAuditProvider customAuditProvider = new CustomAuditProvider();
-        
+
         builder.audit().provider(customAuditProvider);
-        
+
         PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
 
         UserContext authenticatingUserContext = new UserContext();
@@ -97,10 +97,10 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
         assertNotNull(subject);
         assertTrue(subject.isAuthenticated());
-        
+
         assertTrue(customAuditProvider.isAudited());
     }
-    
+
     /**
      * <p>
      * Tests the default configuration for auditing. By default, PicketBox will use the {@link LogAuditProvider} to log audit
@@ -114,13 +114,9 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         MockUserAuditEventHandler auditEventHandler = new MockUserAuditEventHandler();
-        
-        builder
-            .audit()
-                .logProvider()
-            .eventManager()
-                .handler(auditEventHandler);
-        
+
+        builder.audit().logProvider().eventManager().handler(auditEventHandler);
+
         PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
 
         UserContext authenticatingUserContext = new UserContext();
@@ -131,14 +127,15 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
         assertNotNull(subject);
         assertTrue(subject.isAuthenticated());
-        
+
         assertTrue(auditEventHandler.isPreAuditEvent());
         assertTrue(auditEventHandler.isPostAuditEvent());
         assertNotNull(auditEventHandler.getEvent());
         assertEquals(AuditType.AUTHENTICATION, auditEventHandler.getEvent().getAuditType());
-        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("creationDate"));
-        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("details"));
-        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("user"));
+        assertNotNull(auditEventHandler.getEvent().getCreationDate());
+        assertNotNull(auditEventHandler.getEvent().getDescription());
+        assertNotNull(auditEventHandler.getEvent().getUserContext());
+        assertTrue(auditEventHandler.getEvent().getContextMap().containsKey("customAuditInfo"));
     }
 
 }

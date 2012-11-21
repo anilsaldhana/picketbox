@@ -20,19 +20,22 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.audit;
+package org.picketbox.core.audit.event;
+
+import org.picketbox.core.audit.AuditEvent;
+import org.picketbox.core.audit.AuditProvider;
 
 /**
- * <p>This class represents a event fired before an audit record is processed by some specific {@link AuditProvider}.</p>
+ * <p>This class represents a event fired after an audit record is processed by some specific {@link AuditProvider}.</p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class PreAuditEvent {
+public class PostAuditEvent {
 
     private AuditEvent event;
 
-    public PreAuditEvent(AuditEvent event) {
+    public PostAuditEvent(AuditEvent event) {
         this.event = event;
     }
 

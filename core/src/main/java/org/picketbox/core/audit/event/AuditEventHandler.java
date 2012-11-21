@@ -20,18 +20,23 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.audit;
+package org.picketbox.core.audit.event;
 
-import java.util.Date;
 import java.util.HashMap;
 
+import org.picketbox.core.audit.AuditEvent;
+import org.picketbox.core.audit.AuditProvider;
+import org.picketbox.core.audit.AuditType;
 import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
 import org.picketbox.core.authentication.event.UserAuthenticationFailedEvent;
 import org.picketbox.core.authentication.event.UserNotAuthenticatedEvent;
 import org.picketbox.core.event.EventObserver;
 
 /**
- * <p>This class represents acts as a handler for security related events, auditing each event using a specific {@link AuditProvider}.</p>
+ * <p>
+ * This class acts as a handler for security related events, auditing each event using a specific
+ * {@link AuditProvider}.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
@@ -48,34 +53,36 @@ public class AuditEventHandler {
     public void onSuccessfulAuthentication(UserAuthenticatedEvent event) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
-        map.put("creationDate", new Date());
-        map.put("user", event.getUserContext());
-        map.put("details", "User authenticated");
+        AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map);
 
-        this.auditProvider.audit(new AuditEvent(AuditType.AUTHENTICATION, map));
+        auditRecord.setUserContext(event.getUserContext());
+        auditRecord.setDescription("User was authenticated");
+
+        this.auditProvider.audit(auditRecord);
     }
 
     @EventObserver
     public void onUnSuccessfulAuthentication(UserNotAuthenticatedEvent event) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
-        map.put("creationDate", new Date());
-        map.put("user", event.getUserContext());
-        map.put("details", "Invalid user");
+        AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map);
 
-        this.auditProvider.audit(new AuditEvent(AuditType.AUTHENTICATION, map));
+        auditRecord.setUserContext(event.getUserContext());
+        auditRecord.setDescription("Invalid user");
+
+        this.auditProvider.audit(auditRecord);
     }
 
     @EventObserver
     public void onAuthenticationFailed(UserAuthenticationFailedEvent event) {
         HashMap<String, Object> map = new HashMap<String, Object>();
 
-        map.put("creationDate", new Date());
-        map.put("user", event.getUserContext());
-        map.put("details", "Authentication failed.");
-        map.put("exception", event.getException());
+        AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map, event.getException());
 
-        this.auditProvider.audit(new AuditEvent(AuditType.AUTHENTICATION, map));
+        auditRecord.setUserContext(event.getUserContext());
+        auditRecord.setDescription("Authentication failed");
+
+        this.auditProvider.audit(auditRecord);
     }
 
 }

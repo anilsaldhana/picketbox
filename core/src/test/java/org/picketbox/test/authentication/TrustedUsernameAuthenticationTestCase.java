@@ -57,7 +57,7 @@ public class TrustedUsernameAuthenticationTestCase extends AbstractDefaultPicket
         UserContext authenticatingUser = new UserContext();
 
         UserCredential credential = new TrustedUsernameCredential("admin");
-        
+
         authenticatingUser.setCredential(credential);
 
         // let's authenticate the user

@@ -42,7 +42,7 @@ public class MockSessionEventHandler {
     boolean onGetAttributeCalled = false;
     boolean onInvalidateCalled = false;
     boolean onExpirationCalled = false;
-    
+
     @EventObserver
     public void onCreate(SessionCreatedEvent event) {
         this.onCreateCalled = true;
@@ -80,5 +80,5 @@ public class MockSessionEventHandler {
         assertNotNull(event);
         assertNotNull(event.getSession());
     }
-    
+
 }

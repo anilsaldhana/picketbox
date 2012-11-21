@@ -45,7 +45,7 @@ public class MockUserAuthenticationEventHandler {
     public void onUnSuccessful(UserNotAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = false;
     }
-    
+
     @EventObserver
     public void onFailed(UserAuthenticationFailedEvent userAuthenticatedEvent) {
         this.authenticationFailed = false;
@@ -54,7 +54,7 @@ public class MockUserAuthenticationEventHandler {
     public boolean isSuccessfulAuthentication() {
         return this.successfulAuthentication;
     }
-    
+
     public boolean isAuthenticationFailed() {
         return this.authenticationFailed;
     }

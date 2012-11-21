@@ -95,5 +95,5 @@ public class TimeBasedOTPUnitTestCase {
 
         assertTrue("TOTP validated", TimeBasedOTPUtil.validate(totp, this.seed.getBytes(), this.NUMBER_OF_DIGITS));
     }
-    
+
 }

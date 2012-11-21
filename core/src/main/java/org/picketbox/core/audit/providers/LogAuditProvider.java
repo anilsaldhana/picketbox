@@ -42,7 +42,7 @@ public class LogAuditProvider extends AbstractAuditProvider {
 
     @Override
     protected void doAudit(AuditEvent auditEvent) {
-        Exception e = auditEvent.getUnderlyingException();
+        Throwable e = auditEvent.getUnderlyingException();
 
         if (e != null) {
             if (isTraceEnabled())

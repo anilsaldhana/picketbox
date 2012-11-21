@@ -23,7 +23,7 @@
 package org.picketbox.core.audit;
 
 /**
- * <p>Define the Audit Levels of Severity.</p>
+ * <p>Define the Audit Types.</p>
  *
  * @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  * @since Aug 21, 2006

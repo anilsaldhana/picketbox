@@ -34,20 +34,20 @@ import org.picketbox.core.event.EventObserver;
 public class MockUserPreAuthenticationEventHandler {
 
     public static final String PRE_AUTH_CONTEXT_DATA = "PRE_AUTH_CONTEXT_DATA";
-    
+
     private boolean invoked;
 
     @EventObserver
     public void onPreAuthentication(UserPreAuthenticationEvent event) {
         this.invoked = true;
         HashMap<String, Object> contextData = new HashMap<String, Object>();
-        
+
         contextData.put(PRE_AUTH_CONTEXT_DATA, PRE_AUTH_CONTEXT_DATA);
-        
+
         event.getUserContext().setContextData(contextData);
     }
-    
+
     public boolean isInvoked() {
-        return invoked;
+        return this.invoked;
     }
 }

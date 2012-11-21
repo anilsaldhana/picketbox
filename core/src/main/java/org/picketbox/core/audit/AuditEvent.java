@@ -24,8 +24,11 @@ package org.picketbox.core.audit;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.picketbox.core.UserContext;
 
 /**
  * <p>
@@ -38,10 +41,12 @@ import java.util.Map;
 public class AuditEvent {
 
     private String auditType;
+    private Date creationDate = new Date();
+    private UserContext userContext;
+    private String description;
+    private Throwable underlyingException;
 
     private Map<String, Object> contextMap = new HashMap<String, Object>();
-
-    private Exception underlyingException = null;
 
     public AuditEvent(String type) {
         this.auditType = type;
@@ -52,18 +57,81 @@ public class AuditEvent {
         this.contextMap = map;
     }
 
-    public AuditEvent(String type, Map<String, Object> map, Exception ex) {
+    public AuditEvent(String type, Map<String, Object> map, Throwable ex) {
         this(type, map);
         this.underlyingException = ex;
     }
 
     /**
-     * Return the Audit Level
+     * Return the Audit Type
      *
      * @return
      */
     public String getAuditType() {
         return this.auditType;
+    }
+
+    /**
+     * Set the Audit Type
+     *
+     * @param auditType
+     */
+    public void setAuditType(String auditType) {
+        this.auditType = auditType;
+    }
+
+    /**
+     * Get the creation date
+     *
+     * @return
+     */
+    public Date getCreationDate() {
+        return this.creationDate;
+    }
+
+    /**
+     * Set the creation date
+     *
+     * @param creationDate
+     */
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    /**
+     * Get the {@link UserContext}
+     *
+     * @return
+     */
+    public UserContext getUserContext() {
+        return this.userContext;
+    }
+
+    /**
+     * Set the {@link UserContext}
+     *
+     * @param userContext
+     */
+    public void setUserContext(UserContext userContext) {
+        this.userContext = userContext;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return
+     */
+    public String getDescription() {
+        return this.description;
     }
 
     /**
@@ -89,7 +157,7 @@ public class AuditEvent {
      *
      * @return
      */
-    public Exception getUnderlyingException() {
+    public Throwable getUnderlyingException() {
         return this.underlyingException;
     }
 
@@ -105,8 +173,11 @@ public class AuditEvent {
     @Override
     public String toString() {
         StringBuilder sbu = new StringBuilder();
-        sbu.append("[").append(this.auditType).append("]");
-        sbu.append(dissectContextMap());
+        sbu.append("\n##AUDIT_TYPE: ").append(this.auditType).append("##\n")
+        .append("##CREATION_DATE: ").append(getCreationDate()).append("##\n")
+        .append("##DESCRIPTION: ").append(getDescription()).append("##\n")
+        .append("##USER_CONTEXT: ").append(getUserContext()).append("##\n")
+        .append("##AUDIT_CONTEXT: ").append(dissectContextMap()).append("##\n");
         return sbu.toString();
     }
 

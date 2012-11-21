@@ -80,6 +80,7 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
 
         if (user != null) {
             boolean validation = identityManager.validateCredential(user, new PasswordCredential(pass));
+
             if (validation) {
                 // Validate OTP
                 String seed = user.getAttribute("serial");
@@ -107,6 +108,7 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
                 principal = new PicketBoxPrincipal(username);
             }
         }
+
         return principal;
     }
 }
