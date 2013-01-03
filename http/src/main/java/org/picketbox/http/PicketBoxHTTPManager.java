@@ -31,7 +31,6 @@ import javax.servlet.http.HttpSession;
 import org.picketbox.core.AbstractPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
-import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.authorization.Resource;
 import org.picketbox.http.authorization.resource.WebResource;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;

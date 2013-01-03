@@ -30,8 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
-import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPFormConfiguration;
 import org.picketlink.idm.credential.Credentials;

@@ -32,12 +32,10 @@ import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationResult;
-import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.credential.OTPCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.core.util.TimeBasedOTPUtil;
-import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Credentials.Status;
 import org.picketlink.idm.credential.UsernamePasswordCredentials;
 import org.picketlink.idm.model.Attribute;
@@ -52,6 +50,7 @@ import org.picketlink.idm.model.User;
 public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism {
 
     private String algorithm = TimeBasedOTP.HMAC_SHA1;
+
     // This is the number of digits in the totp
     private int NUMBER_OF_DIGITS = 6;
 
@@ -77,11 +76,10 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
 
         Principal principal = null;
 
-        IdentityManager identityManager = getIdentityManager();
-        User user = identityManager.getUser(username);
+        User user = getIdentityManager().getUser(username);
 
         if (user != null) {
-            identityManager.validateCredentials(passwordCredential);
+            getIdentityManager().validateCredentials(passwordCredential);
 
             boolean validation = passwordCredential.getStatus().equals(Status.VALID);
 
@@ -108,13 +106,15 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
                     }
                 } else {
                     validation = false;
-                    result.setStatus(AuthenticationStatus.INVALID_CREDENTIALS);
+                    authenticationFailed(result);
                     result.addMessage("User does not have a seed. OTP tokens could not me derived.");
                 }
             }
 
             if (validation) {
                 principal = new PicketBoxPrincipal(username);
+            } else {
+                invalidCredentials(result);
             }
         }
 

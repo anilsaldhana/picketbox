@@ -67,7 +67,7 @@ public interface AuthenticationMechanism {
      * </p>
      * <p>
      *
-     * @param callbackHandler
+     * @param credential
      * @return
      * @throws AuthenticationException
      */

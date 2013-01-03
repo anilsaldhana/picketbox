@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.picketbox.core.PicketBoxMessages;
-import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.logout.LogoutManager;
+import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.PicketBoxHTTPMessages;
 
 /**

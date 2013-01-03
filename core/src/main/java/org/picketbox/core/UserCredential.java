@@ -36,7 +36,7 @@ import org.picketlink.idm.credential.Credentials;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public interface UserCredential extends Credentials {
+public interface UserCredential {
 
     /**
      * <p>

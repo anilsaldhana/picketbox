@@ -241,6 +241,10 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                     try {
                         result = mechanism.authenticate(credential);
                         supportedCredential = true;
+
+                        if (result == null) {
+                            LOGGER.warnf("mechanism [%s] returned a null AuthenticationResult. Unexpected behavior may occur.", mechanism);
+                        }
                     } catch (AuthenticationException e) {
                         throw MESSAGES.authenticationFailed(e);
                     }
@@ -251,7 +255,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 throw MESSAGES.unsupportedCredentialType(credential);
             }
         } else {
-            LOGGER.tracef("authentication will not me performed. doPreAuthentication method returned false. user is [%s]", userContext);
+            LOGGER.tracef("doPreAuthentication method returned false. authentication will not me performed for user [%s]", userContext);
         }
 
         if (result == null) {
@@ -263,7 +267,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
     /**
      * <p>
-     * Performs some post authentication steps when the authentication is successfull.
+     * Performs some post authentication steps when the authentication is successful.
      * </p>
      *
      * @param userContext
@@ -300,10 +304,10 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      * Performs some post authentication steps when the authentication fail.
      * </p>
      *
-     * @param subject
+     * @param userContext
      */
-    protected void performUnsuccessfulAuthentication(UserContext subject) {
-        getEventManager().raiseEvent(new UserNotAuthenticatedEvent(subject));
+    protected void performUnsuccessfulAuthentication(UserContext userContext) {
+        getEventManager().raiseEvent(new UserNotAuthenticatedEvent(userContext));
     }
 
     /**

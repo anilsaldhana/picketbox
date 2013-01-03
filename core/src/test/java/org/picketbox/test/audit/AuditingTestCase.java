@@ -39,9 +39,9 @@ import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
  * <p>
  * Tests the auditing capabilities.
  * </p>
- * 
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  */
 public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
@@ -50,7 +50,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
      * Tests the default configuration for auditing. By default, PicketBox will use the {@link LogAuditProvider} to log audit
      * events.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -76,7 +76,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
      * Tests the default configuration for auditing. By default, PicketBox will use the {@link LogAuditProvider} to log audit
      * events.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -106,7 +106,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
      * Tests the default configuration for auditing. By default, PicketBox will use the {@link LogAuditProvider} to log audit
      * events.
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test

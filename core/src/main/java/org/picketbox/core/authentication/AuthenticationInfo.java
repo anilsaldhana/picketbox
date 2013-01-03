@@ -36,13 +36,12 @@ public class AuthenticationInfo {
 
     private String name;
     private String description;
-    private boolean required = true;
-    private Class<? extends UserCredential> implementation;
+    private Class<? extends UserCredential> supportedCredentials;
 
-    public AuthenticationInfo(String name, String description, Class<? extends UserCredential> implementation) {
+    public AuthenticationInfo(String name, String description, Class<? extends UserCredential> supportedCredentials) {
         this.name = name;
         this.description = description;
-        this.implementation = implementation;
+        this.supportedCredentials = supportedCredentials;
     }
 
     /**
@@ -74,31 +73,10 @@ public class AuthenticationInfo {
     }
 
     /**
-     * @return the implementation
+     * @return the supportedCredentials
      */
-    public Class<? extends UserCredential> getImplementation() {
-        return this.implementation;
-    }
-
-    /**
-     * @param implementation the implementation to set
-     */
-    public void setImplementation(Class<? extends UserCredential> implementation) {
-        this.implementation = implementation;
-    }
-
-    /**
-     * @return the required
-     */
-    public boolean isRequired() {
-        return this.required;
-    }
-
-    /**
-     * @param required the required to set
-     */
-    public void setRequired(boolean required) {
-        this.required = required;
+    public Class<? extends UserCredential> getSupportedCredentials() {
+        return this.supportedCredentials;
     }
 
 }

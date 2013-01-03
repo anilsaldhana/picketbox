@@ -41,7 +41,6 @@ import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketlink.idm.credential.Credentials.Status;
 import org.picketlink.idm.credential.X509CertificateCredentials;
-import org.picketlink.idm.model.User;
 
 /**
  * <p>
@@ -52,9 +51,6 @@ import org.picketlink.idm.model.User;
  *
  */
 public class CertificateAuthenticationMechanism extends AbstractAuthenticationMechanism {
-
-    private boolean useCertificateValidation;
-    private boolean useCNAsPrincipal;
 
     @Override
     public List<AuthenticationInfo> getAuthenticationInfo() {
@@ -69,40 +65,45 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
 
     @Override
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
-        if (credential.getCredential() != null) {
-            CertificateCredential certCredential = (CertificateCredential) credential;
-            X509CertificateCredentials x509Credential = (X509CertificateCredentials) certCredential.getCredential();
-            X509Certificate clientCertificate = x509Credential.getCertificate().getValue();
+        CertificateCredential certCredential = (CertificateCredential) credential;
+        X509CertificateCredentials x509Credential = (X509CertificateCredentials) certCredential.getCredential();
+        X509Certificate clientCertificate = x509Credential.getCertificate().getValue();
 
-            String username = getCertificatePrincipal(clientCertificate).getName();
+        String username = getUserName(clientCertificate);
 
-            if (isUseCNAsPrincipal()) {
-                Properties prop = new Properties();
-                try {
-                    prop.load(new StringReader(username.replaceAll(",", "\n")));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Principal principal = null;
 
-                username = prop.getProperty("CN");
+        if (isUseCertificateValidation()) {
+            getIdentityManager().validateCredentials(x509Credential);
+
+            if (x509Credential.getStatus().equals(Status.VALID)) {
+                principal = new PicketBoxPrincipal(username);
             }
-
-            User user = getIdentityManager().getUser(username);
-
-            if (user != null) {
-                if (isUseCertificateValidation()) {
-                    getIdentityManager().validateCredentials(x509Credential);
-
-                    if (x509Credential.getStatus().equals(Status.VALID)) {
-                        return new PicketBoxPrincipal(username);
-                    }
-                } else {
-                    return new PicketBoxPrincipal(username);
-                }
-            }
+        } else if (getIdentityManager().getUser(username) != null) {
+            principal = new PicketBoxPrincipal(username);
         }
 
-        return null;
+        if (principal == null) {
+            invalidCredentials(result);
+        }
+
+        return principal;
+    }
+
+    private String getUserName(X509Certificate clientCertificate) {
+        String username = getCertificatePrincipal(clientCertificate).getName();
+
+        if (isUseCNAsPrincipal()) {
+            Properties prop = new Properties();
+            try {
+                prop.load(new StringReader(username.replaceAll(",", "\n")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            username = prop.getProperty("CN");
+        }
+        return username;
     }
 
     private Principal getCertificatePrincipal(X509Certificate cert) {
@@ -118,10 +119,10 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
         ClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
 
         if (clientCertConfig != null) {
-            this.useCertificateValidation = clientCertConfig.isUseCertificateValidation();
+            return clientCertConfig.isUseCertificateValidation();
         }
 
-        return this.useCertificateValidation;
+        return false;
     }
 
     private ClientCertConfiguration getClientCertAuthenticationConfig() {
@@ -138,10 +139,10 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
         ClientCertConfiguration clientCertConfig = getClientCertAuthenticationConfig();
 
         if (clientCertConfig != null) {
-            this.useCNAsPrincipal = clientCertConfig.isUseCNAsPrincipal();
+            return clientCertConfig.isUseCNAsPrincipal();
         }
 
-        return this.useCNAsPrincipal;
+        return false;
     }
 
 }

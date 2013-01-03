@@ -35,11 +35,10 @@ import javax.servlet.http.HttpSession;
 
 import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
-import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketbox.core.authentication.credential.DigestCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.nonce.NonceGenerator;
 import org.picketbox.core.nonce.UUIDNonceGenerator;
+import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPDigestConfiguration;
 import org.picketlink.idm.credential.Credentials.Status;

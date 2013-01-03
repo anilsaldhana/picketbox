@@ -50,131 +50,163 @@ public class PicketBoxIdentityManager implements IdentityManager {
         this.delegate = identityManager;
     }
 
+    @Override
     public void bootstrap(IdentityConfiguration configuration, IdentityStoreInvocationContextFactory contextFactory) {
-        delegate.bootstrap(configuration, contextFactory);
+        this.delegate.bootstrap(configuration, contextFactory);
     }
 
+    @Override
     public void setIdentityStoreFactory(StoreFactory factory) {
-        delegate.setIdentityStoreFactory(factory);
+        this.delegate.setIdentityStoreFactory(factory);
     }
 
+    @Override
     public void add(IdentityType identityType) {
-        delegate.add(identityType);
+        this.delegate.add(identityType);
     }
 
+    @Override
     public void update(IdentityType identityType) {
-        delegate.update(identityType);
+        this.delegate.update(identityType);
     }
 
+    @Override
     public void remove(IdentityType identityType) {
-        delegate.remove(identityType);
+        this.delegate.remove(identityType);
     }
 
+    @Override
     public Agent getAgent(String id) {
-        return delegate.getAgent(id);
+        return this.delegate.getAgent(id);
     }
 
+    @Override
     public User getUser(String id) {
-        return delegate.getUser(id);
+        return this.delegate.getUser(id);
     }
 
+    @Override
     public Group getGroup(String groupId) {
-        return delegate.getGroup(groupId);
+        return this.delegate.getGroup(groupId);
     }
 
+    @Override
     public Group getGroup(String groupName, Group parent) {
-        return delegate.getGroup(groupName, parent);
+        return this.delegate.getGroup(groupName, parent);
     }
 
+    @Override
     public boolean isMember(IdentityType identityType, Group group) {
-        return delegate.isMember(identityType, group);
+        return this.delegate.isMember(identityType, group);
     }
 
+    @Override
     public void addToGroup(IdentityType identityType, Group group) {
-        delegate.addToGroup(identityType, group);
+        this.delegate.addToGroup(identityType, group);
     }
 
+    @Override
     public void removeFromGroup(IdentityType identityType, Group group) {
-        delegate.removeFromGroup(identityType, group);
+        this.delegate.removeFromGroup(identityType, group);
     }
 
+    @Override
     public Role getRole(String name) {
-        return delegate.getRole(name);
+        return this.delegate.getRole(name);
     }
 
+    @Override
     public boolean hasGroupRole(IdentityType identityType, Role role, Group group) {
-        return delegate.hasGroupRole(identityType, role, group);
+        return this.delegate.hasGroupRole(identityType, role, group);
     }
 
+    @Override
     public void grantGroupRole(IdentityType identityType, Role role, Group group) {
-        delegate.grantGroupRole(identityType, role, group);
+        this.delegate.grantGroupRole(identityType, role, group);
     }
 
+    @Override
     public void revokeGroupRole(IdentityType identityType, Role role, Group group) {
-        delegate.revokeGroupRole(identityType, role, group);
+        this.delegate.revokeGroupRole(identityType, role, group);
     }
 
+    @Override
     public boolean hasRole(IdentityType identityType, Role role) {
-        return delegate.hasRole(identityType, role);
+        return this.delegate.hasRole(identityType, role);
     }
 
+    @Override
     public void grantRole(IdentityType identityType, Role role) {
-        delegate.grantRole(identityType, role);
+        this.delegate.grantRole(identityType, role);
     }
 
+    @Override
     public void revokeRole(IdentityType identityType, Role role) {
-        delegate.revokeRole(identityType, role);
+        this.delegate.revokeRole(identityType, role);
     }
 
+    @Override
     public <T extends IdentityType> IdentityQuery<T> createQuery(Class<T> identityType) {
-        return delegate.createQuery(identityType);
+        return this.delegate.createQuery(identityType);
     }
 
+    @Override
     public void validateCredentials(Credentials credentials) {
-        delegate.validateCredentials(credentials);
+        this.delegate.validateCredentials(credentials);
     }
 
+    @Override
     public void updateCredential(Agent agent, Object value) {
-        delegate.updateCredential(agent, value);
+        this.delegate.updateCredential(agent, value);
     }
 
+    @Override
     public IdentityType lookupIdentityByKey(String key) {
-        return delegate.lookupIdentityByKey(key);
+        return this.delegate.lookupIdentityByKey(key);
     }
 
+    @Override
     public void loadAttribute(IdentityType identityType, String attributeName) {
-        delegate.loadAttribute(identityType, attributeName);
+        this.delegate.loadAttribute(identityType, attributeName);
     }
 
+    @Override
     public void createRealm(Realm realm) {
-        delegate.createRealm(realm);
+        this.delegate.createRealm(realm);
     }
 
+    @Override
     public void removeRealm(Realm realm) {
-        delegate.removeRealm(realm);
+        this.delegate.removeRealm(realm);
     }
 
+    @Override
     public Realm getRealm(String name) {
-        return delegate.getRealm(name);
+        return this.delegate.getRealm(name);
     }
 
+    @Override
     public void createTier(Tier tier) {
-        delegate.createTier(tier);
+        this.delegate.createTier(tier);
     }
 
+    @Override
     public void removeTier(Tier tier) {
-        delegate.removeTier(tier);
+        this.delegate.removeTier(tier);
     }
 
+    @Override
     public Tier getTier(String id) {
-        return delegate.getTier(id);
+        return this.delegate.getTier(id);
     }
 
+    @Override
     public IdentityManager forRealm(Realm realm) {
-        return delegate.forRealm(realm);
+        return this.delegate.forRealm(realm);
     }
 
+    @Override
     public IdentityManager forTier(Tier tier) {
-        return delegate.forTier(tier);
+        return this.delegate.forTier(tier);
     }
 }

@@ -35,7 +35,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
-import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.http.resource.HTTPProtectedResourceManager;

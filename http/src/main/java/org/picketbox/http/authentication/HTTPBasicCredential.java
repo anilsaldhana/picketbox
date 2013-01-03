@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
-import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.util.Base64;
+import org.picketbox.http.PicketBoxConstants;
 import org.picketlink.idm.credential.PlainTextPassword;
 import org.picketlink.idm.credential.UsernamePasswordCredentials;
 

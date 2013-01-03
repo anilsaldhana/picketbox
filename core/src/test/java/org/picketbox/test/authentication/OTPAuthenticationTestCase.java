@@ -198,7 +198,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         if(serialNumber == null){
             String serial = null;
-            
+
             //Generate serial number
             serial = UUID.randomUUID().toString();
             serial = serial.replace('-', 'c');
@@ -207,14 +207,14 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
             serial = serial.substring(0, 10);
 
             serial = toHexString(serial.getBytes());
-            
+
             serialNumber = new Attribute<String>("serial", serial);
-            
+
             idmuser.setAttribute(serialNumber);
-            
+
             identityManager.update(idmuser);
         }
-
+        
         return TimeBasedOTP.generateTOTP(serialNumber.getValue(), 6);
     }
 

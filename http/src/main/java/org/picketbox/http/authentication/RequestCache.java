@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.picketbox.core.authentication.PicketBoxConstants;
+import org.picketbox.http.PicketBoxConstants;
 
 /**
  * <p>

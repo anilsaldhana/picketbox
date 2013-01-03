@@ -30,10 +30,10 @@ import java.util.List;
 
 /**
  * <p>
- * This class provides informations collected during the authentication process.
+ * This class provides some information collected during the authentication process.
  * </p>
  * <p>
- * It can be used to check the authentication status as well to get a {@link AuthenticationUser} instance.
+ * It can be used to check the authentication status, messages, {@link AuthenticationUser} instance, etc.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -49,6 +49,7 @@ public class AuthenticationResult implements Serializable {
     private Principal principal;
 
     public AuthenticationResult() {
+        this.status = AuthenticationStatus.NONE;
     }
 
     public AuthenticationResult(AuthenticationStatus status) {

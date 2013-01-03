@@ -107,20 +107,20 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
 
         Role roleDeveloper = new SimpleRole("developer");
-        
+
         identityManager.add(roleDeveloper);
-        
+
         Role roleAdmin = new SimpleRole("admin");
-        
+
         identityManager.add(roleAdmin);
 
         Group groupCoreDeveloper = new SimpleGroup("PicketBox Group");
-        
+
         identityManager.add(groupCoreDeveloper);
 
         identityManager.grantRole(adminUser, roleDeveloper);
         identityManager.grantRole(adminUser, roleAdmin);
-        
+
         identityManager.addToGroup(adminUser, groupCoreDeveloper);
 
         SimpleUser jbidTestUser = new SimpleUser("jbid test");
@@ -131,7 +131,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         identityManager.grantRole(jbidTestUser, roleDeveloper);
         identityManager.grantRole(jbidTestUser, roleAdmin);
-        
+
         identityManager.addToGroup(jbidTestUser, groupCoreDeveloper);
 
         SimpleUser certUser = new SimpleUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
@@ -142,7 +142,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         identityManager.grantRole(certUser, roleDeveloper);
         identityManager.grantRole(certUser, roleAdmin);
-        
+
         identityManager.addToGroup(certUser, groupCoreDeveloper);
     }
 

@@ -22,12 +22,13 @@
 package org.picketbox.core.authentication.credential;
 
 /**
- * Extension of {@link UsernamePasswordCredential} to allow OTP
+ * Extension of {@link UsernamePasswordCredential} to allow OTP tokens.
  *
  * @author anil saldhana
  * @since Oct 9, 2012
  */
 public class OTPCredential extends UsernamePasswordCredential {
+
     private String otp;
 
     public OTPCredential(String userName, String password, String otp) {

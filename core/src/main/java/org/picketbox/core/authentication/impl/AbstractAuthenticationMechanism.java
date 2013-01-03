@@ -53,7 +53,7 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
         List<AuthenticationInfo> authenticationInfo = getAuthenticationInfo();
 
         for (AuthenticationInfo callbackInfo : authenticationInfo) {
-            if (callbackInfo.getImplementation().equals(credential.getClass())) {
+            if (callbackInfo.getSupportedCredentials().equals(credential.getClass())) {
                 return true;
             }
         }
@@ -63,17 +63,6 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
 
     @Override
     public AuthenticationResult authenticate(UserCredential credential) throws AuthenticationException {
-        return performAuthentication(credential);
-    }
-
-    /**
-     * <p>Performs the authentication workflow given the specified {@link Credential}.</p>
-     *
-     * @param credential
-     * @return
-     * @throws AuthenticationException
-     */
-    protected AuthenticationResult performAuthentication(UserCredential credential) throws AuthenticationException {
         Principal principal = null;
         AuthenticationResult result = new AuthenticationResult();
 
@@ -89,7 +78,7 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
             result.setStatus(AuthenticationStatus.SUCCESS);
         } else {
             if (result.getStatus() == null || result.getStatus().equals(AuthenticationStatus.NONE)) {
-                result.setStatus(AuthenticationStatus.INVALID_CREDENTIALS);
+                authenticationFailed(result);
             }
         }
 

@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
-import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.authorization.AuthorizationManager;
 import org.picketbox.core.authorization.impl.SimpleAuthorizationManager;
 import org.picketbox.core.config.ConfigurationBuilder;
@@ -46,6 +45,7 @@ import org.picketbox.core.ctx.SecurityContextPropagation;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.exceptions.ProcessingException;
 import org.picketbox.http.HTTPUserContext;
+import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authentication.HTTPBasicCredential;
 import org.picketbox.http.authentication.HTTPClientCertCredential;

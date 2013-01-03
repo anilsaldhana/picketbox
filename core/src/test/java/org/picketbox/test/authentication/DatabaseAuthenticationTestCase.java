@@ -75,9 +75,9 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         PicketBoxManager picketBoxManager = createManager(builder);
 
         EntityManager entityManager = JPAIdentityStoreContext.get();
-        
+
         entityManager.flush();
-        
+
         UserContext authenticatingUser = new UserContext();
 
         authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "admin"));
