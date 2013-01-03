@@ -23,7 +23,8 @@
 package org.picketbox.core.authentication.credential;
 
 import org.picketbox.core.AbstractUserCredential;
-import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.UsernamePasswordCredentials;
 
 /**
  * <p>
@@ -37,7 +38,7 @@ public class UsernamePasswordCredential extends AbstractUserCredential {
 
     public UsernamePasswordCredential(String userName, String password) {
         super.setUserName(userName);
-        setCredential(new PasswordCredential(password));
+        setCredential(new UsernamePasswordCredentials(userName, new PlainTextPassword(password.toCharArray())));
     }
 
 }

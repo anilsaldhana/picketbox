@@ -56,7 +56,7 @@ public class FileDirectoryEntitlementsUseCase {
 
     private User useranil = new SimpleUser("anil");
     private Role employee = new SimpleRole("employee");
-    private Group jboss = new SimpleGroup("1", "jboss", null);
+    private Group jboss = new SimpleGroup("1", new SimpleGroup("jboss"));
 
     @Before
     public void setup() throws Exception {
@@ -145,7 +145,7 @@ public class FileDirectoryEntitlementsUseCase {
         roles.add(new SimpleRole("banned"));
 
         List<Group> groups = new ArrayList<Group>();
-        groups.add(new SimpleGroup("2", "bannedgroup", null));
+        groups.add(new SimpleGroup("2", new SimpleGroup("bannedgroup")));
 
         userContext.setUser(new SimpleUser("baduser")).setRoles(roles).setGroups(groups);
 

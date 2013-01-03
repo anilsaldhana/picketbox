@@ -22,7 +22,9 @@
 
 package org.picketbox.core;
 
-import org.picketlink.idm.credential.Credential;
+import org.picketlink.idm.credential.AbstractBaseCredentials;
+import org.picketlink.idm.credential.Credentials;
+
 
 /**
  * <p>
@@ -32,16 +34,16 @@ import org.picketlink.idm.credential.Credential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class AbstractUserCredential implements UserCredential {
+public class AbstractUserCredential extends AbstractBaseCredentials implements UserCredential {
 
     private String userName;
 
-    private Credential credential;
+    private Credentials credential;
 
     public AbstractUserCredential() {
     }
 
-    public AbstractUserCredential(Credential credential) {
+    public AbstractUserCredential(Credentials credential) {
         this.credential = credential;
     }
 
@@ -60,12 +62,17 @@ public class AbstractUserCredential implements UserCredential {
     }
 
     @Override
-    public Credential getCredential() {
+    public Credentials getCredential() {
         return this.credential;
     }
 
-    public void setCredential(Credential credential) {
+    public void setCredential(Credentials credential) {
         this.credential = credential;
+    }
+
+    @Override
+    public void invalidate() {
+        this.credential = null;
     }
 
 }

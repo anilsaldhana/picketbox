@@ -22,7 +22,7 @@
 
 package org.picketbox.core;
 
-import org.picketlink.idm.credential.Credential;
+import org.picketlink.idm.credential.Credentials;
 
 /**
  * <p>
@@ -36,7 +36,7 @@ import org.picketlink.idm.credential.Credential;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public interface UserCredential extends Credential {
+public interface UserCredential extends Credentials {
 
     /**
      * <p>
@@ -52,5 +52,5 @@ public interface UserCredential extends Credential {
      *
      * @return
      */
-    Credential getCredential();
+    Credentials getCredential();
 }

@@ -22,8 +22,11 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.file.internal.FileBasedIdentityStore;
-import org.picketlink.idm.spi.IdentityStore;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.config.IdentityConfiguration;
+import org.picketlink.idm.file.internal.FileIdentityStoreConfiguration;
+import org.picketlink.idm.internal.DefaultIdentityManager;
+import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -34,21 +37,24 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
     private String workingDir;
     private boolean alwaysCreateFiles = true;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.config.IdentityManagerConfiguration#getIdentityStore()
-     */
-    @Override
-    public IdentityStore getIdentityStore() {
-        return new FileBasedIdentityStore(this.workingDir, this.alwaysCreateFiles);
-    }
-
     protected void setWorkingDir(String workingDir) {
         this.workingDir = workingDir;
     }
 
     protected void setAlwaysCreateFiles(boolean alwaysCreateFiles) {
         this.alwaysCreateFiles = alwaysCreateFiles;
+    }
+
+    @Override
+    public IdentityManager getIdentityManager() {
+        IdentityConfiguration config = new IdentityConfiguration();
+
+        config.addStoreConfiguration(new FileIdentityStoreConfiguration());
+
+        IdentityManager identityManager = new DefaultIdentityManager();
+
+        identityManager.bootstrap(config, new DefaultIdentityStoreInvocationContextFactory(null));
+
+        return identityManager;
     }
 }

@@ -40,13 +40,14 @@ public class AbstractAuthenticationTest {
     public void initialize() throws Exception {
         this.configuration = new HTTPConfigurationBuilder();
         this.configuration.identityManager().fileStore().preserveState();
-        IdentityManagerInitializer.initializeIdentityStore();
 
         doConfigureManager(this.configuration);
 
         this.picketBoxManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) this.configuration.build());
 
         this.picketBoxManager.start();
+        
+        IdentityManagerInitializer.initializeIdentityStore(this.picketBoxManager.getIdentityManager(), false);
     }
 
     /**

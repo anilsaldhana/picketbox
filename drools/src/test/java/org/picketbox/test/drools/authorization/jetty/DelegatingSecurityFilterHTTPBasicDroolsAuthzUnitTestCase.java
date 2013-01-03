@@ -38,12 +38,15 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
+import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.drools.authorization.PicketBoxDroolsAuthorizationManager;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.test.authentication.http.jetty.HTTPDigestConfigurationProvider;
+import org.picketbox.test.config.IdentityManagerInitializer;
 import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
+import org.picketlink.idm.IdentityManager;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPBasicAuthentication}
@@ -55,6 +58,7 @@ import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
 public class DelegatingSecurityFilterHTTPBasicDroolsAuthzUnitTestCase extends EmbeddedWebServerBase {
 
     String urlStr = "http://localhost:11080/auth/";
+    private WebAppContext webapp;
 
     @Override
     protected void establishUserApps() {
@@ -73,11 +77,11 @@ public class DelegatingSecurityFilterHTTPBasicDroolsAuthzUnitTestCase extends Em
         final String warUrlString = warUrl.toExternalForm();
 
         //Context context = new WebAppContext(warUrlString, CONTEXTPATH);
-        WebAppContext context = createWebApp(CONTEXTPATH, warUrlString);
+        webapp = createWebApp(CONTEXTPATH, warUrlString);
         
-        server.setHandler(context);
+        server.setHandler(webapp);
 
-        Thread.currentThread().setContextClassLoader(context.getClassLoader());
+        Thread.currentThread().setContextClassLoader(webapp.getClassLoader());
 
         System.setProperty(PicketBoxConstants.USERNAME, "Aladdin");
         System.setProperty(PicketBoxConstants.CREDENTIAL, "Open Sesame");
@@ -85,18 +89,23 @@ public class DelegatingSecurityFilterHTTPBasicDroolsAuthzUnitTestCase extends Em
         FilterHolder filterHolder = new FilterHolder(DelegatingSecurityFilter.class);
         filterHolder.setInitParameter(PicketBoxConstants.AUTHZ_MGR, "Drools");
         
-        context.setInitParameter(PicketBoxConstants.AUTHENTICATION_KEY, PicketBoxConstants.HTTP_BASIC);
-        context.setInitParameter(PicketBoxConstants.HTTP_CONFIGURATION_PROVIDER, HTTPDigestConfigurationProvider.class.getName());
+        webapp.setInitParameter(PicketBoxConstants.AUTHENTICATION_KEY, PicketBoxConstants.HTTP_BASIC);
+        webapp.setInitParameter(PicketBoxConstants.HTTP_CONFIGURATION_PROVIDER, HTTPDigestConfigurationProvider.class.getName());
         //context.addFilter(filterHolder, "/", 1);
         
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addFilter(filterHolder, createFilterMapping("/", filterHolder));
         
-        context.setServletHandler(servletHandler);
+        webapp.setServletHandler(servletHandler);
     }
 
     @Test
     public void testBasicAuth() throws Exception {
+        PicketBoxManager picketBoxManager = (PicketBoxManager) this.webapp.getServletContext().getAttribute(PicketBoxConstants.PICKETBOX_MANAGER);
+        IdentityManager identityManager = picketBoxManager.getIdentityManager();
+        
+        IdentityManagerInitializer.initializeIdentityStore(identityManager, true);
+        
         URL url = new URL(urlStr);
 
         DefaultHttpClient httpclient = null;

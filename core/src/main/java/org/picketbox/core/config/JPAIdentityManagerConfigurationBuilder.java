@@ -37,12 +37,15 @@ public class JPAIdentityManagerConfigurationBuilder extends AbstractConfiguratio
     }
 
     public JPAIdentityManagerConfigurationBuilder template(JPATemplate template) {
-        this.configuration.setTemplate(template);
+        this.configuration.setJpaTemplate(template);
         return this;
     }
 
     @Override
     protected void setDefaults() {
+        if (this.configuration.getJpaTemplate() == null) {
+            this.configuration.setJpaTemplate(new JPATemplate());
+        }
     }
 
     @Override

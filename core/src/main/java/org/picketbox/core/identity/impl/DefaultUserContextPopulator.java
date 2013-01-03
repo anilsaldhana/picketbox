@@ -33,7 +33,7 @@ import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
-import org.picketlink.idm.query.GroupQuery;
+import org.picketlink.idm.query.IdentityQuery;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -61,16 +61,21 @@ public class DefaultUserContextPopulator implements UserContextPopulator {
         Principal principal = authenticatedUserContext.getPrincipal();
 
         User userFromIDM = getIdentityManager().getUser(principal.getName());
-        Collection<Role> rolesFromIDM = getIdentityManager().getRoles(userFromIDM, null);
+
+        IdentityQuery<Role> query = getIdentityManager().createQuery(Role.class);
+
+        query.setParameter(Role.ROLE_OF, userFromIDM);
+
+        Collection<Role> rolesFromIDM = query.getResultList();
 
         authenticatedUserContext.setUser(userFromIDM);
         authenticatedUserContext.setRoles(rolesFromIDM);
 
-        GroupQuery groupQuery = getIdentityManager().createGroupQuery();
+        IdentityQuery<Group> groupQuery = getIdentityManager().createQuery(Group.class);
 
-        groupQuery.setRelatedUser(userFromIDM);
+        groupQuery.setParameter(Role.HAS_MEMBER, userFromIDM);
 
-        List<Group> groups = groupQuery.executeQuery();
+        List<Group> groups = groupQuery.getResultList();
 
         authenticatedUserContext.setGroups(groups);
 

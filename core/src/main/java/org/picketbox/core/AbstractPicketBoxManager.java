@@ -53,7 +53,6 @@ import org.picketbox.core.session.DefaultSessionManager;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionManager;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.spi.IdentityStore;
 
 /**
  * <p>
@@ -352,13 +351,13 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
             }
 
-            IdentityStore identityStore = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
-                    .getIdentityStore();
+            IdentityManager identityManager = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
+                    .getIdentityManager();
 
             IdentityManager providedIdentityManager = this.configuration.getIdentityManager().getIdentityManager();
 
             if (providedIdentityManager == null) {
-                this.identityManager = new PicketBoxIdentityManager(this, identityStore);
+                this.identityManager = new PicketBoxIdentityManager(identityManager);
             } else {
                 this.identityManager = providedIdentityManager;
             }
@@ -497,7 +496,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
         LOGGER.debugInstanceUsage(" Identity Store", this.configuration.getIdentityManager().getIdentityManagerConfiguration()
-                .getIdentityStore());
+                .getIdentityManager());
 
         LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
 

@@ -33,6 +33,8 @@ import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketlink.idm.credential.Credentials;
+import org.picketlink.idm.credential.Credentials.Status;
 import org.picketlink.idm.model.User;
 
 /**
@@ -63,7 +65,11 @@ public class UserNamePasswordAuthenticationMechanism extends AbstractAuthenticat
         // try to retrieve the user from the configured identity store
         User user = getIdentityManager().getUser(userCredential.getUserName());
 
-        if (user != null && getIdentityManager().validateCredential(user, userCredential.getCredential())) {
+        Credentials passwordCredential = userCredential.getCredential();
+
+        getIdentityManager().validateCredentials(passwordCredential);
+
+        if (user != null && passwordCredential.getStatus().equals(Status.VALID)) {
             return new PicketBoxPrincipal(user.getId());
         }
 

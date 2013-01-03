@@ -32,7 +32,6 @@ import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.Credential;
 
 /**
  * <p>

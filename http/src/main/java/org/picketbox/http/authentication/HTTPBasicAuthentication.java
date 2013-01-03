@@ -32,6 +32,8 @@ import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketlink.idm.credential.Credentials;
+import org.picketlink.idm.credential.Credentials.Status;
 import org.picketlink.idm.model.User;
 
 /**
@@ -86,7 +88,11 @@ public class HTTPBasicAuthentication extends AbstractHTTPAuthentication {
 
             User user = getIdentityManager().getUser(username);
 
-            if (user != null && getIdentityManager().validateCredential(user, basicCredential.getCredential())) {
+            Credentials userCredential = basicCredential.getCredential();
+
+            getIdentityManager().validateCredentials(userCredential);
+
+            if (user != null && userCredential.getStatus().equals(Status.VALID)) {
                 return new PicketBoxPrincipal(username);
             }
         }

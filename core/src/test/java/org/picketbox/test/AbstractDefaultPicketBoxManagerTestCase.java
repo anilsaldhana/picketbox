@@ -37,13 +37,13 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.PasswordCredential;
-import org.picketlink.idm.credential.X509CertificateCredential;
-import org.picketlink.idm.file.internal.FileUser;
+import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.X509Cert;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.SimpleGroup;
 import org.picketlink.idm.model.SimpleRole;
+import org.picketlink.idm.model.SimpleUser;
 
 /**
  * <p>
@@ -95,42 +95,55 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
      * @param identityManager
      */
     private void initialize(IdentityManager identityManager) {
-        FileUser adminUser = new FileUser("admin");
+        SimpleUser adminUser = new SimpleUser("admin");
 
-        identityManager.createUser(adminUser);
+        identityManager.add(adminUser);
 
         adminUser.setEmail("admin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
 
-        identityManager.updateCredential(adminUser, new PasswordCredential("admin"));
-        identityManager.updateCredential(adminUser, new X509CertificateCredential(getTestingCertificate()));
+        identityManager.updateCredential(adminUser, new PlainTextPassword("admin".toCharArray()));
+        identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
 
-        Role roleDeveloper = identityManager.createRole("developer");
-        Role roleAdmin = identityManager.createRole("admin");
+        Role roleDeveloper = new SimpleRole("developer");
+        
+        identityManager.add(roleDeveloper);
+        
+        Role roleAdmin = new SimpleRole("admin");
+        
+        identityManager.add(roleAdmin);
 
-        Group groupCoreDeveloper = identityManager.createGroup("PicketBox Group");
+        Group groupCoreDeveloper = new SimpleGroup("PicketBox Group");
+        
+        identityManager.add(groupCoreDeveloper);
 
-        identityManager.grantRole(roleDeveloper, adminUser, groupCoreDeveloper);
-        identityManager.grantRole(roleAdmin, adminUser, groupCoreDeveloper);
+        identityManager.grantRole(adminUser, roleDeveloper);
+        identityManager.grantRole(adminUser, roleAdmin);
+        
+        identityManager.addToGroup(adminUser, groupCoreDeveloper);
 
-        FileUser jbidTestUser = new FileUser("jbid test");
+        SimpleUser jbidTestUser = new SimpleUser("jbid test");
 
-        identityManager.createUser(jbidTestUser);
+        identityManager.add(jbidTestUser);
 
-        identityManager.updateCredential(jbidTestUser, new X509CertificateCredential(getTestingCertificate()));
+        identityManager.updateCredential(jbidTestUser, new X509Cert(getTestingCertificate()));
 
-        identityManager.grantRole(roleDeveloper, jbidTestUser, groupCoreDeveloper);
-        identityManager.grantRole(roleAdmin, jbidTestUser, groupCoreDeveloper);
+        identityManager.grantRole(jbidTestUser, roleDeveloper);
+        identityManager.grantRole(jbidTestUser, roleAdmin);
+        
+        identityManager.addToGroup(jbidTestUser, groupCoreDeveloper);
 
-        FileUser certUser = new FileUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
+        SimpleUser certUser = new SimpleUser("CN=jbid test, OU=JBoss, O=JBoss, C=US");
 
-        identityManager.createUser(certUser);
+        identityManager.add(certUser);
 
-        identityManager.updateCredential(certUser, new X509CertificateCredential(getTestingCertificate()));
+        identityManager.updateCredential(certUser, new X509Cert(getTestingCertificate()));
 
-        identityManager.grantRole(roleDeveloper, certUser, groupCoreDeveloper);
-        identityManager.grantRole(roleAdmin, certUser, groupCoreDeveloper);
+        identityManager.grantRole(certUser, roleDeveloper);
+        identityManager.grantRole(certUser, roleAdmin);
+        
+        identityManager.addToGroup(certUser, groupCoreDeveloper);
     }
 
     protected void assertRoles(UserContext authenticatedUser) {
@@ -140,7 +153,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
     protected void assertGroups(UserContext authenticatedUser) {
         assertFalse(authenticatedUser.getGroups().isEmpty());
-        assertTrue(authenticatedUser.getGroups().containsAll(Arrays.asList(new Group[] {new SimpleGroup("PicketBox Group","PicketBox Group",null)})));
+        assertTrue(authenticatedUser.getGroups().containsAll(Arrays.asList(new Group[] {new SimpleGroup("PicketBox Group")})));
     }
 
     protected X509Certificate getTestingCertificate() {

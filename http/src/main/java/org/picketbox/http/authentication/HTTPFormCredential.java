@@ -22,12 +22,14 @@
 
 package org.picketbox.http.authentication;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
 import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.UsernamePasswordCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -46,7 +48,7 @@ public class HTTPFormCredential extends AbstractUserCredential implements HttpSe
 
         if (userName != null) {
             setUserName(userName);
-            setCredential(new PasswordCredential(this.request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD)));
+            setCredential(new UsernamePasswordCredentials(userName, new PlainTextPassword(request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD).toCharArray())));
         }
     }
 

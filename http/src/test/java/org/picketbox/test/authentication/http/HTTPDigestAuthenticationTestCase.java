@@ -35,14 +35,14 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.util.Base64;
-import org.picketbox.core.util.HTTPDigestUtil;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;
 import org.picketbox.http.authentication.HTTPDigestCredential;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
+import org.picketbox.http.util.HTTPDigestUtil;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
-import org.picketlink.idm.credential.DigestCredential;
+import org.picketlink.idm.credential.Digest;
 
 /**
  * Unit test the {@link HTTPDigestAuthentication} class
@@ -83,7 +83,7 @@ public class HTTPDigestAuthenticationTestCase extends AbstractAuthenticationTest
         req.setMethod("GET");
         req.setContextPath("/test");
         req.setRequestURI(req.getContextPath() + "/index.html");
-
+        
         // Call the server to get the digest challenge
         UserContext authenticatedUser = this.picketBoxManager.authenticate(new HTTPUserContext(req, resp,
                 new HTTPDigestCredential(req, resp)));
@@ -99,7 +99,7 @@ public class HTTPDigestAuthenticationTestCase extends AbstractAuthenticationTest
         String[] tokens = HTTPDigestUtil.quoteTokenize(authorizationHeader);
 
         // Let us get the digest info
-        DigestCredential digest = HTTPDigestUtil.digest(tokens);
+        Digest digest = HTTPDigestUtil.digest(tokens);
 
         // Get Positive Authentication
         req.addHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER, "Digest " + getPositive(digest));
@@ -128,7 +128,7 @@ public class HTTPDigestAuthenticationTestCase extends AbstractAuthenticationTest
         assertTrue(digestHeader.startsWith("Digest realm="));
     }
 
-    private String getPositive(DigestCredential digest) {
+    private String getPositive(Digest digest) {
         String cnonce = "0a4f113b";
         String clientResponse = null;
 

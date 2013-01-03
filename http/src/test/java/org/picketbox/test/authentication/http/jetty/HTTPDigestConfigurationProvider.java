@@ -26,7 +26,6 @@ import javax.servlet.ServletContext;
 
 import org.picketbox.http.config.ConfigurationBuilderProvider;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
-import org.picketbox.test.config.IdentityManagerInitializer;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -44,8 +43,6 @@ public class HTTPDigestConfigurationProvider implements ConfigurationBuilderProv
         HTTPConfigurationBuilder configurationBuilder = new HTTPConfigurationBuilder();
 
         configurationBuilder.identityManager().fileStore().preserveState();
-
-        IdentityManagerInitializer.initializeIdentityStore();
 
         return configurationBuilder;
     }

@@ -27,8 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
 import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketbox.core.util.HTTPDigestUtil;
-import org.picketlink.idm.credential.DigestCredential;
+import org.picketbox.http.util.HTTPDigestUtil;
+import org.picketlink.idm.credential.Digest;
+import org.picketlink.idm.credential.DigestCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -67,7 +68,7 @@ public class HTTPDigestCredential extends AbstractUserCredential implements Http
     }
 
     @Override
-    public DigestCredential getCredential() {
+    public DigestCredentials getCredential() {
         // Get the Authorization Header
         String authorizationHeader = getRequest().getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
 
@@ -83,11 +84,11 @@ public class HTTPDigestCredential extends AbstractUserCredential implements Http
                 return null;
             }
 
-            DigestCredential digest = HTTPDigestUtil.digest(tokens);
+            Digest digest = HTTPDigestUtil.digest(tokens);
 
             digest.setMethod(getRequest().getMethod());
 
-            return digest;
+            return new DigestCredentials(digest);
         }
 
         return null;

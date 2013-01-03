@@ -34,6 +34,8 @@ import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPFormConfiguration;
+import org.picketlink.idm.credential.Credentials;
+import org.picketlink.idm.credential.Credentials.Status;
 import org.picketlink.idm.model.User;
 
 /**
@@ -65,8 +67,12 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
         if (formCredential.getCredential() != null) {
             User user = getIdentityManager().getUser(formCredential.getUserName());
 
-            if (user != null && getIdentityManager().validateCredential(user, formCredential.getCredential())) {
-                return new PicketBoxPrincipal(user.getKey());
+            Credentials passwordCredential = formCredential.getCredential();
+
+            getIdentityManager().validateCredentials(passwordCredential);
+
+            if (user != null && passwordCredential.getStatus().equals(Status.VALID)) {
+                return new PicketBoxPrincipal(user.getId());
             }
         }
 

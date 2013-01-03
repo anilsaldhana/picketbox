@@ -20,35 +20,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.config;
+package org.picketbox.core.authentication.credential;
 
-import javax.servlet.ServletContext;
-
-import org.picketbox.http.config.ConfigurationBuilderProvider;
-import org.picketbox.http.config.HTTPConfigurationBuilder;
-import org.picketbox.http.resource.ProtectedResourceConstraint;
+import org.picketbox.core.AbstractUserCredential;
+import org.picketlink.idm.credential.DigestCredentials;
 
 /**
+ * <p>
+ * Represents a Digest credential.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class ProtectedResourcesConfigurationProvider implements ConfigurationBuilderProvider {
+public class DigestCredential extends AbstractUserCredential {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.http.config.ConfigurationBuilderProvider#getBuilder(javax.servlet.ServletContext)
-     */
-    @Override
-    public HTTPConfigurationBuilder getBuilder(ServletContext context) {
-        HTTPConfigurationBuilder configurationBuilder = new HTTPConfigurationBuilder();
-
-        configurationBuilder.protectedResource().resource("/notProtected", ProtectedResourceConstraint.NOT_PROTECTED)
-                .resource("/onlyManagers", "manager").resource("/confidentialResource", "confidential");
-
-        configurationBuilder.identityManager().fileStore().preserveState();
-        
-        return configurationBuilder;
+    public DigestCredential(String userName, DigestCredentials digestCredential) {
+        setUserName(userName);
+        setCredential(digestCredential);
     }
 
 }

@@ -39,6 +39,7 @@ import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.authentication.HTTPFormAuthentication;
 import org.picketbox.http.authentication.HTTPFormCredential;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
+import org.picketbox.test.config.IdentityManagerInitializer;
 import org.picketbox.test.http.TestServletContext;
 import org.picketbox.test.http.TestServletContext.TestRequestDispatcher;
 import org.picketbox.test.http.TestServletRequest;
@@ -78,6 +79,7 @@ public class HTTPFormAuthenticationTestCase extends AbstractAuthenticationTest {
      */
     @Test
     public void testHttpForm() throws Exception {
+        IdentityManagerInitializer.initializeIdentityStore(this.picketBoxManager.getIdentityManager(), true);
         TestServletRequest req = new TestServletRequest(this.sc, new InputStream() {
             @Override
             public int read() throws IOException {

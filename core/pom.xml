@@ -28,7 +28,7 @@
 	<name>PicketBox Core</name>
 	<description>PicketBox Core contains the core infrastructure code.</description>
 	<properties>
-		<picketlink.idm.version>3.0-2012Nov26</picketlink.idm.version>
+		<picketlink.idm.version>3.0-SNAPSHOT</picketlink.idm.version>
 	</properties>
 	<dependencies>
 		<dependency>

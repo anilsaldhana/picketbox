@@ -25,6 +25,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -35,12 +38,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
+import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
+import org.picketbox.test.config.IdentityManagerInitializer;
 import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
+import org.picketlink.idm.IdentityManager;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPBasicAuthentication}
@@ -51,6 +58,7 @@ import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
 public class DelegatingSecurityFilterHTTPBasicUnitTestCase extends EmbeddedWebServerBase {
 
     String urlStr = "http://localhost:11080/auth/";
+    private WebAppContext webapp;
 
     @Override
     protected void establishUserApps() {
@@ -72,18 +80,19 @@ public class DelegatingSecurityFilterHTTPBasicUnitTestCase extends EmbeddedWebSe
          *
          * Thread.currentThread().setContextClassLoader(context.getClassLoader());
          */
-        WebAppContext webapp = createWebApp(CONTEXTPATH, warUrlString);
+        this.webapp = createWebApp(CONTEXTPATH, warUrlString);
         this.server.setHandler(webapp);
 
         System.setProperty(PicketBoxConstants.USERNAME, "Aladdin");
         System.setProperty(PicketBoxConstants.CREDENTIAL, "Open Sesame");
 
         FilterHolder filterHolder = new FilterHolder(DelegatingSecurityFilter.class);
-
+        
         webapp.setInitParameter(PicketBoxConstants.AUTHENTICATION_KEY, PicketBoxConstants.BASIC);
         webapp.setInitParameter(PicketBoxConstants.HTTP_CONFIGURATION_PROVIDER, HTTPDigestConfigurationProvider.class.getName());
 
         ServletHandler servletHandler = new ServletHandler();
+        
         servletHandler.addFilter(filterHolder, createFilterMapping("/", filterHolder));
 
         webapp.setServletHandler(servletHandler);
@@ -93,7 +102,13 @@ public class DelegatingSecurityFilterHTTPBasicUnitTestCase extends EmbeddedWebSe
     public void testBasicAuth() throws Exception {
         URL url = new URL(this.urlStr);
 
+        PicketBoxManager picketBoxManager = (PicketBoxManager) this.webapp.getServletContext().getAttribute(PicketBoxConstants.PICKETBOX_MANAGER);
+        IdentityManager identityManager = picketBoxManager.getIdentityManager();
+        
+        IdentityManagerInitializer.initializeIdentityStore(identityManager, true);
+        
         DefaultHttpClient httpclient = null;
+        
         try {
             String user = "Aladdin";
             String pass = "Open Sesame";

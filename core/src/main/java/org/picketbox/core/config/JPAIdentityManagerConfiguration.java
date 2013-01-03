@@ -25,11 +25,16 @@ package org.picketbox.core.config;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
-import org.picketlink.idm.jpa.schema.internal.JPACallback;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.config.IdentityConfiguration;
+import org.picketlink.idm.config.IdentityStoreConfiguration;
+import org.picketlink.idm.internal.DefaultIdentityManager;
+import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
+import org.picketlink.idm.jpa.internal.JPAIdentityStoreConfiguration;
+import org.picketlink.idm.jpa.schema.IdentityObject;
+import org.picketlink.idm.jpa.schema.IdentityObjectAttribute;
+import org.picketlink.idm.jpa.schema.MembershipObject;
 import org.picketlink.idm.jpa.schema.internal.JPATemplate;
-import org.picketlink.idm.jpa.schema.internal.SimpleJPAIdentityStore;
-import org.picketlink.idm.spi.IdentityStore;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -38,7 +43,7 @@ import org.picketlink.idm.spi.IdentityStore;
 public class JPAIdentityManagerConfiguration implements IdentityManagerConfiguration {
 
     private EntityManagerFactory entityManagerFactory;
-    private JPATemplate template;
+    private JPATemplate jpaTemplate;
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
@@ -48,37 +53,39 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         return this.entityManagerFactory;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.config.IdentityManagerConfiguration#getIdentityStore()
-     */
+    public void setJpaTemplate(JPATemplate jpaTemplate) {
+        this.jpaTemplate = jpaTemplate;
+    }
+
+    public JPATemplate getJpaTemplate() {
+        return this.jpaTemplate;
+    }
+
     @Override
-    public IdentityStore getIdentityStore() {
-        SimpleJPAIdentityStore store = new SimpleJPAIdentityStore();
+    public IdentityManager getIdentityManager() {
+        IdentityConfiguration config = new IdentityConfiguration();
 
-        if (this.template == null) {
-            this.template = new JPATemplate() {
-                @Override
-                public Object execute(JPACallback callback) {
-                    EntityManager entityManager = JPAIdentityStoreContext.get();
+        config.addStoreConfiguration(getConfiguration());
 
-                    if (entityManager == null) {
-                        throw new RuntimeException("Null EntityManager. Did you forget to provide a JPATemplate implementation that knows how to get the current EntityManager instance ?");
-                    }
+        IdentityManager identityManager = new DefaultIdentityManager();
+        DefaultIdentityStoreInvocationContextFactory icf = new DefaultIdentityStoreInvocationContextFactory(null) {
+            @Override
+            public EntityManager getEntityManager(){
+                return JPAIdentityManagerConfiguration.this.jpaTemplate.getEntityManager();
+            }
+        };
 
-                    return callback.execute(entityManager);
-                }
-            };
-        }
+        identityManager.bootstrap(config, icf);
 
-        store.setJpaTemplate(this.template);
-
-        return store;
+        return identityManager;
     }
 
-    public void setTemplate(JPATemplate template) {
-        this.template = template;
-    }
+    private IdentityStoreConfiguration getConfiguration() {
+        JPAIdentityStoreConfiguration configuration = new JPAIdentityStoreConfiguration();
 
-}
+        configuration.setIdentityClass(IdentityObject.class);
+        configuration.setAttributeClass(IdentityObjectAttribute.class);
+        configuration.setMembershipClass(MembershipObject.class);
+
+        return configuration;
+    }}

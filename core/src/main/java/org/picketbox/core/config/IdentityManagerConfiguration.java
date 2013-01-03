@@ -22,7 +22,7 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.spi.IdentityStore;
+import org.picketlink.idm.IdentityManager;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -30,6 +30,6 @@ import org.picketlink.idm.spi.IdentityStore;
  */
 public interface IdentityManagerConfiguration {
 
-    IdentityStore getIdentityStore();
+    IdentityManager getIdentityManager();
 
 }

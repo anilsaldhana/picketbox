@@ -29,7 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
 import org.picketbox.core.authentication.PicketBoxConstants;
-import org.picketlink.idm.credential.X509CertificateCredential;
+import org.picketlink.idm.credential.X509Cert;
+import org.picketlink.idm.credential.X509CertificateCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -49,7 +50,7 @@ public class HTTPClientCertCredential extends AbstractUserCredential implements 
         if (certs != null && certs.length > 0) {
             X509Certificate clientCertificate = certs[0];
 
-            setCredential(new X509CertificateCredential(clientCertificate));
+            setCredential(new X509CertificateCredentials(new X509Cert(clientCertificate)));
         }
     }
 

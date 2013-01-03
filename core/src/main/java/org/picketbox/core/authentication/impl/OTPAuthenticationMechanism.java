@@ -22,6 +22,7 @@
 
 package org.picketbox.core.authentication.impl;
 
+import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -37,7 +38,9 @@ import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.core.util.TimeBasedOTPUtil;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.PasswordCredential;
+import org.picketlink.idm.credential.Credentials.Status;
+import org.picketlink.idm.credential.UsernamePasswordCredentials;
+import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.User;
 
 /**
@@ -67,10 +70,9 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
     @Override
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         OTPCredential otpCredential = (OTPCredential) credential;
-        PasswordCredential passwordCredential = (PasswordCredential) otpCredential.getCredential();
+        UsernamePasswordCredentials passwordCredential = (UsernamePasswordCredentials) otpCredential.getCredential();
 
         String username = otpCredential.getUserName();
-        String pass = passwordCredential.getPassword();
         String otp = otpCredential.getOtp();
 
         Principal principal = null;
@@ -79,11 +81,18 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
         User user = identityManager.getUser(username);
 
         if (user != null) {
-            boolean validation = identityManager.validateCredential(user, new PasswordCredential(pass));
+            identityManager.validateCredentials(passwordCredential);
+
+            boolean validation = passwordCredential.getStatus().equals(Status.VALID);
 
             if (validation) {
                 // Validate OTP
-                String seed = user.getAttribute("serial");
+                Attribute<Serializable> secretAttribute = user.getAttribute("serial");
+                String seed = null;
+
+                if (secretAttribute != null) {
+                    seed = secretAttribute.getValue().toString();
+                }
 
                 if (seed != null) {
                     try {

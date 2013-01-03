@@ -38,7 +38,8 @@ import org.picketbox.core.authentication.PicketBoxConstants;
 import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
-import org.picketlink.idm.credential.X509CertificateCredential;
+import org.picketlink.idm.credential.Credentials.Status;
+import org.picketlink.idm.credential.X509CertificateCredentials;
 import org.picketlink.idm.model.User;
 
 /**
@@ -95,8 +96,8 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
         HTTPClientCertCredential certCredential = (HTTPClientCertCredential) credential;
 
         if (certCredential.getCredential() != null) {
-            X509CertificateCredential x509Credential = (X509CertificateCredential) certCredential.getCredential();
-            X509Certificate clientCertificate = x509Credential.getCertificate();
+            X509CertificateCredentials x509Credential = (X509CertificateCredentials) certCredential.getCredential();
+            X509Certificate clientCertificate = x509Credential.getCertificate().getValue();
 
             String username = getCertificatePrincipal(clientCertificate).getName();
 
@@ -115,7 +116,9 @@ public class HTTPClientCertAuthentication extends AbstractHTTPAuthentication {
 
             if (user != null) {
                 if (isUseCertificateValidation()) {
-                    if (!getIdentityManager().validateCredential(user, certCredential.getCredential())) {
+                    getIdentityManager().validateCredentials(x509Credential);
+
+                    if (!x509Credential.getStatus().equals(Status.VALID)) {
                         return null;
                     }
                 }

@@ -39,7 +39,8 @@ import org.picketbox.core.authentication.credential.CertificateCredential;
 import org.picketbox.core.config.AuthenticationConfiguration;
 import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketlink.idm.credential.X509CertificateCredential;
+import org.picketlink.idm.credential.Credentials.Status;
+import org.picketlink.idm.credential.X509CertificateCredentials;
 import org.picketlink.idm.model.User;
 
 /**
@@ -70,8 +71,8 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
     protected Principal doAuthenticate(UserCredential credential, AuthenticationResult result) throws AuthenticationException {
         if (credential.getCredential() != null) {
             CertificateCredential certCredential = (CertificateCredential) credential;
-            X509CertificateCredential x509Credential = (X509CertificateCredential) certCredential.getCredential();
-            X509Certificate clientCertificate = x509Credential.getCertificate();
+            X509CertificateCredentials x509Credential = (X509CertificateCredentials) certCredential.getCredential();
+            X509Certificate clientCertificate = x509Credential.getCertificate().getValue();
 
             String username = getCertificatePrincipal(clientCertificate).getName();
 
@@ -90,12 +91,14 @@ public class CertificateAuthenticationMechanism extends AbstractAuthenticationMe
 
             if (user != null) {
                 if (isUseCertificateValidation()) {
-                    if (!getIdentityManager().validateCredential(user, certCredential.getCredential())) {
-                        return null;
-                    }
-                }
+                    getIdentityManager().validateCredentials(x509Credential);
 
-                return new PicketBoxPrincipal(username);
+                    if (x509Credential.getStatus().equals(Status.VALID)) {
+                        return new PicketBoxPrincipal(username);
+                    }
+                } else {
+                    return new PicketBoxPrincipal(username);
+                }
             }
         }
 

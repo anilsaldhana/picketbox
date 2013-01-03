@@ -40,6 +40,7 @@ import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.User;
 
 /**
@@ -191,23 +192,30 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
     }
 
     private String generateOTP(IdentityManager identityManager) throws GeneralSecurityException {
-        String serialNumber;
+        Attribute<String> serialNumber;
         User idmuser = identityManager.getUser("admin");
         serialNumber = idmuser.getAttribute("serial");
 
         if(serialNumber == null){
+            String serial = null;
+            
             //Generate serial number
-            serialNumber = UUID.randomUUID().toString();
-            serialNumber = serialNumber.replace('-', 'c');
+            serial = UUID.randomUUID().toString();
+            serial = serial.replace('-', 'c');
 
             //Just pick the first 10 characters
-            serialNumber = serialNumber.substring(0, 10);
+            serial = serial.substring(0, 10);
 
-            serialNumber = toHexString(serialNumber.getBytes());
-            idmuser.setAttribute("serial", serialNumber);
+            serial = toHexString(serial.getBytes());
+            
+            serialNumber = new Attribute<String>("serial", serial);
+            
+            idmuser.setAttribute(serialNumber);
+            
+            identityManager.update(idmuser);
         }
 
-        return TimeBasedOTP.generateTOTP(serialNumber, 6);
+        return TimeBasedOTP.generateTOTP(serialNumber.getValue(), 6);
     }
 
     private String toHexString(byte[] ba) {
