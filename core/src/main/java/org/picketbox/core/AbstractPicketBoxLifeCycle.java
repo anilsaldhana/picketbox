@@ -84,7 +84,7 @@ public abstract class AbstractPicketBoxLifeCycle implements PicketBoxLifecycle {
 
     /**
      * <p>
-     * Checks if the manager is started.
+     * Checks if the instance was started.
      * </p>
      *
      * @throws IllegalStateException if the instance was not properly started.
