@@ -151,8 +151,12 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
     }
 
     protected X509Certificate getTestingCertificate() {
+        return getCertificate("servercert.txt");
+    }
+    
+    protected X509Certificate getCertificate(String fileName) {
         // Certificate
-        InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/servercert.txt");
+        InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/" + fileName);
         X509Certificate cert = null;
 
         try {

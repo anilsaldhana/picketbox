@@ -24,6 +24,7 @@ package org.picketbox.test.authentication;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.security.cert.X509Certificate;
 
@@ -40,9 +41,9 @@ import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
  * <p>
  * Tests the different ways to authenticate users using a {@link UserCredential} instance..
  * </p>
- *
+ * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- *
+ * 
  */
 public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
@@ -51,7 +52,7 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
      * Tests if the authentication performs successfully when provided a valid {@link CertificateCredential}. By default the
      * username used to authenticate the user is obtained from the {@link X509Certificate} Subject DN.
      * </p>
-     *
+     * 
      * @throws AuthenticationException
      */
     @Test
@@ -73,6 +74,15 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
+
+        credential = new CertificateCredential(getCertificate("servercert2.txt"));
+
+        authenticatingUser = new UserContext(credential);
+
+        authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
     }
 
     /**
@@ -80,7 +90,7 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
      * Tests if the authentication performs successfully when provided a valid {@link CertificateCredential}. In this case we
      * use the {@link X509Certificate} CN as the username.
      * </p>
-     *
+     * 
      * @throws AuthenticationException
      */
     @Test
@@ -102,6 +112,13 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
+
+        authenticatingUser = new UserContext(new CertificateCredential(getCertificate("servercert2.txt")));
+
+        authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
     }
 
     /**
@@ -109,7 +126,7 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
      * Tests if the authentication performs successfully when provided a valid {@link CertificateCredential}. In this case we
      * try to validate the provided certificate against the identity store.
      * </p>
-     *
+     * 
      * @throws AuthenticationException
      */
     @Test
@@ -131,6 +148,13 @@ public class CertificateAuthenticationTestCase extends AbstractDefaultPicketBoxM
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
+
+        authenticatingUser = new UserContext(new CertificateCredential(getCertificate("servercert2.txt")));
+
+        authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
     }
 
 }

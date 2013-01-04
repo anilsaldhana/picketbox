@@ -20,10 +20,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.authentication;
+package org.picketbox.test.identity;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -52,6 +53,7 @@ import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
     private EntityManagerFactory entityManagerFactory;
+    private PicketBoxManager picketBoxManager;
 
     /**
      * <p>
@@ -62,33 +64,27 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
      */
     @Test
     public void testUserNamePasswordCredential() throws AuthenticationException {
-        ConfigurationBuilder builder = new ConfigurationBuilder();
-
-        // configure the JPA identity store
-        builder.identityManager().jpaStore().template(new JPATemplate() {
-            @Override
-            public EntityManager getEntityManager() {
-                return JPAIdentityStoreContext.get();
-            }
-        });
-
-        PicketBoxManager picketBoxManager = createManager(builder);
-
-        EntityManager entityManager = JPAIdentityStoreContext.get();
-
-        entityManager.flush();
-
         UserContext authenticatingUser = new UserContext();
 
         authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "admin"));
 
         // let's authenticate the user
-        UserContext authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
+        UserContext authenticatedUser = this.picketBoxManager.authenticate(authenticatingUser);
 
         assertNotNull(authenticatedUser);
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
+        
+        this.picketBoxManager.logout(authenticatedUser);
+        
+        authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "bad_passwd"));
+        
+        // let's authenticate the user
+        authenticatedUser = this.picketBoxManager.authenticate(authenticatingUser);
+
+        assertNotNull(authenticatedUser);
+        assertFalse(authenticatedUser.isAuthenticated());
     }
 
 
@@ -101,6 +97,20 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         entityManager.getTransaction().begin();
 
         JPAIdentityStoreContext.set(entityManager);
+        
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+
+        // configure the JPA identity store
+        builder.identityManager().jpaStore().template(new JPATemplate() {
+            @Override
+            public EntityManager getEntityManager() {
+                return JPAIdentityStoreContext.get();
+            }
+        });
+        
+        this.picketBoxManager = createManager(builder);
+
+        entityManager.flush();
     }
 
     @After

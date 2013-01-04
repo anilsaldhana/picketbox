@@ -25,7 +25,7 @@ package org.picketbox.test.session;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
-import junit.framework.Assert;
+import static junit.framework.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -113,7 +113,7 @@ public class SessionManagerTestCase extends AbstractDefaultPicketBoxManagerTestC
 
         assertFalse(session.isValid());
 
-        Assert.assertNull(getStoredSession(session));
+        assertNull(getStoredSession(session));
     }
 
     /**
@@ -132,7 +132,7 @@ public class SessionManagerTestCase extends AbstractDefaultPicketBoxManagerTestC
 
         assertFalse(session.isValid());
 
-        Assert.assertNull(getStoredSession(session));
+        assertNull(getStoredSession(session));
     }
 
     private PicketBoxSession createSession() {

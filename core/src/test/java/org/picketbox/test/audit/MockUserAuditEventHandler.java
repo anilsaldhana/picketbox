@@ -23,6 +23,7 @@
 package org.picketbox.test.audit;
 
 import org.picketbox.core.audit.AuditEvent;
+import org.picketbox.core.audit.event.PostAuditEvent;
 import org.picketbox.core.audit.event.PreAuditEvent;
 import org.picketbox.core.event.EventObserver;
 
@@ -45,7 +46,7 @@ public class MockUserAuditEventHandler {
     }
 
     @EventObserver
-    public void onPostAudit(PreAuditEvent event) {
+    public void onPostAudit(PostAuditEvent event) {
         this.postAuditEvent = true;
         this.event = event.getEvent();
     }

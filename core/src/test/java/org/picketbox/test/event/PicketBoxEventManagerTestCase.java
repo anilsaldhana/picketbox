@@ -57,7 +57,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     public void testSuccesfulUserAuthenticatedEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        MockUserAuthenticationEventHandler authenticationEventHandler = new MockUserAuthenticationEventHandler();
+        MockEventHandler authenticationEventHandler = new MockEventHandler();
 
         builder.authentication().eventManager().handler(authenticationEventHandler);
 
@@ -85,7 +85,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     public void testUnSuccessfulUserAuthenticatedEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        MockUserAuthenticationEventHandler authenticationEventHandler = new MockUserAuthenticationEventHandler();
+        MockEventHandler authenticationEventHandler = new MockEventHandler();
 
         builder.authentication().eventManager().handler(authenticationEventHandler);
 
@@ -113,7 +113,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     public void testUserLoggedOutEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        MockUserLoggedOutEventHandler logoutEventHandler = new MockUserLoggedOutEventHandler();
+        MockEventHandler logoutEventHandler = new MockEventHandler();
 
         builder.authentication().eventManager().handler(logoutEventHandler);
 
@@ -130,7 +130,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         picketBoxManager.logout(subject);
 
-        assertTrue(logoutEventHandler.isLoggedOut());
+        assertTrue(logoutEventHandler.wasLoggedOut());
     }
 
     /**
@@ -144,7 +144,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
     public void testUserPreAuthenticationEvent() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        MockUserPreAuthenticationEventHandler preAuthenticationEventHandler = new MockUserPreAuthenticationEventHandler();
+        MockEventHandler preAuthenticationEventHandler = new MockEventHandler();
 
         builder.authentication().eventManager().handler(preAuthenticationEventHandler);
 
@@ -158,8 +158,8 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         assertNotNull(subject);
         assertTrue(subject.isAuthenticated());
-        assertTrue(preAuthenticationEventHandler.isInvoked());
-        assertNotNull(subject.getContextData().get(MockUserPreAuthenticationEventHandler.PRE_AUTH_CONTEXT_DATA));
+        assertTrue(preAuthenticationEventHandler.wasPreAuthenticationInvoked());
+        assertNotNull(subject.getContextData().get(MockEventHandler.PRE_AUTH_CONTEXT_DATA));
     }
 
 }

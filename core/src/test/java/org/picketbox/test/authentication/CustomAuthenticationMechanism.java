@@ -62,7 +62,7 @@ public class CustomAuthenticationMechanism extends AbstractAuthenticationMechani
         return null;
     }
 
-    public boolean isInvoked() {
+    public boolean wasInvoked() {
         return this.invoked;
     }
 }

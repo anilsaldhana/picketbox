@@ -29,6 +29,7 @@ import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
@@ -73,7 +74,31 @@ public class TestCustomAuthenticationMechanism extends AbstractDefaultPicketBoxM
         assertTrue(authenticatedContext.isAuthenticated());
 
         // check if the custom mechanisms was invoked during the authentication
-        assertTrue(customMechanism.isInvoked());
+        assertTrue(customMechanism.wasInvoked());
+    }
+    
+    /**
+     * <p>
+     * Tests the case where a not supported credential type is provided.
+     * </p>
+     *
+     * @throws Exception
+     */
+    @Test (expected=AuthenticationException.class)
+    public void testUnsupportedCredentialType() throws Exception {
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+
+        // creates and start the manager
+        PicketBoxManager manager = createManager(builder);
+
+        // creates the credential supported by the custom mechanism
+        CustomCredential credential = new CustomCredential("admin");
+
+        // creates an authenticating context with the credential
+        UserContext authenticatingContext = new UserContext(credential);
+
+        // performs the authentication
+        manager.authenticate(authenticatingContext);
     }
 
 }

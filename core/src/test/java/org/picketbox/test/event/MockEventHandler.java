@@ -22,20 +22,53 @@
 
 package org.picketbox.test.event;
 
+import java.util.HashMap;
+
 import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
 import org.picketbox.core.authentication.event.UserAuthenticationFailedEvent;
 import org.picketbox.core.authentication.event.UserNotAuthenticatedEvent;
+import org.picketbox.core.authentication.event.UserPreAuthenticationEvent;
 import org.picketbox.core.event.EventObserver;
+import org.picketbox.core.logout.event.UserLoggedOutEvent;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class MockUserAuthenticationEventHandler {
+public class MockEventHandler {
 
     private boolean successfulAuthentication;
     private boolean authenticationFailed;
+    
+    private boolean loggedOut;
+    
+    public static final String PRE_AUTH_CONTEXT_DATA = "PRE_AUTH_CONTEXT_DATA";
 
+    private boolean preAuthenticationInvoked;
+
+    @EventObserver
+    public void onPreAuthentication(UserPreAuthenticationEvent event) {
+        this.preAuthenticationInvoked = true;
+        HashMap<String, Object> contextData = new HashMap<String, Object>();
+
+        contextData.put(PRE_AUTH_CONTEXT_DATA, PRE_AUTH_CONTEXT_DATA);
+
+        event.getUserContext().setContextData(contextData);
+    }
+
+    public boolean wasPreAuthenticationInvoked() {
+        return this.preAuthenticationInvoked;
+    }
+    
+    @EventObserver
+    public void onLogout(UserLoggedOutEvent userLogOutEvent) {
+        this.loggedOut = true;
+    }
+
+    public boolean wasLoggedOut() {
+        return this.loggedOut;
+    }
+    
     @EventObserver
     public void onSuccessful(UserAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = true;

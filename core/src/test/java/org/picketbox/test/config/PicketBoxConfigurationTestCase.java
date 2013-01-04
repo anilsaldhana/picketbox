@@ -24,6 +24,7 @@ package org.picketbox.test.config;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,11 +70,18 @@ public class PicketBoxConfigurationTestCase extends AbstractDefaultPicketBoxMana
 
         assertNotNull(subject);
         assertTrue(subject.isAuthenticated());
+        
+        assertTrue(picketBoxManager.started());
+        assertNotNull(picketBoxManager.getIdentityManager());
+        assertNotNull(picketBoxManager.getEventManager());
+        
+        assertNull(picketBoxManager.getSessionManager());
+        assertNull(picketBoxManager.getAuditProvider());
     }
 
     /**
      * <p>
-     * Tests a simple configuration using only the default values.
+     * Tests the configuration using a custom {@link UserContextPopulator}.
      * </p>
      *
      * @throws Exception
