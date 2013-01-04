@@ -30,7 +30,6 @@ import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
@@ -86,13 +85,9 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         picketBoxManager.logout(authenticatedUser);
 
-        Thread.sleep(30000);
+        Thread.sleep(25000);
 
-        String secondOTP = generateOTP(identityManager);
-
-        assertFalse(token.equals(secondOTP));
-
-        authenticatingUser.setCredential(new OTPCredential(userName, userName, secondOTP));
+        authenticatingUser.setCredential(new OTPCredential(userName, userName, token));
 
         authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
 
@@ -104,14 +99,13 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
     /**
      * <p>
-     * Tests if the authentication fail when using the same token twice.
+     * Tests if the authentication fail when using the same token twice after some amount of time.
      * </p>
      * @throws Exception
      *
      * @throws AuthenticationException
      */
     @Test
-    @Ignore
     public void testInvalidOTPAuthentication() throws Exception {
         PicketBoxManager picketBoxManager = createManager();
         IdentityManager identityManager = picketBoxManager.getIdentityManager();
@@ -130,7 +124,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         picketBoxManager.logout(authenticatedUser);
 
-        Thread.sleep(30000);
+        Thread.sleep(60000);
 
         authenticatingUser.setCredential(new OTPCredential("admin", "admin", firstOTP));
 
