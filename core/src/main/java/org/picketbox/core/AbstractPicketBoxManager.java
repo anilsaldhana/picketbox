@@ -385,9 +385,9 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         if (this.sessionManager == null && this.configuration.getSessionManager().getStore() != null) {
             this.sessionManager = new DefaultSessionManager(this);
         }
-        
+
         if (this.sessionManager != null) {
-            this.sessionManager.start();            
+            this.sessionManager.start();
         }
 
         if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
