@@ -23,7 +23,6 @@
 package org.picketbox.core.identity.impl;
 
 import java.security.Principal;
-import java.util.Collection;
 import java.util.List;
 
 import org.picketbox.core.PicketBoxMessages;
@@ -60,26 +59,35 @@ public class DefaultUserContextPopulator implements UserContextPopulator {
 
         Principal principal = authenticatedUserContext.getPrincipal();
 
-        User userFromIDM = getIdentityManager().getUser(principal.getName());
+        User storedUser = getIdentityManager().getUser(principal.getName());
 
-        IdentityQuery<Role> query = getIdentityManager().createQuery(Role.class);
+        authenticatedUserContext.setUser(storedUser);
 
-        query.setParameter(Role.ROLE_OF, userFromIDM);
+        List<Role> roles = getRoles(storedUser);
 
-        Collection<Role> rolesFromIDM = query.getResultList();
+        authenticatedUserContext.setRoles(roles);
 
-        authenticatedUserContext.setUser(userFromIDM);
-        authenticatedUserContext.setRoles(rolesFromIDM);
-
-        IdentityQuery<Group> groupQuery = getIdentityManager().createQuery(Group.class);
-
-        groupQuery.setParameter(Role.HAS_MEMBER, userFromIDM);
-
-        List<Group> groups = groupQuery.getResultList();
+        List<Group> groups = getGroups(storedUser);
 
         authenticatedUserContext.setGroups(groups);
 
         return authenticatedUserContext;
+    }
+
+    private List<Group> getGroups(User storedUser) {
+        IdentityQuery<Group> groupQuery = getIdentityManager().createQuery(Group.class);
+
+        groupQuery.setParameter(Role.HAS_MEMBER, storedUser);
+
+        return groupQuery.getResultList();
+    }
+
+    private List<Role> getRoles(User userFromIDM) {
+        IdentityQuery<Role> query = getIdentityManager().createQuery(Role.class);
+
+        query.setParameter(Role.ROLE_OF, userFromIDM);
+
+        return query.getResultList();
     }
 
     public IdentityManager getIdentityManager() {
