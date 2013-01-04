@@ -59,7 +59,7 @@ public class PicketBoxConfigurationTestCase extends AbstractDefaultPicketBoxMana
     public void testDefaultConfiguration() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
@@ -96,7 +96,7 @@ public class PicketBoxConfigurationTestCase extends AbstractDefaultPicketBoxMana
             }
         });
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 

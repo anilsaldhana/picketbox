@@ -55,13 +55,13 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
      */
     @Test
     public void testSuccesfulUserAuthenticatedEvent() throws Exception {
-        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        ConfigurationBuilder builder = new ConfigurationBuilder();
 
         MockUserAuthenticationEventHandler authenticationEventHandler = new MockUserAuthenticationEventHandler();
 
-        configurationBuilder.authentication().eventManager().handler(authenticationEventHandler);
+        builder.authentication().eventManager().handler(authenticationEventHandler);
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(configurationBuilder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
@@ -89,7 +89,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         builder.authentication().eventManager().handler(authenticationEventHandler);
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
@@ -117,7 +117,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         builder.authentication().eventManager().handler(logoutEventHandler);
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
@@ -148,7 +148,7 @@ public class PicketBoxEventManagerTestCase extends AbstractDefaultPicketBoxManag
 
         builder.authentication().eventManager().handler(preAuthenticationEventHandler);
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 

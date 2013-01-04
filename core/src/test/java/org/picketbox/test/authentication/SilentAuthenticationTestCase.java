@@ -180,7 +180,7 @@ public class SilentAuthenticationTestCase extends AbstractDefaultPicketBoxManage
 
         builder.sessionManager().inMemorySessionStore();
 
-        return getPicketBoxManager(builder.build());
+        return createManager(builder);
     }
 
 }

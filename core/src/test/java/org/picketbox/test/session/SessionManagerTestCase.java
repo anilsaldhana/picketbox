@@ -55,7 +55,7 @@ public class SessionManagerTestCase extends AbstractDefaultPicketBoxManagerTestC
 
         builder.sessionManager().inMemorySessionStore();
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         this.sessionManager = picketBoxManager.getSessionManager();
     }

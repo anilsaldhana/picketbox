@@ -56,18 +56,6 @@ import org.picketlink.idm.model.SimpleUser;
  */
 public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
-    private PicketBoxManager picketboxManager;
-
-    protected PicketBoxManager getPicketBoxManager(PicketBoxConfiguration configuration) {
-        if (this.picketboxManager == null) {
-            this.picketboxManager = new DefaultPicketBoxManager(configuration);
-            this.picketboxManager.start();
-            initialize(this.picketboxManager.getIdentityManager());
-        }
-
-        return this.picketboxManager;
-    }
-
     /**
      * <p>
      * Creates a {@link PicketBoxManager}.
@@ -83,8 +71,14 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         } else {
             configBuilder = builder[0];
         }
-
-        return getPicketBoxManager(configBuilder.build());
+        
+        PicketBoxManager picketboxManager = new DefaultPicketBoxManager(configBuilder.build());
+        
+        picketboxManager.start();
+        
+        initialize(picketboxManager.getIdentityManager());
+        
+        return picketboxManager;
     }
 
     /**

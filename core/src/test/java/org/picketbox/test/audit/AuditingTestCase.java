@@ -59,7 +59,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
         builder.audit().logProvider();
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
@@ -87,7 +87,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
         builder.audit().provider(customAuditProvider);
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
@@ -117,7 +117,7 @@ public class AuditingTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
         builder.audit().logProvider().eventManager().handler(auditEventHandler);
 
-        PicketBoxManager picketBoxManager = getPicketBoxManager(builder.build());
+        PicketBoxManager picketBoxManager = createManager(builder);
 
         UserContext authenticatingUserContext = new UserContext();
 
