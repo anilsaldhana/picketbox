@@ -45,6 +45,7 @@ import org.picketbox.core.authorization.ent.EntitlementsManager;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.exceptions.AuthenticationException;
+import org.picketbox.core.exceptions.ConfigurationException;
 import org.picketbox.core.identity.PicketBoxIdentityManager;
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketbox.core.identity.impl.DefaultUserContextPopulator;
@@ -96,13 +97,15 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
             PicketBoxSession userSession = restoreSession(userContext);
 
-            // if there is a valid session associate it with the subject and performs a silent authentication, trusting the provided
+            // if there is a valid session associate it with the subject and performs a silent authentication, trusting the
+            // provided
             // principal.
             if (userSession != null) {
                 UserContext restoredUserContext = userSession.getUserContext();
                 Principal restoredPrincipal = restoredUserContext.getPrincipal(false);
 
-                LOGGER.tracef("performing silent authentication and re-authenticating principal %s", restoredPrincipal.getName());
+                LOGGER.tracef("performing silent authentication and re-authenticating principal %s",
+                        restoredPrincipal.getName());
 
                 TrustedUsernameCredential credential = new TrustedUsernameCredential(restoredPrincipal.getName());
 
@@ -149,6 +152,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 LOGGER.trace("session not associated with user.");
             }
         }
+
         return userSession;
     }
 
@@ -243,7 +247,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                         supportedCredential = true;
 
                         if (result == null) {
-                            LOGGER.warnf("mechanism [%s] returned a null AuthenticationResult. Unexpected behavior may occur.", mechanism);
+                            LOGGER.warnf("mechanism [%s] returned a null AuthenticationResult. Unexpected behavior may occur.",
+                                    mechanism);
                         }
                     } catch (AuthenticationException e) {
                         throw MESSAGES.authenticationFailed(e);
@@ -255,7 +260,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 throw MESSAGES.unsupportedCredentialType(credential);
             }
         } else {
-            LOGGER.tracef("doPreAuthentication method returned false. authentication will not me performed for user [%s]", userContext);
+            LOGGER.tracef("doPreAuthentication method returned false. authentication will not me performed for user [%s]",
+                    userContext);
         }
 
         if (result == null) {
@@ -282,7 +288,6 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         LOGGER.trace("user is authenticated. configuring security context.");
 
-        // creates a fresh new session if none was retrieved from the session manager
         if (userSession == null) {
             userSession = createSession(userContext);
         }
@@ -324,7 +329,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      */
     private PicketBoxSession createSession(UserContext authenticatedUserContext) throws IllegalArgumentException {
         if (!authenticatedUserContext.isAuthenticated()) {
-            throw new IllegalArgumentException("UserContext is not authenticated. Session can not be created.");
+            throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
 
         if (this.sessionManager == null) {
@@ -346,54 +351,56 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      */
     @Override
     protected void doStart() {
+        if (this.configuration == null) {
+            throw new ConfigurationException("No configuration provided. Manager could not be started.");
+        }
+
         this.eventManager = this.configuration.getEventManager().getEventManager();
 
-        if (this.configuration != null) {
-            this.authenticationProvider = new PicketBoxAuthenticationProvider(this);
+        this.authenticationProvider = new PicketBoxAuthenticationProvider(this);
 
-            if (!this.configuration.getAuthorization().getManagers().isEmpty()) {
-                this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
-            }
-
-            IdentityManager identityManager = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
-                    .getIdentityManager();
-
-            IdentityManager providedIdentityManager = this.configuration.getIdentityManager().getIdentityManager();
-
-            if (providedIdentityManager == null) {
-                this.identityManager = new PicketBoxIdentityManager(identityManager);
-            } else {
-                this.identityManager = providedIdentityManager;
-            }
-
-            this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
-
-            if (this.userContextPopulator == null) {
-                this.userContextPopulator = new DefaultUserContextPopulator(this.identityManager);
-            }
-
-            this.sessionManager = this.configuration.getSessionManager().getManager();
-
-            if (this.sessionManager == null && this.configuration.getSessionManager().getStore() != null) {
-                this.sessionManager = new DefaultSessionManager(this);
-            }
-
-            if (this.sessionManager != null) {
-                this.sessionManager.start();
-            }
-
-            if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
-                this.auditProvider = this.configuration.getAuditConfig().getProvider();
-
-                if (this.auditProvider instanceof AbstractAuditProvider) {
-                    ((AbstractAuditProvider) this.auditProvider).setPicketBoxManager(this);
-                }
-
-                this.eventManager.addHandler(new AuditEventHandler(this.auditProvider));
-            }
-
-            doConfigure();
+        if (!this.configuration.getAuthorization().getManagers().isEmpty()) {
+            this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
         }
+
+        IdentityManager identityManager = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
+                .getIdentityManager();
+
+        IdentityManager providedIdentityManager = this.configuration.getIdentityManager().getIdentityManager();
+
+        if (providedIdentityManager == null) {
+            this.identityManager = new PicketBoxIdentityManager(identityManager);
+        } else {
+            this.identityManager = providedIdentityManager;
+        }
+
+        this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
+
+        if (this.userContextPopulator == null) {
+            this.userContextPopulator = new DefaultUserContextPopulator(this.identityManager);
+        }
+
+        this.sessionManager = this.configuration.getSessionManager().getManager();
+
+        if (this.sessionManager == null) {
+            this.sessionManager = new DefaultSessionManager(this);
+        }
+
+        if (this.sessionManager != null) {
+            this.sessionManager.start();
+        }
+
+        if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
+            this.auditProvider = this.configuration.getAuditConfig().getProvider();
+
+            if (this.auditProvider instanceof AbstractAuditProvider) {
+                ((AbstractAuditProvider) this.auditProvider).setPicketBoxManager(this);
+            }
+
+            this.eventManager.addHandler(new AuditEventHandler(this.auditProvider));
+        }
+
+        doConfigure();
 
         logConfiguration();
 
