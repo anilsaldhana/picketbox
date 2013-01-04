@@ -22,6 +22,9 @@
 
 package org.picketbox.core.config;
 
+import javax.persistence.EntityManager;
+
+import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
 import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 
 /**
@@ -44,8 +47,14 @@ public class JPAIdentityManagerConfigurationBuilder extends AbstractConfiguratio
     @Override
     protected void setDefaults() {
         if (this.configuration.getJpaTemplate() == null) {
-            this.configuration.setJpaTemplate(new JPATemplate());
+            this.configuration.setJpaTemplate(new JPATemplate() {
+                @Override
+                public EntityManager getEntityManager() {
+                    return JPAIdentityStoreContext.get();
+                }
+            });
         }
+
     }
 
     @Override
