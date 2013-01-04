@@ -50,6 +50,7 @@ import org.picketbox.core.identity.PicketBoxIdentityManager;
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketbox.core.identity.impl.DefaultUserContextPopulator;
 import org.picketbox.core.logout.event.UserLoggedOutEvent;
+import org.picketbox.core.session.DefaultSessionManager;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionManager;
 import org.picketlink.idm.IdentityManager;
@@ -381,8 +382,12 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
 
         this.sessionManager = this.configuration.getSessionManager().getManager();
 
+        if (this.sessionManager == null && this.configuration.getSessionManager().getStore() != null) {
+            this.sessionManager = new DefaultSessionManager(this);
+        }
+        
         if (this.sessionManager != null) {
-            this.sessionManager.start();
+            this.sessionManager.start();            
         }
 
         if (this.configuration.getAuditConfig() != null && this.configuration.getAuditConfig().getProvider() != null) {
