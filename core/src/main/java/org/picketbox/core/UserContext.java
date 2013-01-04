@@ -54,21 +54,16 @@ public class UserContext implements Serializable {
     private Subject subject;
     private User user;
 
-    @SuppressWarnings("unchecked")
-    private Collection<Role> roles = Collections.EMPTY_LIST;
+    private Collection<Role> roles = Collections.emptyList();
+    private Collection<Group> groups = Collections.emptyList();
 
-    @SuppressWarnings("unchecked")
-    private Collection<Group> groups = Collections.EMPTY_LIST;
-
-    protected transient Map<String, Object> contextData = new HashMap<String, Object>();
+    private transient Map<String, Object> contextData = new HashMap<String, Object>();
 
     private transient PicketBoxSession session;
 
     private transient UserCredential credential;
 
     private AuthenticationResult authenticationResult;
-
-    // TODO: how to deal with groups/nested groups etc
 
     public UserContext() {
 
@@ -206,6 +201,7 @@ public class UserContext implements Serializable {
         if (this.session != null && this.session.isValid()) {
             try {
                 this.session.invalidate();
+                this.session = null;
             } catch (PicketBoxSessionException e) {
                 throw PicketBoxMessages.MESSAGES.unableToInvalidateSession(e);
             }
@@ -323,6 +319,10 @@ public class UserContext implements Serializable {
         }
 
         return null;
+    }
+
+    protected void addContextData(String name, Object value) {
+        this.contextData.put(name, value);
     }
 
     @Override
