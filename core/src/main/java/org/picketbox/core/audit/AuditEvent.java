@@ -173,11 +173,10 @@ public class AuditEvent {
     @Override
     public String toString() {
         StringBuilder sbu = new StringBuilder();
-        sbu.append("\n##AUDIT_TYPE: ").append(this.auditType).append("##\n")
-        .append("##CREATION_DATE: ").append(getCreationDate()).append("##\n")
-        .append("##DESCRIPTION: ").append(getDescription()).append("##\n")
-        .append("##USER_CONTEXT: ").append(getUserContext()).append("##\n")
-        .append("##AUDIT_CONTEXT: ").append(dissectContextMap()).append("##\n");
+        sbu.append("\n##AUDIT_TYPE: ").append(this.auditType).append("##\n").append("##CREATION_DATE: ")
+                .append(getCreationDate()).append("##\n").append("##DESCRIPTION: ").append(getDescription()).append("##\n")
+                .append("##USER_CONTEXT: ").append(getUserContext()).append("##\n").append("##AUDIT_CONTEXT: ")
+                .append(dissectContextMap()).append("##\n");
         return sbu.toString();
     }
 

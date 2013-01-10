@@ -25,7 +25,9 @@ package org.picketbox.core.event;
 import java.lang.reflect.Method;
 
 /**
- * <p>Helper class that holds the definitions for event handlers.</p>
+ * <p>
+ * Helper class that holds the definitions for event handlers.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

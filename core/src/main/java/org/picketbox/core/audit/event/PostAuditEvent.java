@@ -26,7 +26,9 @@ import org.picketbox.core.audit.AuditEvent;
 import org.picketbox.core.audit.AuditProvider;
 
 /**
- * <p>This class represents a event fired after an audit record is processed by some specific {@link AuditProvider}.</p>
+ * <p>
+ * This class represents a event fired after an audit record is processed by some specific {@link AuditProvider}.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

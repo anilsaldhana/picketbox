@@ -243,7 +243,7 @@ public class UserContext implements Serializable {
             throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
 
-        for (Group userGroup: getGroups()) {
+        for (Group userGroup : getGroups()) {
             if (group.equals(userGroup.getName())) {
                 return true;
             }
@@ -251,7 +251,6 @@ public class UserContext implements Serializable {
 
         return false;
     }
-
 
     /**
      * Get the role names
@@ -327,7 +326,7 @@ public class UserContext implements Serializable {
 
     @Override
     public String toString() {
-        String userName  = null;
+        String userName = null;
 
         if (isAuthenticated()) {
             userName = getPrincipal().getName();
@@ -335,7 +334,8 @@ public class UserContext implements Serializable {
             userName = getCredential().getUserName();
         }
 
-        return " Username: " + userName + "/ IsAuthenticated: " + this.isAuthenticated() + " / Credential: [" + this.credential + "] / Authentication Result: [" + this.authenticationResult + "] / Session: [" + this.session + "]";
+        return " Username: " + userName + "/ IsAuthenticated: " + this.isAuthenticated() + " / Credential: [" + this.credential
+                + "] / Authentication Result: [" + this.authenticationResult + "] / Session: [" + this.session + "]";
     }
 
 }

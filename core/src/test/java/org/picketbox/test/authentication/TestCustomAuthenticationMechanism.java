@@ -76,7 +76,7 @@ public class TestCustomAuthenticationMechanism extends AbstractDefaultPicketBoxM
         // check if the custom mechanisms was invoked during the authentication
         assertTrue(customMechanism.wasInvoked());
     }
-    
+
     /**
      * <p>
      * Tests the case where a not supported credential type is provided.
@@ -84,7 +84,7 @@ public class TestCustomAuthenticationMechanism extends AbstractDefaultPicketBoxM
      *
      * @throws Exception
      */
-    @Test (expected=AuthenticationException.class)
+    @Test(expected = AuthenticationException.class)
     public void testUnsupportedCredentialType() throws Exception {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 

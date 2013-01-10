@@ -34,8 +34,7 @@ import org.picketbox.core.event.EventObserver;
 
 /**
  * <p>
- * This class acts as a handler for security related events, auditing each event using a specific
- * {@link AuditProvider}.
+ * This class acts as a handler for security related events, auditing each event using a specific {@link AuditProvider}.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

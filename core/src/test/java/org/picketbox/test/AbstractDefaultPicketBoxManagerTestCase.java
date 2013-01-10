@@ -71,13 +71,13 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         } else {
             configBuilder = builder[0];
         }
-        
+
         PicketBoxManager picketboxManager = new DefaultPicketBoxManager(configBuilder.build());
-        
+
         picketboxManager.start();
-        
+
         initialize(picketboxManager.getIdentityManager());
-        
+
         return picketboxManager;
     }
 
@@ -97,7 +97,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
 
-        identityManager.updateCredential(adminUser, new Password("admin".toCharArray()), null, null);
+        identityManager.updateCredential(adminUser, new Password("admin".toCharArray()));
         identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
 
         Role roleDeveloper = new SimpleRole("developer");
@@ -142,18 +142,19 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
     protected void assertRoles(UserContext authenticatedUser) {
         assertFalse(authenticatedUser.getRoles().isEmpty());
-        assertTrue(authenticatedUser.getRoles().containsAll(Arrays.asList(new Role[] {new SimpleRole("developer"), new SimpleRole("admin")})));
+        assertTrue(authenticatedUser.getRoles().containsAll(
+                Arrays.asList(new Role[] { new SimpleRole("developer"), new SimpleRole("admin") })));
     }
 
     protected void assertGroups(UserContext authenticatedUser) {
         assertFalse(authenticatedUser.getGroups().isEmpty());
-        assertTrue(authenticatedUser.getGroups().containsAll(Arrays.asList(new Group[] {new SimpleGroup("PicketBox Group")})));
+        assertTrue(authenticatedUser.getGroups().containsAll(Arrays.asList(new Group[] { new SimpleGroup("PicketBox Group") })));
     }
 
     protected X509Certificate getTestingCertificate() {
         return getCertificate("servercert.txt");
     }
-    
+
     protected X509Certificate getCertificate(String fileName) {
         // Certificate
         InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/" + fileName);

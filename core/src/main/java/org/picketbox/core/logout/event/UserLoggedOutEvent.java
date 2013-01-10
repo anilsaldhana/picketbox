@@ -24,7 +24,6 @@ package org.picketbox.core.logout.event;
 
 import org.picketbox.core.UserContext;
 
-
 /**
  * Event to indicate an user is authenticated
  *

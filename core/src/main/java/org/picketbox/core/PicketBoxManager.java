@@ -109,7 +109,9 @@ public interface PicketBoxManager extends PicketBoxLifecycle {
     SessionManager getSessionManager();
 
     /**
-     * <p>Returns the configured {@link AuditProvider} instance.</p>
+     * <p>
+     * Returns the configured {@link AuditProvider} instance.
+     * </p>
      *
      * @return
      */

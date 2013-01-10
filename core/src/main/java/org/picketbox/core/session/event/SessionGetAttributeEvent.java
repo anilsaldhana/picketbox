@@ -25,7 +25,9 @@ package org.picketbox.core.session.event;
 import org.picketbox.core.session.PicketBoxSession;
 
 /**
- * <p>This class represents a event fired when an session attribute is requested.</p>
+ * <p>
+ * This class represents a event fired when an session attribute is requested.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

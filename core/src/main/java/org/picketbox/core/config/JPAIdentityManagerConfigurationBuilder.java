@@ -23,9 +23,7 @@
 package org.picketbox.core.config;
 
 import javax.persistence.EntityManager;
-
-import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
-import org.picketlink.idm.jpa.schema.internal.JPATemplate;
+import javax.persistence.EntityManagerFactory;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -34,32 +32,41 @@ import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 public class JPAIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<JPAIdentityManagerConfiguration> {
 
     private JPAIdentityManagerConfiguration configuration = new JPAIdentityManagerConfiguration();
+    private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
 
     public JPAIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
         super(identityManagerConfigurationBuilder);
     }
 
-    public JPAIdentityManagerConfigurationBuilder template(JPATemplate template) {
-        this.configuration.setJpaTemplate(template);
+    public JPAIdentityManagerConfigurationBuilder setEntityManagerFactory(EntityManagerFactory emf) {
+        this.entityManagerFactory = emf;
+        return this;
+    }
+
+    public JPAIdentityManagerConfigurationBuilder setEntityManager(EntityManager em) {
+        this.entityManager = em;
         return this;
     }
 
     @Override
     protected void setDefaults() {
-        if (this.configuration.getJpaTemplate() == null) {
-            this.configuration.setJpaTemplate(new JPATemplate() {
-                @Override
-                public EntityManager getEntityManager() {
-                    return JPAIdentityStoreContext.get();
-                }
-            });
-        }
+        /*
+         * if (this.configuration.getJpaTemplate() == null) { this.configuration.setJpaTemplate(new JPATemplate() {
+         *
+         * @Override public EntityManager getEntityManager() { return JPAIdentityStoreContext.get(); } }); }
+         */
 
     }
 
     @Override
     protected JPAIdentityManagerConfiguration doBuild() {
+        if (entityManagerFactory != null) {
+            configuration.setEntityManagerFactory(entityManagerFactory);
+        }
+        if (entityManager != null) {
+            configuration.setEntityManager(entityManager);
+        }
         return this.configuration;
     }
-
 }

@@ -48,7 +48,9 @@ public interface UserCredential {
     String getUserName();
 
     /**
-     * <p>Returns the user credential.</p>
+     * <p>
+     * Returns the user credential.
+     * </p>
      *
      * @return
      */

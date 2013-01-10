@@ -36,7 +36,8 @@ public class AuthenticationConfiguration {
     private List<AuthenticationMechanism> mechanisms;
     private ClientCertConfiguration certConfiguration;
 
-    public AuthenticationConfiguration(List<AuthenticationMechanism> mechanisms, EventManagerConfiguration eventManager, ClientCertConfiguration certConfiguration) {
+    public AuthenticationConfiguration(List<AuthenticationMechanism> mechanisms, EventManagerConfiguration eventManager,
+            ClientCertConfiguration certConfiguration) {
         this.eventManager = eventManager;
         this.mechanisms = mechanisms;
         this.certConfiguration = certConfiguration;

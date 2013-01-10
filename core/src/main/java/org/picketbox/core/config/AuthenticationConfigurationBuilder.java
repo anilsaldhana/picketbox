@@ -66,6 +66,7 @@ public class AuthenticationConfigurationBuilder extends AbstractConfigurationBui
 
     @Override
     public AuthenticationConfiguration doBuild() {
-        return new AuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build(), this.certAuthentication.build());
+        return new AuthenticationConfiguration(this.mechanisms, this.builder.eventManager().build(),
+                this.certAuthentication.build());
     }
 }

@@ -25,7 +25,6 @@ package org.picketbox.core;
 import org.picketlink.idm.credential.AbstractBaseCredentials;
 import org.picketlink.idm.credential.Credentials;
 
-
 /**
  * <p>
  * Base class for the {@link UserCredential} interface.

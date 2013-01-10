@@ -45,7 +45,8 @@ public class CustomAuthenticationMechanism extends AbstractAuthenticationMechani
     public List<AuthenticationInfo> getAuthenticationInfo() {
         ArrayList<AuthenticationInfo> info = new ArrayList<AuthenticationInfo>();
 
-        info.add(new AuthenticationInfo("Custom Authentication Mechanism for testing.", "Custom Authentication Mechanism for testing.", CustomCredential.class));
+        info.add(new AuthenticationInfo("Custom Authentication Mechanism for testing.",
+                "Custom Authentication Mechanism for testing.", CustomCredential.class));
 
         return info;
     }

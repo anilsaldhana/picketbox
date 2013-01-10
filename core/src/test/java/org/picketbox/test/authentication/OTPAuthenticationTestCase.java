@@ -56,6 +56,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
      * <p>
      * Tests if the authentication performs successfully when provided a valid {@link OTPCredential}.
      * </p>
+     *
      * @throws Exception
      *
      * @throws AuthenticationException
@@ -101,6 +102,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
      * <p>
      * Tests if the authentication fail when using the same token twice after some amount of time.
      * </p>
+     *
      * @throws Exception
      *
      * @throws AuthenticationException
@@ -138,6 +140,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
      * <p>
      * Tests if the authentication fail when using a null token.
      * </p>
+     *
      * @throws Exception
      *
      * @throws AuthenticationException
@@ -165,6 +168,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
      * <p>
      * Tests if the authentication fail when authenticating an user without a seed.
      * </p>
+     *
      * @throws Exception
      *
      * @throws AuthenticationException
@@ -190,14 +194,14 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         User idmuser = identityManager.getUser("admin");
         serialNumber = idmuser.getAttribute("serial");
 
-        if(serialNumber == null){
+        if (serialNumber == null) {
             String serial = null;
 
-            //Generate serial number
+            // Generate serial number
             serial = UUID.randomUUID().toString();
             serial = serial.replace('-', 'c');
 
-            //Just pick the first 10 characters
+            // Just pick the first 10 characters
             serial = serial.substring(0, 10);
 
             serial = toHexString(serial.getBytes());
@@ -208,13 +212,13 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
             identityManager.update(idmuser);
         }
-        
+
         return TimeBasedOTP.generateTOTP(serialNumber.getValue(), 6);
     }
 
     private String toHexString(byte[] ba) {
         StringBuilder str = new StringBuilder();
-        for(int i = 0; i < ba.length; i++)
+        for (int i = 0; i < ba.length; i++)
             str.append(String.format("%x", ba[i]));
         return str.toString();
     }

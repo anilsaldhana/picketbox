@@ -62,7 +62,8 @@ public class DefaultSessionEventHandler {
 
         if (storedSession != null) {
             try {
-                event.getSession().setAttribute(event.getAttributeName(), storedSession.getAttributes().get(event.getAttributeName()));
+                event.getSession().setAttribute(event.getAttributeName(),
+                        storedSession.getAttributes().get(event.getAttributeName()));
             } catch (PicketBoxSessionException e) {
                 throw new IllegalStateException("Unable to update session with stored attribute.", e);
             }

@@ -22,7 +22,6 @@
 
 package org.picketbox.core.config;
 
-
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
@@ -53,11 +52,13 @@ public class ClientCertConfigurationBuilder extends AbstractConfigurationBuilder
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
      */
     @Override
     public ClientCertConfiguration doBuild() {
-        return this.configuration ;
+        return this.configuration;
     }
 }

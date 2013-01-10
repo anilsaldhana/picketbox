@@ -39,7 +39,9 @@ import org.picketlink.idm.spi.IdentityStoreInvocationContextFactory;
 import org.picketlink.idm.spi.StoreFactory;
 
 /**
- * <p>PicketBox default implementation for the PicketLink {@link IdentityManager} interface.</p>
+ * <p>
+ * PicketBox default implementation for the PicketLink {@link IdentityManager} interface.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
@@ -162,7 +164,7 @@ public class PicketBoxIdentityManager implements IdentityManager {
     public void updateCredential(Agent agent, Object value) {
         this.delegate.updateCredential(agent, value);
     }
-    
+
     @Override
     public void updateCredential(Agent agent, Object value, Date effectiveDate, Date expiryDate) {
         this.delegate.updateCredential(agent, value, effectiveDate, expiryDate);

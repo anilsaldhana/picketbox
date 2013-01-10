@@ -79,9 +79,12 @@ public class TimeBasedOTPUnitTestCase {
             while (this.steps.length() < 16)
                 this.steps = "0" + this.steps;
 
-            assertEquals(this.totp[++totpIndex], TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA1"));
-            assertEquals(this.totp[++totpIndex], TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA256"));
-            assertEquals(this.totp[++totpIndex], TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA512"));
+            assertEquals(this.totp[++totpIndex],
+                    TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA1"));
+            assertEquals(this.totp[++totpIndex],
+                    TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA256"));
+            assertEquals(this.totp[++totpIndex],
+                    TimeBasedOTP.generateTOTP(this.seed, this.steps, this.NUMBER_OF_DIGITS, "HmacSHA512"));
         }
     }
 

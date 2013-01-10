@@ -39,9 +39,9 @@ public class MockEventHandler {
 
     private boolean successfulAuthentication;
     private boolean authenticationFailed;
-    
+
     private boolean loggedOut;
-    
+
     public static final String PRE_AUTH_CONTEXT_DATA = "PRE_AUTH_CONTEXT_DATA";
 
     private boolean preAuthenticationInvoked;
@@ -59,7 +59,7 @@ public class MockEventHandler {
     public boolean wasPreAuthenticationInvoked() {
         return this.preAuthenticationInvoked;
     }
-    
+
     @EventObserver
     public void onLogout(UserLoggedOutEvent userLogOutEvent) {
         this.loggedOut = true;
@@ -68,7 +68,7 @@ public class MockEventHandler {
     public boolean wasLoggedOut() {
         return this.loggedOut;
     }
-    
+
     @EventObserver
     public void onSuccessful(UserAuthenticatedEvent userAuthenticatedEvent) {
         this.successfulAuthentication = true;

@@ -35,8 +35,8 @@ public class GlobalIdentityManagerConfiguration {
     private UserContextPopulator userPopulator;
     private IdentityManager identityManager;
 
-    public GlobalIdentityManagerConfiguration(IdentityManager identityManager, IdentityManagerConfiguration identityManagerConfiguration,
-            UserContextPopulator userPopulator) {
+    public GlobalIdentityManagerConfiguration(IdentityManager identityManager,
+            IdentityManagerConfiguration identityManagerConfiguration, UserContextPopulator userPopulator) {
         this.identityManager = identityManager;
         this.identityManagerConfiguration = identityManagerConfiguration;
         this.userPopulator = userPopulator;

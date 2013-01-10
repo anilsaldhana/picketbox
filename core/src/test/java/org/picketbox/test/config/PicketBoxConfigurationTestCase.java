@@ -70,11 +70,11 @@ public class PicketBoxConfigurationTestCase extends AbstractDefaultPicketBoxMana
 
         assertNotNull(subject);
         assertTrue(subject.isAuthenticated());
-        
+
         assertTrue(picketBoxManager.started());
         assertNotNull(picketBoxManager.getIdentityManager());
         assertNotNull(picketBoxManager.getEventManager());
-        
+
         assertNull(picketBoxManager.getSessionManager());
         assertNull(picketBoxManager.getAuditProvider());
     }

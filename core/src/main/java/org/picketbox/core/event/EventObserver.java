@@ -30,7 +30,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * <p>Indicates that a specific method should be used as an event handler.</p>
+ * <p>
+ * Indicates that a specific method should be used as an event handler.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

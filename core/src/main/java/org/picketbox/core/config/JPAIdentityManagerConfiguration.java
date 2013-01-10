@@ -34,7 +34,6 @@ import org.picketlink.idm.jpa.internal.JPAIdentityStoreConfiguration;
 import org.picketlink.idm.jpa.schema.IdentityObject;
 import org.picketlink.idm.jpa.schema.IdentityObjectAttribute;
 import org.picketlink.idm.jpa.schema.MembershipObject;
-import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -43,26 +42,33 @@ import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 public class JPAIdentityManagerConfiguration implements IdentityManagerConfiguration {
 
     private EntityManagerFactory entityManagerFactory;
-    private JPATemplate jpaTemplate;
 
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+    private EntityManager entityManager;
+
+    public JPAIdentityManagerConfiguration setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+        return this;
+    }
+
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+
+    public JPAIdentityManagerConfiguration setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+        return this;
     }
 
     public EntityManagerFactory getEntityManagerFactory() {
         return this.entityManagerFactory;
     }
 
-    public void setJpaTemplate(JPATemplate jpaTemplate) {
-        this.jpaTemplate = jpaTemplate;
-    }
-
-    public JPATemplate getJpaTemplate() {
-        return this.jpaTemplate;
-    }
-
     @Override
     public IdentityManager getIdentityManager() {
+        if (entityManager == null) {
+            entityManager = entityManagerFactory.createEntityManager();
+        }
+
         IdentityConfiguration config = new IdentityConfiguration();
 
         config.addStoreConfiguration(getConfiguration());
@@ -70,8 +76,8 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         IdentityManager identityManager = new DefaultIdentityManager();
         DefaultIdentityStoreInvocationContextFactory icf = new DefaultIdentityStoreInvocationContextFactory(null) {
             @Override
-            public EntityManager getEntityManager(){
-                return JPAIdentityManagerConfiguration.this.jpaTemplate.getEntityManager();
+            public EntityManager getEntityManager() {
+                return entityManager;
             }
         };
 
@@ -88,4 +94,5 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         configuration.setMembershipClass(MembershipObject.class);
 
         return configuration;
-    }}
+    }
+}

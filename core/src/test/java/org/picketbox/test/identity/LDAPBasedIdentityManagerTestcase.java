@@ -53,7 +53,8 @@ public class LDAPBasedIdentityManagerTestcase extends AbstractLDAPTest {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         builder.identityManager().ldapStore().url("ldap://localhost:10389/").bindDN("uid=jduke,ou=People,dc=jboss,dc=org")
-                .bindCredential("theduke").userDNSuffix("ou=People,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org").groupDNSuffix("ou=Groups,dc=jboss,dc=org");
+                .bindCredential("theduke").userDNSuffix("ou=People,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org")
+                .groupDNSuffix("ou=Groups,dc=jboss,dc=org");
 
         PicketBoxManager picketBoxManager = new DefaultPicketBoxManager(builder.build());
 

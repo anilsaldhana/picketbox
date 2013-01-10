@@ -40,7 +40,6 @@ import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
-import org.picketlink.idm.jpa.schema.internal.JPATemplate;
 
 /**
  * <p>
@@ -75,18 +74,17 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
-        
+
         this.picketBoxManager.logout(authenticatedUser);
-        
+
         authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "bad_passwd"));
-        
+
         // let's authenticate the user
         authenticatedUser = this.picketBoxManager.authenticate(authenticatingUser);
 
         assertNotNull(authenticatedUser);
         assertFalse(authenticatedUser.isAuthenticated());
     }
-
 
     @Before
     public void onSetup() throws Exception {
@@ -97,17 +95,18 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         entityManager.getTransaction().begin();
 
         JPAIdentityStoreContext.set(entityManager);
-        
+
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         // configure the JPA identity store
-        builder.identityManager().jpaStore().template(new JPATemplate() {
-            @Override
-            public EntityManager getEntityManager() {
-                return JPAIdentityStoreContext.get();
-            }
-        });
-        
+        /*
+         * builder.identityManager().jpaStore().template(new JPATemplate() {
+         *
+         * @Override public EntityManager getEntityManager() { return JPAIdentityStoreContext.get(); } });
+         */
+
+        builder.identityManager().jpaStore().setEntityManager(entityManager);
+
         this.picketBoxManager = createManager(builder);
 
         entityManager.flush();

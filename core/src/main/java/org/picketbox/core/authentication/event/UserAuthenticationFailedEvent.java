@@ -25,7 +25,9 @@ package org.picketbox.core.authentication.event;
 import org.picketbox.core.UserContext;
 
 /**
- *  <p>This class represents a event fired when the authentication fails.</p>
+ * <p>
+ * This class represents a event fired when the authentication fails.
+ * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */

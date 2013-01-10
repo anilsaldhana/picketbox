@@ -103,7 +103,6 @@ public class ConfigurationBuilder extends AbstractConfigurationBuilder<PicketBox
         return this.audit;
     }
 
-
     /*
      * (non-Javadoc)
      *

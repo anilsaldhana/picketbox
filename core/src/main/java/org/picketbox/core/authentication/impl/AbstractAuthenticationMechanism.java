@@ -86,7 +86,9 @@ public abstract class AbstractAuthenticationMechanism implements AuthenticationM
     }
 
     /**
-     * <p>Sub-classes should override this method to implement how the authentication is actually done.</p>
+     * <p>
+     * Sub-classes should override this method to implement how the authentication is actually done.
+     * </p>
      *
      * @param credential
      * @param result
