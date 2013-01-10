@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.picketbox.core.DefaultPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
@@ -96,10 +98,15 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         adminUser.setEmail("admin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
-
-        identityManager.updateCredential(adminUser, new Password("admin".toCharArray()));
+        
+        //Get 30 years
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 100);
+ 
+        identityManager.updateCredential(adminUser, new Password("admin".toCharArray()), new Date(), calendar.getTime());
         identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
-
+        
+        
         Role roleDeveloper = new SimpleRole("developer");
 
         identityManager.add(roleDeveloper);

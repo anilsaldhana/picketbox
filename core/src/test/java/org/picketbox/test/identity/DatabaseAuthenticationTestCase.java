@@ -89,9 +89,9 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
     @Before
     public void onSetup() throws Exception {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("picketbox-testing-pu");
-
+        
         EntityManager entityManager = this.entityManagerFactory.createEntityManager();
-
+        
         entityManager.getTransaction().begin();
 
         JPAIdentityStoreContext.set(entityManager);
