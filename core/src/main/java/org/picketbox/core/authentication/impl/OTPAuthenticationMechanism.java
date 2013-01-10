@@ -107,7 +107,7 @@ public class OTPAuthenticationMechanism extends AbstractAuthenticationMechanism 
                 } else {
                     validation = false;
                     authenticationFailed(result);
-                    result.addMessage("User does not have a seed. OTP tokens could not me derived.");
+                    result.addMessage("User does not have a seed. OTP tokens could not be derived.");
                 }
             }
 

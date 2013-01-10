@@ -27,6 +27,9 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import java.security.GeneralSecurityException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.junit.Assert;
@@ -37,6 +40,8 @@ import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.credential.OTPCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
+import org.picketbox.core.util.TimeBasedOTPUtil;
+import org.picketbox.core.util.TimeBasedOTPUtil.TimeTracker;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Attribute;
@@ -47,6 +52,7 @@ import org.picketlink.idm.model.User;
  * Tests the different ways to authenticate users using a {@link UserCredential} instance..
  * </p>
  *
+ * @author Anil Saldhana
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
@@ -86,7 +92,18 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         picketBoxManager.logout(authenticatedUser);
 
-        Thread.sleep(25000);
+        //Thread.sleep(25000);
+
+        //Sleep for 25 seconds
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        final Calendar future = Calendar.getInstance(utc);
+        future.setTime(new Date());
+        future.add(Calendar.SECOND, 25);
+        TimeBasedOTPUtil.setTimeTracker(new TimeTracker(){
+            @Override
+            public Calendar getCalendar() {
+                return future;
+            }});
 
         authenticatingUser.setCredential(new OTPCredential(userName, userName, token));
 
@@ -96,6 +113,8 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
+        
+        TimeBasedOTPUtil.setTimeTracker(null);
     }
 
     /**
@@ -126,14 +145,30 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         picketBoxManager.logout(authenticatedUser);
 
-        Thread.sleep(60000);
-
+        authenticatedUser = null;
+        
+        //Thread.sleep(60000); 
+        
         authenticatingUser.setCredential(new OTPCredential("admin", "admin", firstOTP));
+        
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        Date date = new Date();
+        final Calendar future = Calendar.getInstance(utc);
+        future.setTime(date);
+        future.add(Calendar.HOUR, 1);
+        TimeBasedOTPUtil.setTimeTracker(new TimeTracker(){
+            @Override
+            public Calendar getCalendar() {
+                return future;
+            }
+        });
 
         authenticatedUser = picketBoxManager.authenticate(authenticatingUser);
 
         assertNotNull(authenticatedUser);
         assertFalse(authenticatedUser.isAuthenticated());
+        
+        TimeBasedOTPUtil.setTimeTracker(null);
     }
 
     /**

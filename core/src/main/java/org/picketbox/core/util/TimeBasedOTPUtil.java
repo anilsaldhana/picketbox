@@ -34,6 +34,30 @@ import java.util.TimeZone;
 public class TimeBasedOTPUtil {
     private static long TIME_INTERVAL = 30 * 1000; // 30 secs
 
+    private static TimeTracker timeTracker = null;
+
+    public static Calendar getCalendar() {
+        if (timeTracker == null) {
+            timeTracker = new TimeTracker() {
+                @Override
+                public Calendar getCalendar() {
+                    TimeZone utc = TimeZone.getTimeZone("UTC");
+                    return Calendar.getInstance(utc);
+                }
+            };
+        }
+        return timeTracker.getCalendar();
+    }
+
+    /**
+     * Allow integrating applications to set the {@link Calendar} if desired. By default, Calendar for timezone UTC is used
+     *
+     * @param tt
+     */
+    public static void setTimeTracker(TimeTracker tt) {
+        timeTracker = tt;
+    }
+
     /**
      * Validate a submitted OTP string
      *
@@ -43,15 +67,14 @@ public class TimeBasedOTPUtil {
      * @throws GeneralSecurityException
      */
     public static boolean validate(String submittedOTP, byte[] secret, int numDigits) throws GeneralSecurityException {
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        Calendar currentDateTime = Calendar.getInstance(utc);
+        Calendar currentDateTime = getCalendar();
 
         String generatedTOTP = TimeBasedOTP.generateTOTP(new String(secret), numDigits);
         boolean result = generatedTOTP.equals(submittedOTP);
 
-        long timeInMilis = currentDateTime.getTimeInMillis();
-
         if (!result) {
+            // Step back time interval
+            long timeInMilis = currentDateTime.getTimeInMillis();
             timeInMilis -= TIME_INTERVAL;
 
             String steps = "0";
@@ -67,6 +90,8 @@ public class TimeBasedOTPUtil {
         }
 
         if (!result) {
+            // Step ahead time interval
+            long timeInMilis = currentDateTime.getTimeInMillis();
             timeInMilis += TIME_INTERVAL;
 
             String steps = "0";
@@ -93,8 +118,7 @@ public class TimeBasedOTPUtil {
      * @throws GeneralSecurityException
      */
     public static boolean validate256(String submittedOTP, byte[] secret, int numDigits) throws GeneralSecurityException {
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        Calendar currentDateTime = Calendar.getInstance(utc);
+        Calendar currentDateTime = getCalendar();
 
         String generatedTOTP = TimeBasedOTP.generateTOTP256(new String(secret), numDigits);
         boolean result = generatedTOTP.equals(submittedOTP);
@@ -129,8 +153,7 @@ public class TimeBasedOTPUtil {
      * @throws GeneralSecurityException
      */
     public static boolean validate512(String submittedOTP, byte[] secret, int numDigits) throws GeneralSecurityException {
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        Calendar currentDateTime = Calendar.getInstance(utc);
+        Calendar currentDateTime = getCalendar();
 
         String generatedTOTP = TimeBasedOTP.generateTOTP512(new String(secret), numDigits);
         boolean result = generatedTOTP.equals(submittedOTP);
@@ -154,5 +177,14 @@ public class TimeBasedOTPUtil {
         }
 
         return result;
+    }
+
+    /**
+     * Allow integrating applications to set the {@link Calendar} if desired. By default, Calendar for timezone UTC is used
+     *
+     * @param tt
+     */
+    public interface TimeTracker {
+        Calendar getCalendar();
     }
 }

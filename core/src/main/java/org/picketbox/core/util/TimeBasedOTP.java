@@ -26,7 +26,6 @@ import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -59,8 +58,7 @@ public class TimeBasedOTP {
      * @throws GeneralSecurityException
      */
     public static String generateTOTP(String key, int returnDigits) throws GeneralSecurityException {
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        Calendar currentDateTime = Calendar.getInstance(utc);
+        Calendar currentDateTime = TimeBasedOTPUtil.getCalendar();
         long timeInMilis = currentDateTime.getTimeInMillis();
 
         String steps = "0";
@@ -82,8 +80,7 @@ public class TimeBasedOTP {
      * @throws GeneralSecurityException
      */
     public static String generateTOTP256(String key, int returnDigits) throws GeneralSecurityException {
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        Calendar currentDateTime = Calendar.getInstance(utc);
+        Calendar currentDateTime = TimeBasedOTPUtil.getCalendar();
         long timeInMilis = currentDateTime.getTimeInMillis();
 
         String steps = "0";
@@ -105,8 +102,7 @@ public class TimeBasedOTP {
      * @throws GeneralSecurityException
      */
     public static String generateTOTP512(String key, int returnDigits) throws GeneralSecurityException {
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        Calendar currentDateTime = Calendar.getInstance(utc);
+        Calendar currentDateTime = TimeBasedOTPUtil.getCalendar();
         long timeInMilis = currentDateTime.getTimeInMillis();
 
         String steps = "0";
