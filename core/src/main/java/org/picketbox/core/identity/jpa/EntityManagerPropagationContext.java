@@ -20,36 +20,27 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.identity.jpa;
 
-import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
+import javax.persistence.EntityManager;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class JPAIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<JPAIdentityManagerConfiguration> {
+public final class EntityManagerPropagationContext {
 
-    private JPAIdentityManagerConfiguration configuration = new JPAIdentityManagerConfiguration();
+    public static final ThreadLocal<EntityManager> entityManagerStore = new ThreadLocal<EntityManager>();
 
-    public JPAIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
-        super(identityManagerConfigurationBuilder);
+    public static void set(EntityManager entityManager) {
+        entityManagerStore.set(entityManager);
     }
 
-    public JPAIdentityManagerConfigurationBuilder entityManagerLookupStrategy(EntityManagerLookupStrategy strategy) {
-        this.configuration.setEntityManagerLookupStrategy(strategy);
-        return this;
+    public static void clear() {
+        entityManagerStore.remove();
     }
 
-    @Override
-    protected void setDefaults() {
-        if (this.configuration.getEntityManagerLookupStrategy() == null) {
-            this.configuration.setEntityManagerLookupStrategy(new EntityManagerLookupStrategy());
-        }
-    }
-
-    @Override
-    protected JPAIdentityManagerConfiguration doBuild() {
-        return this.configuration;
+    public static EntityManager get() {
+        return entityManagerStore.get();
     }
 }

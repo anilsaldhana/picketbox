@@ -32,6 +32,7 @@ import org.picketbox.core.exceptions.AuthorizationException;
 import org.picketbox.core.exceptions.ConfigurationException;
 import org.picketbox.core.exceptions.PicketBoxSessionException;
 import org.picketbox.core.exceptions.ProcessingException;
+import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
 
 /**
  * An instance of {@link MessageBundle} from JBoss Logging
@@ -181,4 +182,7 @@ public interface PicketBoxMessages {
 
     @Message(id = 54, value = "Unsupported credential type [%s].")
     AuthenticationException unsupportedCredentialType(UserCredential credential);
+
+    @Message(id = 55, value = "Could not locate current EntityManager using EntityManagerLookupStrategy implementation [%s].")
+    IllegalStateException failedToLookupEntityManager(EntityManagerLookupStrategy strategy);
 }

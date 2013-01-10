@@ -23,8 +23,8 @@
 package org.picketbox.core.config;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
+import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.config.IdentityConfiguration;
 import org.picketlink.idm.config.IdentityStoreConfiguration;
@@ -43,43 +43,20 @@ import org.picketlink.idm.jpa.schema.MembershipObject;
  */
 public class JPAIdentityManagerConfiguration implements IdentityManagerConfiguration {
 
-    private EntityManagerFactory entityManagerFactory;
-
-    private EntityManager entityManager;
-
-    public JPAIdentityManagerConfiguration setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-        return this;
-    }
-
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    public JPAIdentityManagerConfiguration setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-        return this;
-    }
-
-    public EntityManagerFactory getEntityManagerFactory() {
-        return this.entityManagerFactory;
-    }
+    private EntityManagerLookupStrategy entityManagerLookupStrategy;
 
     @Override
     public IdentityManager getIdentityManager() {
-        if (entityManager == null) {
-            entityManager = entityManagerFactory.createEntityManager();
-        }
-
         IdentityConfiguration config = new IdentityConfiguration();
 
         config.addStoreConfiguration(getConfiguration());
 
         IdentityManager identityManager = new DefaultIdentityManager();
+
         DefaultIdentityStoreInvocationContextFactory icf = new DefaultIdentityStoreInvocationContextFactory(null) {
             @Override
             public EntityManager getEntityManager() {
-                return entityManager;
+                return JPAIdentityManagerConfiguration.this.entityManagerLookupStrategy.getEntityManager();
             }
         };
 
@@ -98,5 +75,13 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         configuration.setCredentialAttributeClass(CredentialObjectAttribute.class);
 
         return configuration;
+    }
+
+    public void setEntityManagerLookupStrategy(EntityManagerLookupStrategy strategy) {
+        this.entityManagerLookupStrategy = strategy;
+    }
+
+    public EntityManagerLookupStrategy getEntityManagerLookupStrategy() {
+        return this.entityManagerLookupStrategy;
     }
 }

@@ -38,16 +38,16 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketbox.core.identity.impl.JPAIdentityStoreContext;
+import org.picketbox.core.identity.jpa.EntityManagerPropagationContext;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
  * <p>
  * Tests the authenticaiton using a JPA-based Identity Store.
  * </p>
- *
+ * 
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- *
+ * 
  */
 public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
@@ -58,7 +58,7 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
      * <p>
      * Tests if the authentication performs successfully when provided a valid {@link UsernamePasswordCredential}.
      * </p>
-     *
+     * 
      * @throws AuthenticationException
      */
     @Test
@@ -89,23 +89,17 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
     @Before
     public void onSetup() throws Exception {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("picketbox-testing-pu");
-        
+
         EntityManager entityManager = this.entityManagerFactory.createEntityManager();
-        
+
         entityManager.getTransaction().begin();
 
-        JPAIdentityStoreContext.set(entityManager);
+        EntityManagerPropagationContext.set(entityManager);
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         // configure the JPA identity store
-        /*
-         * builder.identityManager().jpaStore().template(new JPATemplate() {
-         *
-         * @Override public EntityManager getEntityManager() { return JPAIdentityStoreContext.get(); } });
-         */
-
-        builder.identityManager().jpaStore().setEntityManager(entityManager);
+        builder.identityManager().jpaStore();
 
         this.picketBoxManager = createManager(builder);
 
@@ -114,13 +108,13 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
 
     @After
     public void onFinish() throws Exception {
-        EntityManager entityManager = JPAIdentityStoreContext.get();
+        EntityManager entityManager = EntityManagerPropagationContext.get();
 
         entityManager.flush();
         entityManager.getTransaction().commit();
         entityManager.close();
 
-        JPAIdentityStoreContext.clear();
+        EntityManagerPropagationContext.clear();
         this.entityManagerFactory.close();
     }
 
