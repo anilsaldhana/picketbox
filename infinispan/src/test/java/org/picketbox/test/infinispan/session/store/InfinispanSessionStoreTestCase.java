@@ -44,7 +44,7 @@ import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionId;
 import org.picketbox.infinispan.session.store.InfinispanSessionStore;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.SimpleUser;
 
 /**
@@ -245,7 +245,7 @@ public class InfinispanSessionStoreTestCase {
         
         identityManager.add(user);
         
-        identityManager.updateCredential(user, new PlainTextPassword("admin".toCharArray()));
+        identityManager.updateCredential(user, new Password("admin".toCharArray()));
         
         return picketBoxManager;
     }

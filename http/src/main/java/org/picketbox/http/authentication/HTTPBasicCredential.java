@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.picketbox.core.AbstractUserCredential;
 import org.picketbox.core.util.Base64;
 import org.picketbox.http.PicketBoxConstants;
-import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.credential.UsernamePasswordCredentials;
 
 /**
@@ -62,7 +62,7 @@ public class HTTPBasicCredential extends AbstractUserCredential implements HttpS
                         String password = authorizationHeader.substring(indexOfColon + 1);
 
                         setUserName(username);
-                        setCredential(new UsernamePasswordCredentials(username, new PlainTextPassword(password.toCharArray())));
+                        setCredential(new UsernamePasswordCredentials(username, new Password(password.toCharArray())));
                     }
                 }
             }

@@ -28,7 +28,7 @@ import java.security.cert.X509Certificate;
 
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.config.IdentityConfiguration;
-import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.credential.X509Cert;
 import org.picketlink.idm.file.internal.FileIdentityStoreConfiguration;
 import org.picketlink.idm.internal.DefaultIdentityManager;
@@ -92,9 +92,9 @@ public class IdentityManagerInitializer {
         adminUser.setFirstName("The");
         adminUser.setLastName("Aladdin");
 
-        PlainTextPassword password = new PlainTextPassword("Open Sesame".toCharArray());
+        Password password = new Password("Open Sesame".toCharArray());
         
-        password.setEncodePassword(encodePassword);
+        //password.setEncodePassword(encodePassword);
         
         identityManager.updateCredential(adminUser, password);
 

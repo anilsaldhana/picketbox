@@ -37,7 +37,7 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.credential.X509Cert;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
@@ -97,7 +97,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
 
-        identityManager.updateCredential(adminUser, new PlainTextPassword("admin".toCharArray()));
+        identityManager.updateCredential(adminUser, new Password("admin".toCharArray()), null, null);
         identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
 
         Role roleDeveloper = new SimpleRole("developer");

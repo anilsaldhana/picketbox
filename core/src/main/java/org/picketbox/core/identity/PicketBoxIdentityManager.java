@@ -22,6 +22,8 @@
 
 package org.picketbox.core.identity;
 
+import java.util.Date;
+
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.config.IdentityConfiguration;
 import org.picketlink.idm.credential.Credentials;
@@ -44,6 +46,7 @@ import org.picketlink.idm.spi.StoreFactory;
  */
 public class PicketBoxIdentityManager implements IdentityManager {
 
+    private static final long serialVersionUID = 8582047228661746675L;
     private IdentityManager delegate;
 
     public PicketBoxIdentityManager(IdentityManager identityManager) {
@@ -158,6 +161,11 @@ public class PicketBoxIdentityManager implements IdentityManager {
     @Override
     public void updateCredential(Agent agent, Object value) {
         this.delegate.updateCredential(agent, value);
+    }
+    
+    @Override
+    public void updateCredential(Agent agent, Object value, Date effectiveDate, Date expiryDate) {
+        this.delegate.updateCredential(agent, value, effectiveDate, expiryDate);
     }
 
     @Override
