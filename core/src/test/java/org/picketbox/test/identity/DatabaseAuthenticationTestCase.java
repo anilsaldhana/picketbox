@@ -53,6 +53,7 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
 
     private EntityManagerFactory entityManagerFactory;
     private PicketBoxManager picketBoxManager;
+    private EntityManager entityManager;
 
     /**
      * <p>
@@ -95,6 +96,10 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         entityManager.getTransaction().begin();
 
         EntityManagerPropagationContext.set(entityManager);
+
+        entityManager = this.entityManagerFactory.createEntityManager();
+        
+        entityManager.getTransaction().begin();
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
