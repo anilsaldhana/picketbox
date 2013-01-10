@@ -32,6 +32,7 @@ import org.picketlink.idm.internal.DefaultIdentityManager;
 import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
 import org.picketlink.idm.jpa.internal.JPAIdentityStoreConfiguration;
 import org.picketlink.idm.jpa.schema.CredentialObject;
+import org.picketlink.idm.jpa.schema.CredentialObjectAttribute;
 import org.picketlink.idm.jpa.schema.IdentityObject;
 import org.picketlink.idm.jpa.schema.IdentityObjectAttribute;
 import org.picketlink.idm.jpa.schema.MembershipObject;
@@ -94,6 +95,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         configuration.setAttributeClass(IdentityObjectAttribute.class);
         configuration.setMembershipClass(MembershipObject.class);
         configuration.setCredentialClass(CredentialObject.class);
+        configuration.setCredentialAttributeClass(CredentialObjectAttribute.class);
 
         return configuration;
     }

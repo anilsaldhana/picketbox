@@ -106,7 +106,6 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         identityManager.updateCredential(adminUser, new Password("admin".toCharArray()), new Date(), calendar.getTime());
         identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
         
-        
         Role roleDeveloper = new SimpleRole("developer");
 
         identityManager.add(roleDeveloper);
