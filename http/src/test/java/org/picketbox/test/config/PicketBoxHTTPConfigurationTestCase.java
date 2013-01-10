@@ -35,8 +35,8 @@ import org.junit.Test;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.identity.UserContextPopulator;
-import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.HTTPUserContext;
+import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.authorization.resource.WebResource;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
@@ -82,6 +82,8 @@ public class PicketBoxHTTPConfigurationTestCase {
         this.picketBoxManager = new PicketBoxHTTPManager(build);
 
         this.picketBoxManager.start();
+        
+        IdentityManagerInitializer.initializeIdentityStore(this.picketBoxManager.getIdentityManager(), false);
     }
 
     @Test
