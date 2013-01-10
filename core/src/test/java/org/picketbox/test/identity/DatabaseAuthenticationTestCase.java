@@ -53,7 +53,6 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
 
     private EntityManagerFactory entityManagerFactory;
     private PicketBoxManager picketBoxManager;
-    private EntityManager entityManager;
 
     /**
      * <p>
