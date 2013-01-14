@@ -104,6 +104,10 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
                 UserContext restoredUserContext = userSession.getUserContext();
                 Principal restoredPrincipal = restoredUserContext.getPrincipal(false);
 
+                if (restoredPrincipal == null) {
+                    throw new AuthenticationException("Principal not retrieved");
+                }
+
                 LOGGER.tracef("performing silent authentication and re-authenticating principal %s",
                         restoredPrincipal.getName());
 
