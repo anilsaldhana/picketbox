@@ -96,10 +96,6 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
 
         EntityManagerPropagationContext.set(entityManager);
 
-        entityManager = this.entityManagerFactory.createEntityManager();
-        
-        entityManager.getTransaction().begin();
-
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         // configure the JPA identity store
