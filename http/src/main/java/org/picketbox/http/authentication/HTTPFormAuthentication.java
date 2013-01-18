@@ -72,7 +72,7 @@ public class HTTPFormAuthentication extends AbstractHTTPAuthentication {
             getIdentityManager().validateCredentials(passwordCredential);
 
             if (user != null && passwordCredential.getStatus().equals(Status.VALID)) {
-                return new PicketBoxPrincipal(user.getId());
+                return new PicketBoxPrincipal(formCredential.getUserName());
             }
         }
 

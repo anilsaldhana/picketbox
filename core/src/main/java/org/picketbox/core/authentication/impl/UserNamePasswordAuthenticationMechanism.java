@@ -70,7 +70,7 @@ public class UserNamePasswordAuthenticationMechanism extends AbstractAuthenticat
         getIdentityManager().validateCredentials(passwordCredential);
 
         if (user != null && passwordCredential.getStatus().equals(Status.VALID)) {
-            return new PicketBoxPrincipal(user.getId());
+            return new PicketBoxPrincipal(userCredential.getUserName());
         }
 
         return null;

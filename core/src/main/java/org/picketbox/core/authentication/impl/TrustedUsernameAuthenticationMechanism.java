@@ -26,8 +26,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.picketbox.core.UserCredential;
 import org.picketbox.core.PicketBoxPrincipal;
+import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationResult;
@@ -62,7 +62,7 @@ public class TrustedUsernameAuthenticationMechanism extends AbstractAuthenticati
         User user = getIdentityManager().getUser(credential.getUserName());
 
         if (user != null) {
-            return new PicketBoxPrincipal(user.getId());
+            return new PicketBoxPrincipal(credential.getUserName());
         }
 
         return null;

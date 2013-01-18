@@ -22,6 +22,7 @@
 
 package org.picketbox.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -154,7 +155,8 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
     protected void assertGroups(UserContext authenticatedUser) {
         assertFalse(authenticatedUser.getGroups().isEmpty());
-        assertTrue(authenticatedUser.getGroups().containsAll(Arrays.asList(new Group[] { new SimpleGroup("PicketBox Group") })));
+        assertEquals(1, authenticatedUser.getGroups().size());
+        assertEquals("PicketBox Group", authenticatedUser.getGroups().iterator().next().getName());
     }
 
     protected X509Certificate getTestingCertificate() {
