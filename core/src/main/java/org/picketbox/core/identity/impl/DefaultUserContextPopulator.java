@@ -75,7 +75,7 @@ public class DefaultUserContextPopulator implements UserContextPopulator {
     }
 
     private List<Group> getGroups(User storedUser) {
-        IdentityQuery<Group> groupQuery = getIdentityManager().createQuery(Group.class);
+        IdentityQuery<Group> groupQuery = getIdentityManager().createIdentityQuery(Group.class);
 
         groupQuery.setParameter(Role.HAS_MEMBER, storedUser);
 
@@ -83,7 +83,7 @@ public class DefaultUserContextPopulator implements UserContextPopulator {
     }
 
     private List<Role> getRoles(User userFromIDM) {
-        IdentityQuery<Role> query = getIdentityManager().createQuery(Role.class);
+        IdentityQuery<Role> query = getIdentityManager().createIdentityQuery(Role.class);
 
         query.setParameter(Role.ROLE_OF, userFromIDM);
 

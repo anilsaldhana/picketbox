@@ -31,10 +31,12 @@ import org.picketlink.idm.model.Agent;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.model.Realm;
+import org.picketlink.idm.model.Relationship;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.Tier;
 import org.picketlink.idm.model.User;
 import org.picketlink.idm.query.IdentityQuery;
+import org.picketlink.idm.query.RelationshipQuery;
 import org.picketlink.idm.spi.IdentityStoreInvocationContextFactory;
 import org.picketlink.idm.spi.StoreFactory;
 
@@ -151,8 +153,8 @@ public class PicketBoxIdentityManager implements IdentityManager {
     }
 
     @Override
-    public <T extends IdentityType> IdentityQuery<T> createQuery(Class<T> identityType) {
-        return this.delegate.createQuery(identityType);
+    public <T extends IdentityType> IdentityQuery<T> createIdentityQuery(Class<T> identityType) {
+        return this.delegate.createIdentityQuery(identityType);
     }
 
     @Override
@@ -170,10 +172,10 @@ public class PicketBoxIdentityManager implements IdentityManager {
         this.delegate.updateCredential(agent, value, effectiveDate, expiryDate);
     }
 
-    @Override
+    /*@Override
     public IdentityType lookupIdentityByKey(String key) {
         return this.delegate.lookupIdentityByKey(key);
-    }
+    }*/
 
     @Override
     public void loadAttribute(IdentityType identityType, String attributeName) {
@@ -218,5 +220,30 @@ public class PicketBoxIdentityManager implements IdentityManager {
     @Override
     public IdentityManager forTier(Tier tier) {
         return this.delegate.forTier(tier);
+    }
+
+    @Override
+    public void add(Relationship value) {
+        delegate.add(value);
+    }
+
+    @Override
+    public void update(Relationship value) {
+        delegate.update(value);
+    }
+
+    @Override
+    public void remove(Relationship value) {
+        delegate.remove(value);
+    }
+
+    @Override
+    public <T extends IdentityType> T lookupIdentityById(Class<T> identityType, String value) {
+        return delegate.lookupIdentityById(identityType, value);
+    }
+
+    @Override
+    public <T extends Relationship> RelationshipQuery<T> createRelationshipQuery(Class<T> relationshipType) {
+        return delegate.createRelationshipQuery(relationshipType);
     }
 }

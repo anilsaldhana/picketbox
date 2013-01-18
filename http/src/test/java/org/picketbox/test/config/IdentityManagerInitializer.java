@@ -50,7 +50,7 @@ public class IdentityManagerInitializer {
 
         FileIdentityStoreConfiguration fileConfig = new FileIdentityStoreConfiguration();
         
-        fileConfig.setAlwaysCreateFiles(false);
+        //fileConfig.setAlwaysCreateFiles(false);
         
         config.addStoreConfiguration(fileConfig);
 

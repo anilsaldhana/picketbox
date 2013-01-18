@@ -35,7 +35,6 @@ import org.picketlink.idm.jpa.schema.CredentialObject;
 import org.picketlink.idm.jpa.schema.CredentialObjectAttribute;
 import org.picketlink.idm.jpa.schema.IdentityObject;
 import org.picketlink.idm.jpa.schema.IdentityObjectAttribute;
-import org.picketlink.idm.jpa.schema.MembershipObject;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -70,7 +69,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
 
         configuration.setIdentityClass(IdentityObject.class);
         configuration.setAttributeClass(IdentityObjectAttribute.class);
-        configuration.setMembershipClass(MembershipObject.class);
+        //configuration.setMembershipClass(MembershipObject.class);
         configuration.setCredentialClass(CredentialObject.class);
         configuration.setCredentialAttributeClass(CredentialObjectAttribute.class);
 
