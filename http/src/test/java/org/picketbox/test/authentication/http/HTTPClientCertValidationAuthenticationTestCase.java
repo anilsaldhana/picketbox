@@ -37,7 +37,7 @@ import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPClientCertAuthentication;
-import org.picketbox.http.authentication.HTTPClientCertCredential;
+import org.picketbox.http.authentication.credential.HTTPClientCertCredential;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;

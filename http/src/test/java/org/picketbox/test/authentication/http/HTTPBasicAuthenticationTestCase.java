@@ -37,9 +37,8 @@ import org.picketbox.core.util.Base64;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
-import org.picketbox.http.authentication.HTTPBasicCredential;
+import org.picketbox.http.authentication.credential.HTTPBasicCredential;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
-import org.picketbox.test.config.IdentityManagerInitializer;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
 
@@ -63,8 +62,6 @@ public class HTTPBasicAuthenticationTestCase extends AbstractAuthenticationTest 
 
     @Test
     public void testHttpBasic() throws Exception {
-        IdentityManagerInitializer.initializeIdentityStore(this.picketBoxManager.getIdentityManager(), true);
-        
         TestServletRequest req = new TestServletRequest(new InputStream() {
             @Override
             public int read() throws IOException {

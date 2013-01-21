@@ -38,6 +38,7 @@ import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.authentication.credential.HttpServletCredential;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 
 /**
@@ -50,10 +51,12 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
 
     private RequestCache requestCache = new RequestCache();
 
+    public static final String DEFAULT_REALM = "PicketBox Realm";
+
     /**
      * Injectable realm name
      */
-    protected String realmName = "PicketBox Realm";
+    protected String realmName = DEFAULT_REALM;
 
     private static final String DEFAULT_PAGE_URL = "/";
 

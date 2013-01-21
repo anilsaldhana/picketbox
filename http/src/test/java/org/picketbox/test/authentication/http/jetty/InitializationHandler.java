@@ -20,19 +20,19 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.config;
+package org.picketbox.test.authentication.http.jetty;
 
 import java.io.InputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import org.picketbox.core.InitializedEvent;
+import org.picketbox.core.event.EventObserver;
+import org.picketbox.http.authentication.AbstractHTTPAuthentication;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.config.IdentityConfiguration;
-import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.credential.X509Cert;
-import org.picketlink.idm.file.internal.FileIdentityStoreConfiguration;
-import org.picketlink.idm.internal.DefaultIdentityManager;
-import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
+import org.picketlink.idm.credential.internal.Digest;
+import org.picketlink.idm.credential.internal.Password;
+import org.picketlink.idm.credential.internal.X509Cert;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.SimpleGroup;
@@ -40,28 +40,15 @@ import org.picketlink.idm.model.SimpleRole;
 import org.picketlink.idm.model.SimpleUser;
 
 /**
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ * @author Pedro Silva
  *
  */
-public class IdentityManagerInitializer {
-    
-    public static IdentityManager createIdentityManager() {
-        IdentityConfiguration config = new IdentityConfiguration();
+public class InitializationHandler {
 
-        FileIdentityStoreConfiguration fileConfig = new FileIdentityStoreConfiguration();
+    @EventObserver
+    public void onInitialized(InitializedEvent event) {
+        IdentityManager identityManager = event.getPicketBoxManager().getIdentityManager();
         
-        //fileConfig.setAlwaysCreateFiles(false);
-        
-        config.addStoreConfiguration(fileConfig);
-
-        IdentityManager identityManager = new DefaultIdentityManager();
-
-        identityManager.bootstrap(config, new DefaultIdentityStoreInvocationContextFactory());
-
-        return identityManager;
-    }
-    
-    public static void initializeIdentityStore(IdentityManager identityManager, boolean encodePassword) {
         SimpleUser jbidTestUser = new SimpleUser("jbid test");
 
         identityManager.add(jbidTestUser);
@@ -70,7 +57,7 @@ public class IdentityManagerInitializer {
 
         identityManager.add(certUser);
 
-        InputStream bis = IdentityManagerInitializer.class.getClassLoader().getResourceAsStream("cert/servercert.txt");
+        InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/servercert.txt");
 
         CertificateFactory cf = null;
 
@@ -92,12 +79,28 @@ public class IdentityManagerInitializer {
         adminUser.setFirstName("The");
         adminUser.setLastName("Aladdin");
 
-        Password password = new Password("Open Sesame".toCharArray());
+        String plainTextPassword = "Open Sesame";
         
-        //password.setEncodePassword(encodePassword);
+        Password password = new Password(plainTextPassword.toCharArray());
         
         identityManager.updateCredential(adminUser, password);
+        
+        Digest digestPassword = new Digest();
 
+        digestPassword.setRealm(AbstractHTTPAuthentication.DEFAULT_REALM);
+        digestPassword.setUsername(adminUser.getLoginName());
+        digestPassword.setPassword(plainTextPassword);
+        
+        identityManager.updateCredential(adminUser, digestPassword);
+
+        Digest digest = new Digest();
+        
+        digest.setUsername(adminUser.getLoginName());
+        digest.setRealm("testrealm@host.com");
+        digest.setPassword(plainTextPassword);
+        
+        identityManager.updateCredential(adminUser, digest);
+        
         Role roleManager = new SimpleRole("manager");
         
         identityManager.add(roleManager);
@@ -115,5 +118,5 @@ public class IdentityManagerInitializer {
         
         identityManager.addToGroup(adminUser, groupCoreDeveloper);
     }
-
+    
 }

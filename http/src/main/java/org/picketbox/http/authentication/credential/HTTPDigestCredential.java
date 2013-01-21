@@ -20,36 +20,30 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.authentication;
-
+package org.picketbox.http.authentication.credential;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
 import org.picketbox.http.PicketBoxConstants;
-import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.credential.UsernamePasswordCredentials;
+import org.picketbox.http.util.HTTPDigestUtil;
+import org.picketlink.idm.credential.internal.Digest;
+import org.picketlink.idm.credential.internal.DigestCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPFormCredential extends AbstractUserCredential implements HttpServletCredential {
+public class HTTPDigestCredential extends AbstractUserCredential implements HttpServletCredential {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private String userName;
 
-    public HTTPFormCredential(HttpServletRequest request, HttpServletResponse response) {
+    public HTTPDigestCredential(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-
-        String userName = this.request.getParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME);
-
-        if (userName != null) {
-            setUserName(userName);
-            setCredential(new UsernamePasswordCredentials(userName, new Password(request.getParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD).toCharArray())));
-        }
     }
 
     /* (non-Javadoc)
@@ -68,4 +62,35 @@ public class HTTPFormCredential extends AbstractUserCredential implements HttpSe
         return this.response;
     }
 
+    @Override
+    public String getUserName() {
+        return this.userName;
+    }
+
+    @Override
+    public DigestCredentials getCredential() {
+        // Get the Authorization Header
+        String authorizationHeader = getRequest().getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
+
+        if (authorizationHeader != null && authorizationHeader.isEmpty() == false) {
+            if (authorizationHeader.startsWith(PicketBoxConstants.HTTP_DIGEST)) {
+                authorizationHeader = authorizationHeader.substring(7).trim();
+            }
+
+            String[] tokens = HTTPDigestUtil.quoteTokenize(authorizationHeader);
+
+            int len = tokens.length;
+            if (len == 0) {
+                return null;
+            }
+
+            Digest digest = HTTPDigestUtil.digest(tokens);
+
+            digest.setMethod(getRequest().getMethod());
+
+            return new DigestCredentials(digest);
+        }
+
+        return null;
+    }
 }

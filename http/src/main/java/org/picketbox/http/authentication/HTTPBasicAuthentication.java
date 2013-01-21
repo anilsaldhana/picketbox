@@ -32,6 +32,8 @@ import org.picketbox.core.PicketBoxPrincipal;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxConstants;
+import org.picketbox.http.authentication.credential.HTTPBasicCredential;
+import org.picketbox.http.authentication.credential.HttpServletCredential;
 import org.picketlink.idm.credential.Credentials;
 import org.picketlink.idm.credential.Credentials.Status;
 import org.picketlink.idm.model.User;

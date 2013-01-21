@@ -25,8 +25,8 @@ package org.picketbox.core.authentication.credential;
 import java.security.cert.X509Certificate;
 
 import org.picketbox.core.AbstractUserCredential;
-import org.picketlink.idm.credential.X509Cert;
-import org.picketlink.idm.credential.X509CertificateCredentials;
+import org.picketlink.idm.credential.internal.X509Cert;
+import org.picketlink.idm.credential.internal.X509CertificateCredentials;
 
 /**
  * <p>

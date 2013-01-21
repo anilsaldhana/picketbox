@@ -37,7 +37,7 @@ import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.core.util.TimeBasedOTPUtil;
 import org.picketlink.idm.credential.Credentials.Status;
-import org.picketlink.idm.credential.UsernamePasswordCredentials;
+import org.picketlink.idm.credential.internal.UsernamePasswordCredentials;
 import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.User;
 

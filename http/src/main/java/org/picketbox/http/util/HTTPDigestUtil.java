@@ -25,7 +25,7 @@ import java.security.MessageDigest;
 
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.exceptions.FormatException;
-import org.picketlink.idm.credential.Digest;
+import org.picketlink.idm.credential.internal.Digest;
 
 /**
  * Utility class to support HTTP Digest Authentication
@@ -128,8 +128,9 @@ public class HTTPDigestUtil {
         }
         // Construct a digest holder
         Digest digestHolder = new Digest();
+
         digestHolder.setUsername(username).setRealm(realm).setNonce(nonce).setUri(uri).setQop(qop).setNc(nc).setCnonce(cnonce)
-                .setClientResponse(clientResponse).setOpaque(opaque);
+                .setDigest(clientResponse).setOpaque(opaque);
 
         digestHolder.setStale(stale).setDomain(domain);
 
@@ -207,7 +208,7 @@ public class HTTPDigestUtil {
      * @throws FormatException
      */
     public static boolean matchCredential(Digest digest, char[] password) {
-        return clientResponseValue(digest, password).equalsIgnoreCase(digest.getClientResponse());
+        return clientResponseValue(digest, password).equalsIgnoreCase(digest.getDigest());
     }
 
     /**

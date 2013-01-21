@@ -41,9 +41,9 @@ public class HTTPDigestConfigurationProvider implements ConfigurationBuilderProv
     @Override
     public HTTPConfigurationBuilder getBuilder(ServletContext context) {
         HTTPConfigurationBuilder configurationBuilder = new HTTPConfigurationBuilder();
-
-        configurationBuilder.identityManager().fileStore().preserveState();
-
+        
+        configurationBuilder.eventManager().handler(new InitializationHandler());
+        
         return configurationBuilder;
     }
 

@@ -25,9 +25,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -38,16 +35,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
-import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
-import org.picketbox.core.PicketBoxManager;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
-import org.picketbox.test.config.IdentityManagerInitializer;
 import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
-import org.picketlink.idm.IdentityManager;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPBasicAuthentication}
@@ -102,11 +95,6 @@ public class DelegatingSecurityFilterHTTPBasicUnitTestCase extends EmbeddedWebSe
     public void testBasicAuth() throws Exception {
         URL url = new URL(this.urlStr);
 
-        PicketBoxManager picketBoxManager = (PicketBoxManager) this.webapp.getServletContext().getAttribute(PicketBoxConstants.PICKETBOX_MANAGER);
-        IdentityManager identityManager = picketBoxManager.getIdentityManager();
-        
-        IdentityManagerInitializer.initializeIdentityStore(identityManager, true);
-        
         DefaultHttpClient httpclient = null;
         
         try {

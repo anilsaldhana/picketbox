@@ -413,6 +413,8 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         if (this.authorizationManager != null) {
             this.authorizationManager.start();
         }
+
+        this.eventManager.raiseEvent(new InitializedEvent(this));
     }
 
     /**

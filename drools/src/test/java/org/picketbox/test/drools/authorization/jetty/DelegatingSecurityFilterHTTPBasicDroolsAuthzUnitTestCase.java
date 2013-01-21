@@ -38,15 +38,12 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
-import org.picketbox.core.PicketBoxManager;
 import org.picketbox.drools.authorization.PicketBoxDroolsAuthorizationManager;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.test.authentication.http.jetty.HTTPDigestConfigurationProvider;
-import org.picketbox.test.config.IdentityManagerInitializer;
 import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
-import org.picketlink.idm.IdentityManager;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPBasicAuthentication}
@@ -101,11 +98,6 @@ public class DelegatingSecurityFilterHTTPBasicDroolsAuthzUnitTestCase extends Em
 
     @Test
     public void testBasicAuth() throws Exception {
-        PicketBoxManager picketBoxManager = (PicketBoxManager) this.webapp.getServletContext().getAttribute(PicketBoxConstants.PICKETBOX_MANAGER);
-        IdentityManager identityManager = picketBoxManager.getIdentityManager();
-        
-        IdentityManagerInitializer.initializeIdentityStore(identityManager, true);
-        
         URL url = new URL(urlStr);
 
         DefaultHttpClient httpclient = null;

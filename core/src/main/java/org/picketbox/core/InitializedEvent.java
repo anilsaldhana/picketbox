@@ -20,25 +20,22 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.authentication.credential;
-
-import org.picketbox.core.AbstractUserCredential;
-import org.picketlink.idm.credential.internal.Password;
-import org.picketlink.idm.credential.internal.UsernamePasswordCredentials;
+package org.picketbox.core;
 
 /**
- * <p>
- * A simple credential for username/password authentication.
- * </p>
- *
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ * @author Pedro Silva
  *
  */
-public class UsernamePasswordCredential extends AbstractUserCredential {
+public class InitializedEvent {
 
-    public UsernamePasswordCredential(String userName, String password) {
-        super.setUserName(userName);
-        setCredential(new UsernamePasswordCredentials(userName, new Password(password.toCharArray())));
+    private PicketBoxManager picketBoxManager;
+
+    public InitializedEvent(PicketBoxManager picketBoxManager) {
+        this.picketBoxManager = picketBoxManager;
+    }
+
+    public PicketBoxManager getPicketBoxManager() {
+        return this.picketBoxManager;
     }
 
 }

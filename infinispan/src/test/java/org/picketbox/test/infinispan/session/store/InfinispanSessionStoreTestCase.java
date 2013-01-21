@@ -44,7 +44,7 @@ import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionId;
 import org.picketbox.infinispan.session.store.InfinispanSessionStore;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.Password;
+import org.picketlink.idm.credential.internal.Password;
 import org.picketlink.idm.model.SimpleUser;
 
 /**

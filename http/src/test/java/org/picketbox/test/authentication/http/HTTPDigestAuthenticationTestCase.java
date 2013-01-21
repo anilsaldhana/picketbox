@@ -37,12 +37,12 @@ import org.picketbox.core.util.Base64;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;
-import org.picketbox.http.authentication.HTTPDigestCredential;
+import org.picketbox.http.authentication.credential.HTTPDigestCredential;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.util.HTTPDigestUtil;
 import org.picketbox.test.http.TestServletRequest;
 import org.picketbox.test.http.TestServletResponse;
-import org.picketlink.idm.credential.Digest;
+import org.picketlink.idm.credential.internal.Digest;
 
 /**
  * Unit test the {@link HTTPDigestAuthentication} class

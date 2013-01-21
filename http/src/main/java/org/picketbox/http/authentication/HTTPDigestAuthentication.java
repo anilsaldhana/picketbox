@@ -39,11 +39,13 @@ import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.nonce.NonceGenerator;
 import org.picketbox.core.nonce.UUIDNonceGenerator;
 import org.picketbox.http.PicketBoxConstants;
+import org.picketbox.http.authentication.credential.HTTPDigestCredential;
+import org.picketbox.http.authentication.credential.HttpServletCredential;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPDigestConfiguration;
 import org.picketlink.idm.credential.Credentials.Status;
-import org.picketlink.idm.credential.Digest;
-import org.picketlink.idm.credential.DigestCredentials;
+import org.picketlink.idm.credential.internal.Digest;
+import org.picketlink.idm.credential.internal.DigestCredentials;
 import org.picketlink.idm.model.User;
 
 /**
@@ -160,7 +162,7 @@ public class HTTPDigestAuthentication extends AbstractHTTPAuthentication {
 
         // Pre-verify the client response
         if (digest.getUsername() == null || digest.getRealm() == null || digest.getNonce() == null || digest.getUri() == null
-                || digest.getClientResponse() == null) {
+                || digest.getDigest() == null) {
             return null;
         }
 

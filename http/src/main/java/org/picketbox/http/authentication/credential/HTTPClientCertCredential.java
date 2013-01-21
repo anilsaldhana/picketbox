@@ -20,56 +20,43 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.authentication;
+package org.picketbox.http.authentication.credential;
+
+import java.security.cert.X509Certificate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.AbstractUserCredential;
-import org.picketbox.core.util.Base64;
 import org.picketbox.http.PicketBoxConstants;
-import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.credential.UsernamePasswordCredentials;
+import org.picketlink.idm.credential.internal.X509Cert;
+import org.picketlink.idm.credential.internal.X509CertificateCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPBasicCredential extends AbstractUserCredential implements HttpServletCredential {
+public class HTTPClientCertCredential extends AbstractUserCredential implements HttpServletCredential {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
 
-    public HTTPBasicCredential(HttpServletRequest request, HttpServletResponse response) {
+    public HTTPClientCertCredential(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
 
-        String authorizationHeader = request.getHeader(PicketBoxConstants.HTTP_AUTHORIZATION_HEADER);
+        X509Certificate[] certs = (X509Certificate[]) request.getAttribute(PicketBoxConstants.HTTP_CERTIFICATE);
 
-        if (authorizationHeader != null) {
-            int whitespaceIndex = authorizationHeader.indexOf(' ');
+        if (certs != null && certs.length > 0) {
+            X509Certificate clientCertificate = certs[0];
 
-            if (whitespaceIndex > 0) {
-                String method = authorizationHeader.substring(0, whitespaceIndex);
-
-                if (PicketBoxConstants.HTTP_BASIC.equalsIgnoreCase(method)) {
-                    authorizationHeader = authorizationHeader.substring(whitespaceIndex + 1);
-                    authorizationHeader = new String(Base64.decode(authorizationHeader));
-                    int indexOfColon = authorizationHeader.indexOf(':');
-
-                    if (indexOfColon > 0) {
-                        String username = authorizationHeader.substring(0, indexOfColon);
-                        String password = authorizationHeader.substring(indexOfColon + 1);
-
-                        setUserName(username);
-                        setCredential(new UsernamePasswordCredentials(username, new Password(password.toCharArray())));
-                    }
-                }
-            }
+            setCredential(new X509CertificateCredentials(new X509Cert(clientCertificate)));
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.http.authentication.HttpServletCredential#getRequest()
      */
     @Override
@@ -77,7 +64,9 @@ public class HTTPBasicCredential extends AbstractUserCredential implements HttpS
         return this.request;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.http.authentication.HttpServletCredential#getResponse()
      */
     @Override
