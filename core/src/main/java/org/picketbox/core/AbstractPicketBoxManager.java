@@ -226,7 +226,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         UserCredential credential = userContext.getCredential();
 
         if (credential == null) {
-            throw MESSAGES.failedToValidateCredentials();
+            throw MESSAGES.invalidNullCredential();
         }
 
         AuthenticationResult result = null;

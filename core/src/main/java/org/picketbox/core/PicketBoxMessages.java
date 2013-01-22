@@ -99,8 +99,8 @@ public interface PicketBoxMessages {
     @Message(id = 19, value = "Query %s found no results")
     String queryFoundNoResultsMessage(String query);
 
-    @Message(id = 20, value = "Failed to validate credentials")
-    AuthenticationException failedToValidateCredentials();
+    @Message(id = 20, value = "User credential is null.")
+    AuthenticationException invalidNullCredential();
 
     @Message(id = 22, value = "Instance already started.")
     IllegalStateException instanceAlreadyStarted();
