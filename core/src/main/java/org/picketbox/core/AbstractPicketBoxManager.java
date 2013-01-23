@@ -187,8 +187,12 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
     public boolean authorize(UserContext authenticatedUser, Resource resource) {
         checkIfStarted();
 
+        if (!authenticatedUser.isAuthenticated()) {
+            throw MESSAGES.userNotAuthenticated();
+        }
+
         try {
-            if (this.authorizationManager == null || (authenticatedUser == null || !authenticatedUser.isAuthenticated())) {
+            if (this.authorizationManager == null) {
                 return true;
             }
 
@@ -286,10 +290,6 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      * @return
      */
     protected UserContext performSuccessfulAuthentication(UserContext userContext, PicketBoxSession userSession) {
-        if (!userContext.isAuthenticated()) {
-            throw MESSAGES.userNotAuthenticated();
-        }
-
         LOGGER.trace("user is authenticated. configuring security context.");
 
         if (userSession == null) {

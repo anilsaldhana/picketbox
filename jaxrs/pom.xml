@@ -76,6 +76,7 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>${resteasy.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
@@ -84,11 +85,12 @@
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
-                <dependency>
-                        <groupId>org.codehaus.jackson</groupId>
-                        <artifactId>jackson-jaxrs</artifactId>
-                        <version>1.9.2</version>
-                </dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.2</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.picketbox</groupId>
