@@ -45,9 +45,9 @@ import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.picketbox.core.util.KeyStoreUtil;
+import org.picketbox.http.test.jetty.EmbeddedWebServerBase;
 import org.picketbox.jaxrs.filters.JWEInterceptor;
 import org.picketbox.json.token.JSONWebToken;
-import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
 
 /**
  * Unit test RESTEasy integration with PicketBox

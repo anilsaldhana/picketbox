@@ -42,8 +42,8 @@ import org.picketbox.drools.authorization.PicketBoxDroolsAuthorizationManager;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
-import org.picketbox.test.authentication.http.jetty.HTTPDigestConfigurationProvider;
-import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
+import org.picketbox.http.test.authentication.jetty.HTTPDigestConfigurationProvider;
+import org.picketbox.http.test.jetty.EmbeddedWebServerBase;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPBasicAuthentication}

@@ -19,15 +19,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.test.authentication.http;
+package org.picketbox.http.test.authentication;
 
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,47 +36,40 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.PicketBoxConstants;
-import org.picketbox.http.authentication.HTTPClientCertAuthentication;
-import org.picketbox.http.authentication.credential.HTTPClientCertCredential;
-import org.picketbox.http.config.HTTPConfigurationBuilder;
-import org.picketbox.test.http.TestServletRequest;
-import org.picketbox.test.http.TestServletResponse;
+import org.picketbox.http.authentication.HTTPFormAuthentication;
+import org.picketbox.http.authentication.credential.HTTPFormCredential;
+import org.picketbox.http.test.TestServletContext;
+import org.picketbox.http.test.TestServletRequest;
+import org.picketbox.http.test.TestServletResponse;
+import org.picketbox.http.test.TestServletContext.TestRequestDispatcher;
 
 /**
- * Unit test the {@link HTTPClientCertAuthentication} class
+ * Unit test the {@link HTTPFormAuthentication} class
  *
  * @author anil saldhana
  * @since July 9, 2012
  */
-public class HTTPClientCertAuthenticationTestCase extends AbstractAuthenticationTest {
+public class HTTPDefaultFormAuthenticationTestCase extends AbstractAuthenticationTest {
+
+    private static final String CONTEXT_PATH = "/msite";
+
+    private TestServletContext sc = new TestServletContext(new HashMap<String, String>());
 
     @Before
-    public void onSetup() throws Exception {
+    public void setup() throws Exception {
         super.initialize();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.test.authentication.http.AbstractAuthenticationTest#doConfigureManager(org.picketbox.http.config.
-     * HTTPConfigurationBuilder)
-     */
-    @Override
-    protected void doConfigureManager(HTTPConfigurationBuilder configuration) {
-        configuration.authentication().clientCert().useCNAsPrincipal();
     }
 
     /**
      * <p>
-     * Tests if the authentication is successful when validating the Subject CN from the provided certificate. By default, the
-     * {@link HTTPClientCertAuthentication} is configured with useCNAsPrincipal == true.
+     * Tests if the authentication when using the default configuration.
      * </p>
      *
      * @throws Exception
      */
     @Test
-    public void testAuthenticationUsingCNAsUserName() throws Exception {
-        TestServletRequest req = new TestServletRequest(new InputStream() {
+    public void testDefaultConfiguration() throws Exception {
+        TestServletRequest req = new TestServletRequest(this.sc, new InputStream() {
             @Override
             public int read() throws IOException {
                 return 0;
@@ -91,19 +84,17 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractAuthentication
             }
         });
 
-        req.setContextPath("/test");
-        req.setRequestURI(req.getContextPath() + "/index.html");
+        req.setMethod("GET");
 
-        InputStream bis = getClass().getClassLoader().getResourceAsStream("cert/servercert.txt");
+        // Original URI
+        String orig = "http://msite/someurl";
 
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        X509Certificate cert = (X509Certificate) cf.generateCertificate(bis);
-        bis.close();
+        req.setContextPath("/");
+        req.setRequestURI(orig);
 
-        assertNotNull(cert);
-
+        // Call the server to get the challenge
         UserContext authenticatedUser = this.picketBoxManager.authenticate(new HTTPUserContext(req, resp,
-                new HTTPClientCertCredential(req, resp)));
+                new HTTPFormCredential(req, resp)));
 
         // mechanism is telling us that we need to continue with the authentication.
         assertNotNull(authenticatedUser);
@@ -111,16 +102,33 @@ public class HTTPClientCertAuthenticationTestCase extends AbstractAuthentication
         Assert.assertNotNull(authenticatedUser.getAuthenticationResult().getStatus());
         Assert.assertEquals(authenticatedUser.getAuthenticationResult().getStatus(), AuthenticationStatus.CONTINUE);
 
-        // Now set the certificate
-        req.setAttribute(PicketBoxConstants.HTTP_CERTIFICATE, new X509Certificate[] { cert });
+        // We will test that the request dispatcher is set on the form login page
+        TestRequestDispatcher rd = this.sc.getLast();
+        assertEquals(rd.getRequest(), req);
 
-        authenticatedUser = this.picketBoxManager.authenticate(new HTTPUserContext(req, resp, new HTTPClientCertCredential(req,
+        assertEquals("/login.jsp", rd.getRequestUri());
+
+        // Now assume we have the login page. Lets post
+        TestServletRequest newReq = new TestServletRequest(new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        });
+        newReq.setRequestURI("http://msite" + PicketBoxConstants.HTTP_FORM_J_SECURITY_CHECK);
+        newReq.setContextPath(CONTEXT_PATH);
+        newReq.setParameter(PicketBoxConstants.HTTP_FORM_J_USERNAME, "Aladdin");
+        newReq.setParameter(PicketBoxConstants.HTTP_FORM_J_PASSWORD, "Open Sesame");
+
+        authenticatedUser = this.picketBoxManager.authenticate(new HTTPUserContext(newReq, resp, new HTTPFormCredential(newReq,
                 resp)));
 
         assertNotNull(authenticatedUser);
         Assert.assertTrue(authenticatedUser.isAuthenticated());
         Assert.assertNotNull(authenticatedUser.getAuthenticationResult().getStatus());
         Assert.assertEquals(authenticatedUser.getAuthenticationResult().getStatus(), AuthenticationStatus.SUCCESS);
-    }
 
+        // After authentication, we should be redirected to the default page
+        assertEquals(resp.getSendRedirectedURI(), orig);
+    }
 }

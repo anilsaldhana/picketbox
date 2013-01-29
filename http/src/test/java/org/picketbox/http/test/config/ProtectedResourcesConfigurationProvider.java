@@ -20,13 +20,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.config;
+package org.picketbox.http.test.config;
 
 import javax.servlet.ServletContext;
 
 import org.picketbox.http.config.ConfigurationBuilderProvider;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.resource.ProtectedResourceConstraint;
+import org.picketbox.http.test.InitializationHandler;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -47,6 +48,8 @@ public class ProtectedResourcesConfigurationProvider implements ConfigurationBui
                 .resource("/onlyManagers", "manager").resource("/confidentialResource", "confidential");
 
         configurationBuilder.identityManager().fileStore().preserveState();
+        
+        configurationBuilder.eventManager().handler(new InitializationHandler());
         
         return configurationBuilder;
     }

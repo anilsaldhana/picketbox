@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.test.authentication.http.jetty;
+package org.picketbox.http.test.authentication.jetty;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
-import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
+import org.picketbox.http.test.jetty.EmbeddedWebServerBase;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPBasicAuthentication}

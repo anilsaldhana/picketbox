@@ -19,13 +19,13 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.test.authentication.http;
+package org.picketbox.http.test.authentication;
 
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.http.PicketBoxHTTPManager;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
-import org.picketbox.test.authentication.http.jetty.InitializationHandler;
+import org.picketbox.http.test.InitializationHandler;
 
 /**
  * Base class

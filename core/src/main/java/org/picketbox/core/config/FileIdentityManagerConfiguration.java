@@ -49,7 +49,15 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
     public IdentityManager getIdentityManager() {
         IdentityConfiguration config = new IdentityConfiguration();
 
-        config.addStoreConfiguration(new FileIdentityStoreConfiguration());
+        FileIdentityStoreConfiguration fileStoreConfig = new FileIdentityStoreConfiguration();
+
+        fileStoreConfig.getDataSource().setAlwaysCreateFiles(this.alwaysCreateFiles);
+
+        if (this.workingDir != null) {
+            fileStoreConfig.getDataSource().setWorkingDir(this.workingDir);
+        }
+
+        config.addStoreConfiguration(fileStoreConfig);
 
         IdentityManager identityManager = new DefaultIdentityManager();
 

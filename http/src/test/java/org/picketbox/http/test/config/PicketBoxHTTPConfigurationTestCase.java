@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.test.config;
+package org.picketbox.http.test.config;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,9 +41,9 @@ import org.picketbox.http.authorization.resource.WebResource;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 import org.picketbox.http.resource.ProtectedResourceConstraint;
-import org.picketbox.test.authentication.http.jetty.InitializationHandler;
-import org.picketbox.test.http.TestServletRequest;
-import org.picketbox.test.http.TestServletResponse;
+import org.picketbox.http.test.InitializationHandler;
+import org.picketbox.http.test.TestServletRequest;
+import org.picketbox.http.test.TestServletResponse;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.SimpleRole;
 

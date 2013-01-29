@@ -39,6 +39,7 @@ import org.picketbox.drools.authorization.PicketBoxDroolsAuthorizationManager;
  */
 public class PicketBoxDroolsAuthorizationManagerTestCase {
 
+    @SuppressWarnings("serial")
     @Test
     public void testAuthorize() throws Exception {
         PicketBoxDroolsAuthorizationManager am = new PicketBoxDroolsAuthorizationManager();

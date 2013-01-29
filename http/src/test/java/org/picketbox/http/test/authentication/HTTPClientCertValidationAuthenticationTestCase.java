@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.test.authentication.http;
+package org.picketbox.http.test.authentication;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -39,8 +39,8 @@ import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPClientCertAuthentication;
 import org.picketbox.http.authentication.credential.HTTPClientCertCredential;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
-import org.picketbox.test.http.TestServletRequest;
-import org.picketbox.test.http.TestServletResponse;
+import org.picketbox.http.test.TestServletRequest;
+import org.picketbox.http.test.TestServletResponse;
 
 /**
  * Unit test the {@link HTTPClientCertAuthentication} class

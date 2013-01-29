@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.test.config;
+package org.picketbox.http.test.config;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +28,10 @@ import java.net.URL;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -39,8 +42,9 @@ import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.http.resource.HTTPProtectedResourceManager;
+import org.picketbox.http.test.jetty.EmbeddedWebServerBase;
 import org.picketbox.http.util.HTTPDigestUtil;
-import org.picketbox.test.http.jetty.EmbeddedWebServerBase;
+import org.picketlink.idm.credential.internal.Digest;
 
 /**
  * Unit test the {@link HTTPProtectedResourceManager} for {@link HTTPDigestAuthentication}.
@@ -68,13 +72,8 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
         final String warUrlString = warUrl.toExternalForm();
 
         WebAppContext webapp = createWebApp(CONTEXTPATH, warUrlString);
+        
         this.server.setHandler(webapp);
-
-        /*
-         * Context context = new WebAppContext(warUrlString, CONTEXTPATH); server.setHandler(context);
-         */
-
-        // Thread.currentThread().setContextClassLoader(context.getClassLoader());
 
         Thread.currentThread().setContextClassLoader(webapp.getClassLoader());
 
@@ -82,24 +81,10 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
         System.setProperty(PicketBoxConstants.CREDENTIAL, "Open Sesame");
 
         FilterHolder filterHolder = new FilterHolder(DelegatingSecurityFilter.class);
-        /*
-         * Map<String, String> contextParameters = new HashMap<String, String>();
-         * contextParameters.put(PicketBoxConstants.AUTHENTICATION_KEY, PicketBoxConstants.HTTP_DIGEST);
-         * contextParameters.put(PicketBoxConstants.USER_ATTRIBUTE_NAME, "authenticatedUser");
-         * contextParameters.put(PicketBoxConstants.HTTP_CONFIGURATION_PROVIDER,
-         * ProtectedResourcesConfigurationProvider.class.getName()); context.setInitParams(contextParameters);
-         *
-         * context.addFilter(filterHolder, "/*", 1);
-         */
+
         webapp.setInitParameter(PicketBoxConstants.AUTHENTICATION_KEY, PicketBoxConstants.HTTP_DIGEST);
         webapp.setInitParameter(PicketBoxConstants.HTTP_CONFIGURATION_PROVIDER,
                 ProtectedResourcesConfigurationProvider.class.getName());
-
-        /*
-         * context.setInitParams(contextParameters);
-         *
-         * context.addFilter(filterHolder, "/*", 1);
-         */
 
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addFilter(filterHolder, createFilterMapping("/*", filterHolder));
@@ -130,37 +115,37 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
             String value = header.getValue();
             value = value.substring(7).trim();
 
-//            String[] tokens = HTTPDigestUtil.quoteTokenize(value);
-//            DigestCredential digestHolder = HTTPDigestUtil.digest(tokens);
-//
-//            DigestScheme digestAuth = new DigestScheme();
-//            digestAuth.overrideParamter("algorithm", "MD5");
-//            digestAuth.overrideParamter("realm", digestHolder.getRealm());
-//            digestAuth.overrideParamter("nonce", digestHolder.getNonce());
-//            digestAuth.overrideParamter("qop", "auth");
-//            digestAuth.overrideParamter("nc", "0001");
-//            digestAuth.overrideParamter("cnonce", DigestScheme.createCnonce());
-//            digestAuth.overrideParamter("opaque", digestHolder.getOpaque());
-//
-//            httpget = new HttpGet(url.toExternalForm());
-//            Header auth = digestAuth.authenticate(new UsernamePasswordCredentials(user, pass), httpget);
-//            System.out.println(auth.getName());
-//            System.out.println(auth.getValue());
-//
-//            httpget.setHeader(auth);
-//
-//            System.out.println("executing request" + httpget.getRequestLine());
-//            response = httpclient.execute(httpget);
-//            entity = response.getEntity();
-//
-//            System.out.println("----------------------------------------");
-//            StatusLine statusLine = response.getStatusLine();
-//            System.out.println(statusLine);
-//            if (entity != null) {
-//                System.out.println("Response content length: " + entity.getContentLength());
-//            }
-//            assertEquals(404, statusLine.getStatusCode());
-//            EntityUtils.consume(entity);
+            String[] tokens = HTTPDigestUtil.quoteTokenize(value);
+            Digest digestHolder = HTTPDigestUtil.digest(tokens);
+
+            DigestScheme digestAuth = new DigestScheme();
+            digestAuth.overrideParamter("algorithm", "MD5");
+            digestAuth.overrideParamter("realm", digestHolder.getRealm());
+            digestAuth.overrideParamter("nonce", digestHolder.getNonce());
+            digestAuth.overrideParamter("qop", "auth");
+            digestAuth.overrideParamter("nc", "0001");
+            digestAuth.overrideParamter("cnonce", DigestScheme.createCnonce());
+            digestAuth.overrideParamter("opaque", digestHolder.getOpaque());
+
+            httpget = new HttpGet(url.toExternalForm());
+            Header auth = digestAuth.authenticate(new UsernamePasswordCredentials(user, pass), httpget);
+            System.out.println(auth.getName());
+            System.out.println(auth.getValue());
+
+            httpget.setHeader(auth);
+
+            System.out.println("executing request" + httpget.getRequestLine());
+            response = httpclient.execute(httpget);
+            entity = response.getEntity();
+
+            System.out.println("----------------------------------------");
+            StatusLine statusLine = response.getStatusLine();
+            System.out.println(statusLine);
+            if (entity != null) {
+                System.out.println("Response content length: " + entity.getContentLength());
+            }
+            assertEquals(404, statusLine.getStatusCode());
+            EntityUtils.consume(entity);
         } finally {
             // When HttpClient instance is no longer needed,
             // shut down the connection manager to ensure
@@ -231,36 +216,36 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
             value = value.substring(7).trim();
 
             String[] tokens = HTTPDigestUtil.quoteTokenize(value);
-//            DigestCredential digestHolder = HTTPDigestUtil.digest(tokens);
-//
-//            DigestScheme digestAuth = new DigestScheme();
-//            digestAuth.overrideParamter("algorithm", "MD5");
-//            digestAuth.overrideParamter("realm", digestHolder.getRealm());
-//            digestAuth.overrideParamter("nonce", digestHolder.getNonce());
-//            digestAuth.overrideParamter("qop", "auth");
-//            digestAuth.overrideParamter("nc", "0001");
-//            digestAuth.overrideParamter("cnonce", DigestScheme.createCnonce());
-//            digestAuth.overrideParamter("opaque", digestHolder.getOpaque());
-//
-//            httpget = new HttpGet(url.toExternalForm());
-//            Header auth = digestAuth.authenticate(new UsernamePasswordCredentials(user, pass), httpget);
-//            System.out.println(auth.getName());
-//            System.out.println(auth.getValue());
-//
-//            httpget.setHeader(auth);
-//
-//            System.out.println("executing request" + httpget.getRequestLine());
-//            response = httpclient.execute(httpget);
-//            entity = response.getEntity();
-//
-//            System.out.println("----------------------------------------");
-//            StatusLine statusLine = response.getStatusLine();
-//            System.out.println(statusLine);
-//            if (entity != null) {
-//                System.out.println("Response content length: " + entity.getContentLength());
-//            }
-//            assertEquals(403, statusLine.getStatusCode());
-//            EntityUtils.consume(entity);
+            Digest digestHolder = HTTPDigestUtil.digest(tokens);
+
+            DigestScheme digestAuth = new DigestScheme();
+            digestAuth.overrideParamter("algorithm", "MD5");
+            digestAuth.overrideParamter("realm", digestHolder.getRealm());
+            digestAuth.overrideParamter("nonce", digestHolder.getNonce());
+            digestAuth.overrideParamter("qop", "auth");
+            digestAuth.overrideParamter("nc", "0001");
+            digestAuth.overrideParamter("cnonce", DigestScheme.createCnonce());
+            digestAuth.overrideParamter("opaque", digestHolder.getOpaque());
+
+            httpget = new HttpGet(url.toExternalForm());
+            Header auth = digestAuth.authenticate(new UsernamePasswordCredentials(user, pass), httpget);
+            System.out.println(auth.getName());
+            System.out.println(auth.getValue());
+
+            httpget.setHeader(auth);
+
+            System.out.println("executing request" + httpget.getRequestLine());
+            response = httpclient.execute(httpget);
+            entity = response.getEntity();
+
+            System.out.println("----------------------------------------");
+            StatusLine statusLine = response.getStatusLine();
+            System.out.println(statusLine);
+            if (entity != null) {
+                System.out.println("Response content length: " + entity.getContentLength());
+            }
+            assertEquals(403, statusLine.getStatusCode());
+            EntityUtils.consume(entity);
         } finally {
             // When HttpClient instance is no longer needed,
             // shut down the connection manager to ensure
