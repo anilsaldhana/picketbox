@@ -22,14 +22,8 @@
 
 package org.picketbox.core.config;
 
-import javax.persistence.EntityManager;
-
 import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.config.IdentityConfiguration;
 import org.picketlink.idm.config.IdentityStoreConfiguration;
-import org.picketlink.idm.internal.DefaultIdentityManager;
-import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
 import org.picketlink.idm.jpa.internal.JPAIdentityStoreConfiguration;
 import org.picketlink.idm.jpa.schema.CredentialObject;
 import org.picketlink.idm.jpa.schema.CredentialObjectAttribute;
@@ -49,26 +43,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
     private EntityManagerLookupStrategy entityManagerLookupStrategy;
 
     @Override
-    public IdentityManager getIdentityManager() {
-        IdentityConfiguration config = new IdentityConfiguration();
-
-        config.addStoreConfiguration(getConfiguration());
-
-        IdentityManager identityManager = new DefaultIdentityManager();
-
-        DefaultIdentityStoreInvocationContextFactory icf = new DefaultIdentityStoreInvocationContextFactory(null) {
-            @Override
-            public EntityManager getEntityManager() {
-                return JPAIdentityManagerConfiguration.this.entityManagerLookupStrategy.getEntityManager();
-            }
-        };
-
-        identityManager.bootstrap(config, icf);
-
-        return identityManager;
-    }
-
-    private IdentityStoreConfiguration getConfiguration() {
+    public IdentityStoreConfiguration getConfiguration() {
         JPAIdentityStoreConfiguration configuration = new JPAIdentityStoreConfiguration();
 
         configuration.setIdentityClass(IdentityObject.class);

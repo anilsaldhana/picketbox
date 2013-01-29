@@ -22,11 +22,7 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.config.IdentityConfiguration;
-import org.picketlink.idm.internal.DefaultIdentityManager;
-import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
-import org.picketlink.idm.ldap.internal.LDAPConfiguration;
+import org.picketlink.idm.ldap.internal.LDAPIdentityStoreConfiguration;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -34,36 +30,15 @@ import org.picketlink.idm.ldap.internal.LDAPConfiguration;
  */
 public class LDAPIdentityManagerConfiguration implements IdentityManagerConfiguration {
 
-    private LDAPConfiguration ldapConfig = new LDAPConfiguration();
+    private LDAPIdentityStoreConfiguration ldapConfig = new LDAPIdentityStoreConfiguration();
 
-    public LDAPIdentityManagerConfiguration(LDAPConfiguration ldapConfig) {
+    public LDAPIdentityManagerConfiguration(LDAPIdentityStoreConfiguration ldapConfig) {
         this.ldapConfig = ldapConfig;
     }
 
-    /**
-     * @return the storeConfig
-     */
-    public LDAPConfiguration getStoreConfig() {
-        return this.ldapConfig;
-    }
-
-    /**
-     * @return the searchConfig
-     */
-    public LDAPConfiguration getSearchConfig() {
-        return this.ldapConfig;
-    }
-
     @Override
-    public IdentityManager getIdentityManager() {
-        IdentityConfiguration config = new IdentityConfiguration();
-
-        config.addStoreConfiguration(getStoreConfig());
-
-        IdentityManager identityManager = new DefaultIdentityManager();
-
-        identityManager.bootstrap(config, new DefaultIdentityStoreInvocationContextFactory(null));
-
-        return identityManager;
+    public LDAPIdentityStoreConfiguration getConfiguration() {
+        return this.ldapConfig;
     }
+
 }

@@ -24,9 +24,17 @@ package org.picketbox.core.identity;
 
 import java.util.Date;
 
+import javax.persistence.EntityManager;
+
+import org.picketbox.core.config.GlobalIdentityManagerConfiguration;
+import org.picketbox.core.config.IdentityManagerConfiguration;
+import org.picketbox.core.config.JPAIdentityManagerConfiguration;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.config.IdentityConfiguration;
+import org.picketlink.idm.config.IdentityStoreConfiguration;
 import org.picketlink.idm.credential.Credentials;
+import org.picketlink.idm.internal.DefaultIdentityManager;
+import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
 import org.picketlink.idm.model.Agent;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.IdentityType;
@@ -51,10 +59,44 @@ import org.picketlink.idm.spi.StoreFactory;
 public class PicketBoxIdentityManager implements IdentityManager {
 
     private static final long serialVersionUID = 8582047228661746675L;
+
+    private GlobalIdentityManagerConfiguration configuration;
     private IdentityManager delegate;
 
-    public PicketBoxIdentityManager(IdentityManager identityManager) {
-        this.delegate = identityManager;
+    public PicketBoxIdentityManager(GlobalIdentityManagerConfiguration configuration) {
+        this.configuration = configuration;
+        initIdentityManager();
+    }
+
+    private void initIdentityManager() {
+        IdentityManagerConfiguration identityManagerConfiguration = this.configuration.getIdentityManagerConfiguration();
+
+        IdentityStoreConfiguration storeConfig = identityManagerConfiguration.getConfiguration();
+
+        IdentityConfiguration config = new IdentityConfiguration();
+
+        config.addStoreConfiguration(storeConfig);
+
+        this.delegate = new DefaultIdentityManager();
+
+        DefaultIdentityStoreInvocationContextFactory icf = null;
+
+        if (JPAIdentityManagerConfiguration.class.isInstance(identityManagerConfiguration)) {
+            final JPAIdentityManagerConfiguration jpaStoreConfig = (JPAIdentityManagerConfiguration) identityManagerConfiguration;
+
+            icf = new DefaultIdentityStoreInvocationContextFactory(null) {
+                @Override
+                public EntityManager getEntityManager() {
+                    return jpaStoreConfig.getEntityManagerLookupStrategy().getEntityManager();
+                }
+            };
+        }
+
+        if (icf == null) {
+            icf = new DefaultIdentityStoreInvocationContextFactory();
+        }
+
+        this.delegate.bootstrap(config, icf);
     }
 
     @Override
@@ -172,10 +214,9 @@ public class PicketBoxIdentityManager implements IdentityManager {
         this.delegate.updateCredential(agent, value, effectiveDate, expiryDate);
     }
 
-    /*@Override
-    public IdentityType lookupIdentityByKey(String key) {
-        return this.delegate.lookupIdentityByKey(key);
-    }*/
+    /*
+     * @Override public IdentityType lookupIdentityByKey(String key) { return this.delegate.lookupIdentityByKey(key); }
+     */
 
     @Override
     public void loadAttribute(IdentityType identityType, String attributeName) {

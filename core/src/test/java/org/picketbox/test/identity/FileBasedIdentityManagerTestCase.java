@@ -22,14 +22,8 @@
 
 package org.picketbox.test.identity;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.picketbox.core.config.ConfigurationBuilder;
 
-import org.junit.Test;
-import org.picketbox.core.PicketBoxManager;
-import org.picketbox.core.UserContext;
-import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
-import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
  * <p>
@@ -39,26 +33,11 @@ import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class FileBasedIdentityManagerTestCase extends AbstractDefaultPicketBoxManagerTestCase {
+public class FileBasedIdentityManagerTestCase extends AbstractIdentityManagerTestCase {
 
-    @Test
-    public void testIdentity() throws Exception {
-        PicketBoxManager picketBoxManager = createManager();
-
-        UserContext authenticatingContext = new UserContext();
-
-        authenticatingContext.setCredential(new UsernamePasswordCredential("admin", "admin"));
-
-        UserContext authenticatedContext = picketBoxManager.authenticate(authenticatingContext);
-
-        assertNotNull(authenticatedContext);
-        assertNotNull(authenticatedContext.isAuthenticated());
-
-        // user was loaded by the identity manager ?
-        assertNotNull(authenticatedContext.getUser());
-
-        assertTrue(authenticatedContext.hasRole("admin"));
-        assertTrue(authenticatedContext.hasRole("developer"));
+    @Override
+    protected ConfigurationBuilder doGetConfigurationBuilder() {
+        return new ConfigurationBuilder();
     }
-
+    
 }

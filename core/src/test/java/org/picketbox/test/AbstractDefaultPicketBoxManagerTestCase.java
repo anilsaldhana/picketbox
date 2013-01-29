@@ -79,7 +79,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
 
         picketboxManager.start();
 
-        initialize(picketboxManager.getIdentityManager());
+        initializeStore(picketboxManager.getIdentityManager());
 
         return picketboxManager;
     }
@@ -91,7 +91,7 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
      *
      * @param identityManager
      */
-    private void initialize(IdentityManager identityManager) {
+    protected void initializeStore(IdentityManager identityManager) {
         SimpleUser adminUser = new SimpleUser("admin");
 
         identityManager.add(adminUser);

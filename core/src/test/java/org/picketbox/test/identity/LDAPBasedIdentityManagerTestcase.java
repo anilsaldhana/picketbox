@@ -21,15 +21,8 @@
  */
 package org.picketbox.test.identity;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.picketbox.core.DefaultPicketBoxManager;
-import org.picketbox.core.PicketBoxManager;
-import org.picketbox.core.UserContext;
-import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.test.ldap.AbstractLDAPTest;
 
@@ -39,44 +32,43 @@ import org.picketbox.test.ldap.AbstractLDAPTest;
  * @author anil saldhana
  * @since Jul 18, 2012
  */
-public class LDAPBasedIdentityManagerTestcase extends AbstractLDAPTest {
+public class LDAPBasedIdentityManagerTestcase extends AbstractIdentityManagerTestCase {
 
+    private AbstractLDAPTest ldapTest;
+    
     @Override
     @Before
-    public void setup() throws Exception {
-        super.setup();
-        importLDIF("ldap/pb_core_users.ldif");
+    public void onSetup() throws Exception {
+        this.ldapTest = new AbstractLDAPTest() {
+            @Override
+            @Before
+            public void setup() throws Exception {
+                super.setup();
+                super.importLDIF("ldap/pb_core_users.ldif");
+            }
+        };
+        
+        this.ldapTest.setup();
+        
+        super.onSetup();
     }
-
-    @Test
-    public void testIdentity() throws Exception {
+    
+    @Override
+    @After
+    public void onFinish() throws Exception {
+        super.onFinish();
+        this.ldapTest.tearDown();
+    }
+    
+    @Override
+    protected ConfigurationBuilder doGetConfigurationBuilder() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        builder.identityManager().ldapStore().url("ldap://localhost:10389/").bindDN("uid=jduke,ou=People,dc=jboss,dc=org")
-                .bindCredential("theduke").userDNSuffix("ou=People,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org")
+        builder.identityManager().ldapStore().url("ldap://localhost:10389/").bindDN("uid=admin,ou=system")
+                .bindCredential("secret").userDNSuffix("ou=People,dc=jboss,dc=org").agentDNSuffix("ou=Agent,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org")
                 .groupDNSuffix("ou=Groups,dc=jboss,dc=org");
-
-        PicketBoxManager picketBoxManager = new DefaultPicketBoxManager(builder.build());
-
-        picketBoxManager.start();
-
-        UserContext authenticatingContext = new UserContext();
-
-        authenticatingContext.setCredential(new UsernamePasswordCredential("admin", "admin"));
-
-        UserContext authenticatedContext = picketBoxManager.authenticate(authenticatingContext);
-
-        assertNotNull(authenticatedContext);
-        assertNotNull(authenticatedContext.isAuthenticated());
-
-        // user was loaded by the identity manager ?
-        assertNotNull(authenticatedContext.getUser());
-
-        // check the configured roles
-        assertTrue(authenticatedContext.hasRole("Echo"));
-        assertTrue(authenticatedContext.hasRole("TheDuke"));
-
-        // check the configured group
-        assertTrue(authenticatedContext.hasGroup("The PicketBox Group"));
+        
+        return builder;
     }
+    
 }

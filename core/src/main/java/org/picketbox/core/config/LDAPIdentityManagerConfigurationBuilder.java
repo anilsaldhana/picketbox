@@ -24,7 +24,7 @@ package org.picketbox.core.config;
 
 import java.util.Properties;
 
-import org.picketlink.idm.ldap.internal.LDAPConfiguration;
+import org.picketlink.idm.ldap.internal.LDAPIdentityStoreConfiguration;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -32,7 +32,7 @@ import org.picketlink.idm.ldap.internal.LDAPConfiguration;
  */
 public class LDAPIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<LDAPIdentityManagerConfiguration> {
 
-    private LDAPConfiguration ldapConfig = new LDAPConfiguration();
+    private LDAPIdentityStoreConfiguration ldapConfig = new LDAPIdentityStoreConfiguration();
 
     public LDAPIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
         super(identityManagerConfigurationBuilder);
@@ -90,6 +90,16 @@ public class LDAPIdentityManagerConfigurationBuilder extends AbstractConfigurati
 
     public LDAPIdentityManagerConfigurationBuilder userDNSuffix(String userDNSuffix) {
         this.ldapConfig.setUserDNSuffix(userDNSuffix);
+        return this;
+    }
+
+    public LDAPIdentityManagerConfigurationBuilder agentDNSuffix(String agentDNSuffix) {
+        this.ldapConfig.setAgentDNSuffix(agentDNSuffix);
+        return this;
+    }
+
+    public LDAPIdentityManagerConfigurationBuilder baseDN(String baseDNSuffix) {
+        this.ldapConfig.setBaseDN(baseDNSuffix);
         return this;
     }
 

@@ -367,16 +367,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
         }
 
-        IdentityManager identityManager = this.configuration.getIdentityManager().getIdentityManagerConfiguration()
-                .getIdentityManager();
-
-        IdentityManager providedIdentityManager = this.configuration.getIdentityManager().getIdentityManager();
-
-        if (providedIdentityManager == null) {
-            this.identityManager = new PicketBoxIdentityManager(identityManager);
-        } else {
-            this.identityManager = providedIdentityManager;
-        }
+        this.identityManager = new PicketBoxIdentityManager(this.configuration.getIdentityManager());
 
         this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
 
@@ -512,8 +503,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
         LOGGER.debugInstanceUsage("Authorization Manager", this.authorizationManager);
 
         LOGGER.debugInstanceUsage("Identity Manager", this.identityManager);
-        LOGGER.debugInstanceUsage(" Identity Store", this.configuration.getIdentityManager().getIdentityManagerConfiguration()
-                .getIdentityManager());
+        LOGGER.debugInstanceUsage(" Identity Store", this.configuration.getIdentityManager().getIdentityManagerConfiguration());
 
         LOGGER.debugInstanceUsage("User Context Populator", this.userContextPopulator);
 

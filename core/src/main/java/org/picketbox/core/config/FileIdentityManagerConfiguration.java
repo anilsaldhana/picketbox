@@ -22,11 +22,8 @@
 
 package org.picketbox.core.config;
 
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.config.IdentityConfiguration;
+import org.picketlink.idm.config.IdentityStoreConfiguration;
 import org.picketlink.idm.file.internal.FileIdentityStoreConfiguration;
-import org.picketlink.idm.internal.DefaultIdentityManager;
-import org.picketlink.idm.internal.DefaultIdentityStoreInvocationContextFactory;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
@@ -46,9 +43,7 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
     }
 
     @Override
-    public IdentityManager getIdentityManager() {
-        IdentityConfiguration config = new IdentityConfiguration();
-
+    public IdentityStoreConfiguration getConfiguration() {
         FileIdentityStoreConfiguration fileStoreConfig = new FileIdentityStoreConfiguration();
 
         fileStoreConfig.getDataSource().setAlwaysCreateFiles(this.alwaysCreateFiles);
@@ -57,12 +52,7 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
             fileStoreConfig.getDataSource().setWorkingDir(this.workingDir);
         }
 
-        config.addStoreConfiguration(fileStoreConfig);
-
-        IdentityManager identityManager = new DefaultIdentityManager();
-
-        identityManager.bootstrap(config, new DefaultIdentityStoreInvocationContextFactory(null));
-
-        return identityManager;
+        return fileStoreConfig;
     }
+
 }

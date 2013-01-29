@@ -22,24 +22,14 @@
 
 package org.picketbox.test.identity;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.picketbox.core.PicketBoxManager;
-import org.picketbox.core.UserContext;
-import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.config.ConfigurationBuilder;
-import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.identity.jpa.EntityManagerPropagationContext;
-import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 
 /**
  * <p>
@@ -49,42 +39,9 @@ import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  * 
  */
-public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTestCase {
+public class DatabaseAuthenticationTestCase extends AbstractIdentityManagerTestCase {
 
     private EntityManagerFactory entityManagerFactory;
-    private PicketBoxManager picketBoxManager;
-
-    /**
-     * <p>
-     * Tests if the authentication performs successfully when provided a valid {@link UsernamePasswordCredential}.
-     * </p>
-     * 
-     * @throws AuthenticationException
-     */
-    @Test
-    public void testUserNamePasswordCredential() throws AuthenticationException {
-        UserContext authenticatingUser = new UserContext();
-
-        authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "admin"));
-
-        // let's authenticate the user
-        UserContext authenticatedUser = this.picketBoxManager.authenticate(authenticatingUser);
-
-        assertNotNull(authenticatedUser);
-        assertTrue(authenticatedUser.isAuthenticated());
-        assertRoles(authenticatedUser);
-        assertGroups(authenticatedUser);
-
-        this.picketBoxManager.logout(authenticatedUser);
-
-        authenticatingUser.setCredential(new UsernamePasswordCredential("admin", "bad_passwd"));
-
-        // let's authenticate the user
-        authenticatedUser = this.picketBoxManager.authenticate(authenticatingUser);
-
-        assertNotNull(authenticatedUser);
-        assertFalse(authenticatedUser.isAuthenticated());
-    }
 
     @Before
     public void onSetup() throws Exception {
@@ -95,17 +52,20 @@ public class DatabaseAuthenticationTestCase extends AbstractDefaultPicketBoxMana
         entityManager.getTransaction().begin();
 
         EntityManagerPropagationContext.set(entityManager);
+        
+        super.onSetup();
+    }
 
+    @Override
+    protected ConfigurationBuilder doGetConfigurationBuilder() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         // configure the JPA identity store
         builder.identityManager().jpaStore();
-
-        this.picketBoxManager = createManager(builder);
-
-        entityManager.flush();
+        
+        return builder;
     }
-
+    
     @After
     public void onFinish() throws Exception {
         EntityManager entityManager = EntityManagerPropagationContext.get();
