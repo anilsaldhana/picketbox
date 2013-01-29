@@ -26,9 +26,19 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.config.GlobalIdentityManagerConfiguration;
 import org.picketbox.core.config.IdentityManagerConfiguration;
 import org.picketbox.core.config.JPAIdentityManagerConfiguration;
+import org.picketbox.core.identity.event.GroupCreatedEvent;
+import org.picketbox.core.identity.event.GroupRemovedEvent;
+import org.picketbox.core.identity.event.GroupUpdatedEvent;
+import org.picketbox.core.identity.event.RoleCreatedEvent;
+import org.picketbox.core.identity.event.RoleRemovedEvent;
+import org.picketbox.core.identity.event.RoleUpdatedEvent;
+import org.picketbox.core.identity.event.UserCreatedEvent;
+import org.picketbox.core.identity.event.UserRemovedEvent;
+import org.picketbox.core.identity.event.UserUpdatedEvent;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.config.IdentityConfiguration;
 import org.picketlink.idm.config.IdentityStoreConfiguration;
@@ -60,11 +70,13 @@ public class PicketBoxIdentityManager implements IdentityManager {
 
     private static final long serialVersionUID = 8582047228661746675L;
 
+    private PicketBoxManager picketboxManager;
     private GlobalIdentityManagerConfiguration configuration;
     private IdentityManager delegate;
 
-    public PicketBoxIdentityManager(GlobalIdentityManagerConfiguration configuration) {
-        this.configuration = configuration;
+    public PicketBoxIdentityManager(PicketBoxManager picketboxManager) {
+        this.picketboxManager = picketboxManager;
+        this.configuration = this.picketboxManager.getConfiguration().getIdentityManager();
         initIdentityManager();
     }
 
@@ -112,16 +124,40 @@ public class PicketBoxIdentityManager implements IdentityManager {
     @Override
     public void add(IdentityType identityType) {
         this.delegate.add(identityType);
+
+        if (User.class.isInstance(identityType)) {
+            raiseEvent(new UserCreatedEvent((User) identityType));
+        } else if (Role.class.isInstance(identityType)) {
+            raiseEvent(new RoleCreatedEvent((Role) identityType));
+        } else if (Group.class.isInstance(identityType)) {
+            raiseEvent(new GroupCreatedEvent((Group) identityType));
+        }
     }
 
     @Override
     public void update(IdentityType identityType) {
         this.delegate.update(identityType);
+
+        if (User.class.isInstance(identityType)) {
+            raiseEvent(new UserUpdatedEvent((User) identityType));
+        } else if (Role.class.isInstance(identityType)) {
+            raiseEvent(new RoleUpdatedEvent((Role) identityType));
+        } else if (Group.class.isInstance(identityType)) {
+            raiseEvent(new GroupUpdatedEvent((Group) identityType));
+        }
     }
 
     @Override
     public void remove(IdentityType identityType) {
         this.delegate.remove(identityType);
+
+        if (User.class.isInstance(identityType)) {
+            raiseEvent(new UserRemovedEvent((User) identityType));
+        } else if (Role.class.isInstance(identityType)) {
+            raiseEvent(new RoleRemovedEvent((Role) identityType));
+        } else if (Group.class.isInstance(identityType)) {
+            raiseEvent(new GroupRemovedEvent((Group) identityType));
+        }
     }
 
     @Override
@@ -286,5 +322,9 @@ public class PicketBoxIdentityManager implements IdentityManager {
     @Override
     public <T extends Relationship> RelationshipQuery<T> createRelationshipQuery(Class<T> relationshipType) {
         return delegate.createRelationshipQuery(relationshipType);
+    }
+
+    private void raiseEvent(Object event) {
+        this.picketboxManager.getEventManager().raiseEvent(event);
     }
 }

@@ -367,7 +367,7 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
             this.authorizationManager = this.configuration.getAuthorization().getManagers().get(0);
         }
 
-        this.identityManager = new PicketBoxIdentityManager(this.configuration.getIdentityManager());
+        this.identityManager = new PicketBoxIdentityManager(this);
 
         this.userContextPopulator = this.configuration.getIdentityManager().getUserPopulator();
 
