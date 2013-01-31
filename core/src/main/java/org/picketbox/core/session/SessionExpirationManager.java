@@ -25,6 +25,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 
+import org.jboss.logging.Logger;
+import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.event.EventObserver;
 import org.picketbox.core.exceptions.PicketBoxSessionException;
@@ -38,6 +40,8 @@ import org.picketbox.core.session.event.SessionSetAttributeEvent;
  * @since Jul 16, 2012
  */
 public class SessionExpirationManager {
+
+    private Logger log = Logger.getLogger(SessionExpirationManager.class);
 
     private static Timer timer = new Timer();
 
@@ -95,7 +99,7 @@ public class SessionExpirationManager {
                 try {
                     session.expire();
                 } catch (PicketBoxSessionException e) {
-                    e.printStackTrace();
+                    log.error("Session Expiry Error:", e);
                 }
             }
         }
@@ -103,10 +107,10 @@ public class SessionExpirationManager {
 
     private void handleSessionExpiration(PicketBoxSession session) {
         if (session == null)
-            throw new RuntimeException("Session is null");
+            throw PicketBoxMessages.MESSAGES.invalidNullArgument("Session");
 
         // Get the timertask
-        String key = session.getId().toString();
+        String key = session.getId().getId().toString();
 
         SessionTimerTask sessionTimerTask = timerMap.get(key);
         if (sessionTimerTask != null) {
@@ -114,7 +118,7 @@ public class SessionExpirationManager {
         }
 
         sessionTimerTask = new SessionTimerTask(session);
-        timerMap.put(session.getId().toString(), sessionTimerTask);
+        timerMap.put(session.getId().getId().toString(), sessionTimerTask);
         timer.schedule(sessionTimerTask, this.expiryValue);
     }
 }
