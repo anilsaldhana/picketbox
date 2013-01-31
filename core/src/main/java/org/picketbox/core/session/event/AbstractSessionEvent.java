@@ -19,34 +19,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.picketbox.core.session.event;
 
 import org.picketbox.core.session.PicketBoxSession;
 
 /**
- * <p>
- * This class represents a event fired when a session attribute changes.
- * </p>
+ * Abstract Session Event
  *
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- *
+ * @author anil saldhana
+ * @since Jan 31, 2013
  */
-public class SessionSetAttributeEvent extends AbstractSessionEvent {
-    private String attributeName;
-    private Object attributeValue;
+public abstract class AbstractSessionEvent {
+    protected PicketBoxSession session;
 
-    public SessionSetAttributeEvent(PicketBoxSession session, String attributeName, Object attributeValue) {
-        this.session = session;
-        this.attributeName = attributeName;
-        this.attributeValue = attributeValue;
-    }
-
-    public String getAttributeName() {
-        return this.attributeName;
-    }
-
-    public Object getAttributeValue() {
-        return this.attributeValue;
+    public PicketBoxSession getSession() {
+        return this.session;
     }
 }

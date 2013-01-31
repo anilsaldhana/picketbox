@@ -32,15 +32,9 @@ import org.picketbox.core.session.PicketBoxSession;
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class SessionExpiredEvent {
-
-    private PicketBoxSession session;
+public class SessionExpiredEvent extends AbstractSessionEvent {
 
     public SessionExpiredEvent(PicketBoxSession session) {
         this.session = session;
-    }
-
-    public PicketBoxSession getSession() {
-        return this.session;
     }
 }

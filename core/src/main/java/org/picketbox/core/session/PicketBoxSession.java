@@ -36,6 +36,7 @@ import org.picketbox.core.session.event.SessionExpiredEvent;
 import org.picketbox.core.session.event.SessionGetAttributeEvent;
 import org.picketbox.core.session.event.SessionInvalidatedEvent;
 import org.picketbox.core.session.event.SessionSetAttributeEvent;
+import org.picketbox.core.session.event.SessionTouchedEvent;
 
 /**
  * A session that is capable of storing attributes
@@ -166,6 +167,15 @@ public class PicketBoxSession implements Serializable {
         this.invalid = true;
         if (this.userContext != null && this.userContext.isAuthenticated()) {
             this.userContext.invalidate();
+        }
+    }
+
+    /**
+     * Method to indicate that there was a operation that touches the session and thereby extending the session expiry
+     */
+    public void touch() {
+        if (this.eventManager != null) {
+            this.eventManager.raiseEvent(new SessionTouchedEvent(this));
         }
     }
 

@@ -30,6 +30,7 @@ import org.picketbox.core.AbstractPicketBoxLifeCycle;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.session.event.SessionCreatedEvent;
 
 /**
@@ -70,7 +71,9 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
 
         PicketBoxSession session = doCreateSession(authenticatedUserContext);
 
-        session.setEventManager(this.picketBoxManager.getEventManager());
+        PicketBoxEventManager eventManager = this.picketBoxManager.getEventManager();
+
+        session.setEventManager(eventManager);
 
         fireEvent(new SessionCreatedEvent(session));
 
@@ -88,6 +91,8 @@ public class DefaultSessionManager extends AbstractPicketBoxLifeCycle implements
         this.sessionStore.store(session);
 
         this.sessionExpirationManager.setTimer(session);
+
+        eventManager.addHandler(sessionExpirationManager); // Let the session expiration manager listen on session events
 
         return session;
     }

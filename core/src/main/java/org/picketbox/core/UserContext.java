@@ -86,10 +86,16 @@ public class UserContext implements Serializable {
      * @return
      */
     public Principal getPrincipal() {
+        if (this.session != null) {
+            session.touch();
+        }
         return getPrincipal(true);
     }
 
     Principal getPrincipal(boolean userAuthenticatedRestriction) {
+        if (this.session != null) {
+            session.touch();
+        }
         if (userAuthenticatedRestriction && !isAuthenticated()) {
             throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
@@ -101,6 +107,9 @@ public class UserContext implements Serializable {
      * @return the user
      */
     public User getUser() {
+        if (this.session != null) {
+            session.touch();
+        }
         return this.user;
     }
 
@@ -108,6 +117,9 @@ public class UserContext implements Serializable {
      * @param user the user to set
      */
     public UserContext setUser(User user) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.user = user;
         return this;
     }
@@ -118,6 +130,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public Subject getSubject() {
+        if (this.session != null) {
+            session.touch();
+        }
         return this.subject;
     }
 
@@ -127,6 +142,9 @@ public class UserContext implements Serializable {
      * @param subject
      */
     public UserContext setSubject(Subject subject) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.subject = subject;
         return this;
     }
@@ -137,6 +155,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public Map<String, Object> getContextData() {
+        if (this.session != null) {
+            session.touch();
+        }
         return Collections.unmodifiableMap(this.contextData);
     }
 
@@ -146,6 +167,9 @@ public class UserContext implements Serializable {
      * @param contextData
      */
     public UserContext setContextData(Map<String, Object> contextData) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.contextData = contextData;
         return this;
     }
@@ -154,6 +178,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public boolean isAuthenticated() {
+        if (this.session != null) {
+            session.touch();
+        }
         boolean isAuthenticated = this.authenticationResult != null
                 && this.authenticationResult.getStatus().equals(AuthenticationStatus.SUCCESS);
 
@@ -176,10 +203,16 @@ public class UserContext implements Serializable {
     }
 
     public UserCredential getCredential() {
+        if (this.session != null) {
+            session.touch();
+        }
         return this.credential;
     }
 
     public UserContext setCredential(UserCredential credential) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.credential = credential;
         return this;
     }
@@ -217,6 +250,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public boolean hasRole(String role) {
+        if (this.session != null) {
+            session.touch();
+        }
         if (!isAuthenticated()) {
             throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
@@ -239,6 +275,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public boolean hasGroup(String group) {
+        if (this.session != null) {
+            session.touch();
+        }
         if (!isAuthenticated()) {
             throw PicketBoxMessages.MESSAGES.userNotAuthenticated();
         }
@@ -258,6 +297,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public Collection<String> getRoleNames() {
+        if (this.session != null) {
+            session.touch();
+        }
         Set<String> roleNames = new HashSet<String>();
         for (Role userRole : getRoles()) {
             roleNames.add(userRole.getName());
@@ -267,12 +309,18 @@ public class UserContext implements Serializable {
     }
 
     public UserContext setRoles(Collection<Role> roles) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.roles = roles;
         return this;
     }
 
     @SuppressWarnings("unchecked")
     public Collection<Role> getRoles() {
+        if (this.session != null) {
+            session.touch();
+        }
         if (this.roles == null) {
             this.roles = Collections.EMPTY_LIST;
         }
@@ -286,6 +334,9 @@ public class UserContext implements Serializable {
      * @return
      */
     public Collection<String> getGroupNames() {
+        if (this.session != null) {
+            session.touch();
+        }
         Set<String> groupNames = new HashSet<String>();
         for (Group userRole : getGroups()) {
             groupNames.add(userRole.getName());
@@ -301,6 +352,9 @@ public class UserContext implements Serializable {
 
     @SuppressWarnings("unchecked")
     public Collection<Group> getGroups() {
+        if (this.session != null) {
+            session.touch();
+        }
         if (this.groups == null) {
             this.groups = Collections.EMPTY_LIST;
         }
@@ -309,10 +363,16 @@ public class UserContext implements Serializable {
     }
 
     protected void setAuthenticationResult(AuthenticationResult result) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.authenticationResult = result;
     }
 
     public AuthenticationResult getAuthenticationResult() {
+        if (this.session != null) {
+            session.touch();
+        }
         if (this.authenticationResult != null) {
             return this.authenticationResult.immutable();
         }
@@ -321,6 +381,9 @@ public class UserContext implements Serializable {
     }
 
     protected void addContextData(String name, Object value) {
+        if (this.session != null) {
+            session.touch();
+        }
         this.contextData.put(name, value);
     }
 

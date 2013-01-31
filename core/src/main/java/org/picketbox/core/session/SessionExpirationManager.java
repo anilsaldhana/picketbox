@@ -23,9 +23,13 @@ package org.picketbox.core.session;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.WeakHashMap;
 
 import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.event.EventObserver;
 import org.picketbox.core.exceptions.PicketBoxSessionException;
+import org.picketbox.core.session.event.SessionGetAttributeEvent;
+import org.picketbox.core.session.event.SessionSetAttributeEvent;
 
 /**
  * A manager capable of creating PicketBox sessions
@@ -38,6 +42,8 @@ public class SessionExpirationManager {
     private static Timer timer = new Timer();
 
     private final long expiryValue;
+
+    private WeakHashMap<String, SessionTimerTask> timerMap = new WeakHashMap<String, SessionTimerTask>();
 
     public SessionExpirationManager(PicketBoxConfiguration configuration) {
         this.expiryValue = configuration.getSessionManager().getSessionTimeout() * 60 * 1000;
@@ -53,17 +59,62 @@ public class SessionExpirationManager {
             return;
         }
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (session.isValid()) {
-                    try {
-                        session.expire();
-                    } catch (PicketBoxSessionException e) {
-                        e.printStackTrace();
-                    }
+        handleSessionExpiration(session);
+    }
+
+    @EventObserver
+    public void handleEvents(Object event) {
+        PicketBoxSession session = null;
+        if (event instanceof SessionSetAttributeEvent) {
+            SessionSetAttributeEvent ssae = (SessionSetAttributeEvent) event;
+            session = ssae.getSession();
+        } else if (event instanceof SessionGetAttributeEvent) {
+            SessionGetAttributeEvent sgae = (SessionGetAttributeEvent) event;
+            session = sgae.getSession();
+        }
+
+        if (session != null) {
+            handleSessionExpiration(session);
+        }
+    }
+
+    public class SessionTimerTask extends TimerTask {
+        private PicketBoxSession session = null;
+
+        public SessionTimerTask(PicketBoxSession session) {
+            this.session = session;
+        }
+
+        public SessionId<?> getID() {
+            return session.getId();
+        }
+
+        @Override
+        public void run() {
+            if (session.isValid()) {
+                try {
+                    session.expire();
+                } catch (PicketBoxSessionException e) {
+                    e.printStackTrace();
                 }
             }
-        }, this.expiryValue);
+        }
+    }
+
+    private void handleSessionExpiration(PicketBoxSession session) {
+        if (session == null)
+            throw new RuntimeException("Session is null");
+
+        // Get the timertask
+        String key = session.getId().toString();
+
+        SessionTimerTask sessionTimerTask = timerMap.get(key);
+        if (sessionTimerTask != null) {
+            sessionTimerTask.cancel();
+        }
+
+        sessionTimerTask = new SessionTimerTask(session);
+        timerMap.put(session.getId().toString(), sessionTimerTask);
+        timer.schedule(sessionTimerTask, this.expiryValue);
     }
 }
