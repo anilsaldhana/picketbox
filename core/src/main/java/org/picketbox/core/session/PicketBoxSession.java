@@ -49,6 +49,9 @@ public class PicketBoxSession implements Serializable {
     private static final long serialVersionUID = 2149908831443524877L;
 
     protected ConcurrentMap<String, Object> attributes = new ConcurrentHashMap<String, Object>();
+
+    protected ConcurrentMap<String, Object> applicationAttributes = new ConcurrentHashMap<String, Object>();
+
     protected SessionId<? extends Serializable> id;
     protected boolean invalid = false;
     protected UserContext userContext;
@@ -107,7 +110,7 @@ public class PicketBoxSession implements Serializable {
     }
 
     /**
-     * Get a read only copy of the attributes
+     * Get a read only copy of the attributes.
      *
      * @return
      * @throws PicketBoxSessionException
@@ -130,6 +133,49 @@ public class PicketBoxSession implements Serializable {
         this.eventManager.raiseEvent(new SessionGetAttributeEvent(this, key));
 
         return this.attributes.get(key);
+    }
+
+    /**
+     * Add an attribute for applications.
+     *
+     * Application attributes are for the use by applications and not for users.
+     *
+     * @param key
+     * @param val
+     * @throws PicketBoxSessionException
+     */
+    public void setApplicationStateAttributes(final String key, final Object val) throws PicketBoxSessionException {
+        checkIfIsInvalid();
+
+        this.applicationAttributes.put(key, val);
+    }
+
+    /**
+     * Get a read only copy of the attributes set aside for applications.
+     *
+     * Application attributes are for the use by applications and not for users.
+     *
+     * @return
+     * @throws PicketBoxSessionException
+     */
+    public Map<String, Object> getApplicationStateAttributes() throws PicketBoxSessionException {
+        checkIfIsInvalid();
+        return Collections.unmodifiableMap(this.applicationAttributes);
+    }
+
+    /**
+     * Get an attribute for applications.
+     *
+     * Application attributes are for the use by applications and not for users.
+     *
+     * @param key
+     * @return
+     * @throws PicketBoxSessionException
+     */
+    public Object getApplicationStateAttributes(final String key) throws PicketBoxSessionException {
+        checkIfIsInvalid();
+
+        return this.applicationAttributes.get(key);
     }
 
     /**
