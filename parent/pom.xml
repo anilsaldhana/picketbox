@@ -23,7 +23,7 @@
 	<groupId>org.picketbox</groupId>
 	<artifactId>picketbox-core-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>5.0.0-2013Feb01</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<name>PicketBox Parent</name>
 	<url>http://jboss.org/picketbox/</url>
 	<description>PicketBox Maven Parent Project</description>
