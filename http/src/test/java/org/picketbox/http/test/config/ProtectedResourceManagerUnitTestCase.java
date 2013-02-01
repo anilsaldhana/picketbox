@@ -94,7 +94,7 @@ public class ProtectedResourceManagerUnitTestCase extends EmbeddedWebServerBase 
 
     @Test
     public void testDigestAuth() throws Exception {
-        URL url = new URL(this.urlStr + "onlyManagers");
+        URL url = new URL(this.urlStr + "/onlyManagers/");
 
         DefaultHttpClient httpclient = null;
         try {
