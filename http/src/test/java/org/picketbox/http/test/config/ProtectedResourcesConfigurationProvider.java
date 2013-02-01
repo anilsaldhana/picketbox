@@ -47,7 +47,7 @@ public class ProtectedResourcesConfigurationProvider implements ConfigurationBui
         configurationBuilder.protectedResource().resource("/notProtected", ProtectedResourceConstraint.NOT_PROTECTED)
                 .resource("/onlyManagers", "manager").resource("/confidentialResource", "confidential");
 
-        configurationBuilder.identityManager().fileStore().preserveState();
+        configurationBuilder.identityManager().fileStore();
         
         configurationBuilder.eventManager().handler(new InitializationHandler());
         
