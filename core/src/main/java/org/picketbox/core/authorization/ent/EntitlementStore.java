@@ -44,7 +44,7 @@ public interface EntitlementStore {
     boolean addUserEntitlements(Resource resource, User user, EntitlementCollection collection);
 
     /**
-     *
+     * Add a role {@link EntitlementCollection}
      * @param resource
      * @param role
      * @param collection
@@ -53,7 +53,7 @@ public interface EntitlementStore {
     boolean addRoleEntitlements(Resource resource, Role role, EntitlementCollection collection);
 
     /**
-     *
+     * Add a group {@link EntitlementCollection}
      * @param resource
      * @param group
      * @param collection
@@ -72,7 +72,7 @@ public interface EntitlementStore {
     EntitlementCollection entitlements(Resource resource, User user);
 
     /**
-     *
+     * Return the role {@link EntitlementCollection}
      * @param resource
      * @param role
      * @param collection
@@ -81,7 +81,7 @@ public interface EntitlementStore {
     EntitlementCollection entitlements(Resource resource, Role role);
 
     /**
-     *
+     * Return the group {@link EntitlementCollection}
      * @param resource
      * @param group
      * @param collection

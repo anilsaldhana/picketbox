@@ -25,7 +25,7 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authorization.Resource;
 
 /**
- * Unlike the {@link AuthorizationManager}, the {@link EntitlementsManager} is used to obtain all the entitlements with one
+ * Unlike the {@link AuthorizationManager}, the {@link EntitlementsManager} is used to obtain all the {@link Entitlement} with one
  * call.
  *
  * @author anil saldhana
@@ -33,8 +33,7 @@ import org.picketbox.core.authorization.Resource;
  */
 public interface EntitlementsManager {
     /**
-     * Entitlement API
-     *
+     * Obtain a collection of {@link Entitlement}
      * @param resource resource for which we need to check entitlements
      * @param userContext subject (user/process) that is performing an action on the resource
      * @return a collection of {@link EntitlementCollection}

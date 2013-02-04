@@ -41,7 +41,7 @@ public class EntitlementCollection {
     /**
      * Construct {@link EntitlementCollection}
      *
-     * @param name
+     * @param name name of the collection
      */
     public EntitlementCollection(String name) {
         this.name = name;
@@ -50,7 +50,7 @@ public class EntitlementCollection {
     /**
      * Get the name of the {@link EntitlementCollection}
      *
-     * @return
+     * @return the name 
      */
     public String getName() {
         return this.name;
@@ -59,7 +59,7 @@ public class EntitlementCollection {
     /**
      * Add an {@link Entitlement}
      *
-     * @param entitlement
+     * @param entitlement an {@link Entitlement}
      */
     public void add(Entitlement entitlement) {
         this.entitlements.add(entitlement);
@@ -77,7 +77,7 @@ public class EntitlementCollection {
     /**
      * Add all the entitlements from the list
      *
-     * @param entitlements
+     * @param entitlements a {@link List} of {@link Entitlement}
      */
     public void addAll(List<Entitlement> entitlements) {
         this.entitlements.addAll(entitlements);
@@ -86,7 +86,7 @@ public class EntitlementCollection {
     /**
      * Check whether {@link Entitlement} is present
      *
-     * @param entitlement
+     * @param entitlement an {@link Entitlement}
      * @return
      */
     public boolean contains(Entitlement entitlement) {
@@ -131,9 +131,9 @@ public class EntitlementCollection {
     /**
      * Quick way to create a collection
      *
-     * @param name
-     * @param entitlements
-     * @return
+     * @param name of the entitlement collection
+     * @param entitlements array of {@link Entitlement} objects
+     * @return a {@link EntitlementCollection}
      */
     public static EntitlementCollection create(String name, Entitlement[] entitlements) {
         EntitlementCollection coll = new EntitlementCollection(name);
