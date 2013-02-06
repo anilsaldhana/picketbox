@@ -92,18 +92,19 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         picketBoxManager.logout(authenticatedUser);
 
-        //Thread.sleep(25000);
+        // Thread.sleep(25000);
 
-        //Sleep for 25 seconds
+        // Sleep for 25 seconds
         TimeZone utc = TimeZone.getTimeZone("UTC");
         final Calendar future = Calendar.getInstance(utc);
         future.setTime(new Date());
         future.add(Calendar.SECOND, 25);
-        TimeBasedOTPUtil.setTimeTracker(new TimeTracker(){
+        TimeBasedOTPUtil.setTimeTracker(new TimeTracker() {
             @Override
             public Calendar getCalendar() {
                 return future;
-            }});
+            }
+        });
 
         authenticatingUser.setCredential(new OTPCredential(userName, userName, token));
 
@@ -113,7 +114,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         assertTrue(authenticatedUser.isAuthenticated());
         assertRoles(authenticatedUser);
         assertGroups(authenticatedUser);
-        
+
         TimeBasedOTPUtil.setTimeTracker(null);
     }
 
@@ -146,17 +147,17 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
         picketBoxManager.logout(authenticatedUser);
 
         authenticatedUser = null;
-        
-        //Thread.sleep(60000); 
-        
+
+        // Thread.sleep(60000);
+
         authenticatingUser.setCredential(new OTPCredential("admin", "admin", firstOTP));
-        
+
         TimeZone utc = TimeZone.getTimeZone("UTC");
         Date date = new Date();
         final Calendar future = Calendar.getInstance(utc);
         future.setTime(date);
         future.add(Calendar.HOUR, 1);
-        TimeBasedOTPUtil.setTimeTracker(new TimeTracker(){
+        TimeBasedOTPUtil.setTimeTracker(new TimeTracker() {
             @Override
             public Calendar getCalendar() {
                 return future;
@@ -167,7 +168,7 @@ public class OTPAuthenticationTestCase extends AbstractDefaultPicketBoxManagerTe
 
         assertNotNull(authenticatedUser);
         assertFalse(authenticatedUser.isAuthenticated());
-        
+
         TimeBasedOTPUtil.setTimeTracker(null);
     }
 

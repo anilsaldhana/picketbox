@@ -45,6 +45,7 @@ public interface EntitlementStore {
 
     /**
      * Add a role {@link EntitlementCollection}
+     *
      * @param resource
      * @param role
      * @param collection
@@ -54,6 +55,7 @@ public interface EntitlementStore {
 
     /**
      * Add a group {@link EntitlementCollection}
+     *
      * @param resource
      * @param group
      * @param collection
@@ -73,6 +75,7 @@ public interface EntitlementStore {
 
     /**
      * Return the role {@link EntitlementCollection}
+     *
      * @param resource
      * @param role
      * @param collection
@@ -82,6 +85,7 @@ public interface EntitlementStore {
 
     /**
      * Return the group {@link EntitlementCollection}
+     *
      * @param resource
      * @param group
      * @param collection

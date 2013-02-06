@@ -37,6 +37,7 @@ import org.picketbox.core.authorization.ent.EntitlementStore;
 import org.picketbox.core.authorization.ent.EntitlementsManager;
 import org.picketbox.core.authorization.ent.impl.DefaultEntitlementsManager;
 import org.picketbox.core.authorization.ent.impl.SimpleEntitlement;
+import org.picketbox.core.authorization.impl.SimpleEnclosingResource;
 import org.picketbox.core.authorization.impl.SimpleResource;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
@@ -161,22 +162,11 @@ public class FileDirectoryEntitlementsUseCase {
         }
     }
 
-    public static class DirResource extends FileResource implements Resource {
-        private static final long serialVersionUID = 1L;
-        private List<FileResource> files = new ArrayList<FileResource>();
+    public static class DirResource extends SimpleEnclosingResource implements Resource {
+        private static final long serialVersionUID = -9126083462327760416L;
 
         public DirResource(String name) {
             super(name);
-        }
-
-        public DirResource add(FileResource file) {
-            this.files.add(file);
-            return this;
-        }
-
-        public DirResource add(List<FileResource> files) {
-            this.files.addAll(files);
-            return this;
         }
     }
 }

@@ -97,12 +97,12 @@ public abstract class AbstractDefaultPicketBoxManagerTestCase {
         adminUser.setEmail("admin@picketbox.com");
         adminUser.setFirstName("The");
         adminUser.setLastName("Admin");
-        
+
         identityManager.update(adminUser);
-        
+
         identityManager.updateCredential(adminUser, new Password("admin".toCharArray()));
         identityManager.updateCredential(adminUser, new X509Cert(getTestingCertificate()));
-        
+
         Role roleDeveloper = new SimpleRole("developer");
 
         identityManager.add(roleDeveloper);

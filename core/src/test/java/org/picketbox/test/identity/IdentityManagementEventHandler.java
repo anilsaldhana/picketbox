@@ -54,11 +54,11 @@ public class IdentityManagementEventHandler {
     public User getCreatedUser() {
         return this.createdUser;
     }
-    
+
     public User getUpdatedUser() {
         return this.updatedUser;
     }
-    
+
     public User getRemovedUser() {
         return this.removedUser;
     }

@@ -35,7 +35,7 @@ import org.picketbox.test.ldap.AbstractLDAPTest;
 public class LDAPBasedIdentityManagerTestcase extends AbstractIdentityManagerTestCase {
 
     private AbstractLDAPTest ldapTest;
-    
+
     @Override
     @Before
     public void onSetup() throws Exception {
@@ -47,28 +47,28 @@ public class LDAPBasedIdentityManagerTestcase extends AbstractIdentityManagerTes
                 super.importLDIF("ldap/pb_core_users.ldif");
             }
         };
-        
+
         this.ldapTest.setup();
-        
+
         super.onSetup();
     }
-    
+
     @Override
     @After
     public void onFinish() throws Exception {
         super.onFinish();
         this.ldapTest.tearDown();
     }
-    
+
     @Override
     protected ConfigurationBuilder doGetConfigurationBuilder() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         builder.identityManager().ldapStore().url("ldap://localhost:10389/").bindDN("uid=admin,ou=system")
-                .bindCredential("secret").userDNSuffix("ou=People,dc=jboss,dc=org").agentDNSuffix("ou=Agent,dc=jboss,dc=org").roleDNSuffix("ou=Roles,dc=jboss,dc=org")
-                .groupDNSuffix("ou=Groups,dc=jboss,dc=org");
-        
+                .bindCredential("secret").userDNSuffix("ou=People,dc=jboss,dc=org").agentDNSuffix("ou=Agent,dc=jboss,dc=org")
+                .roleDNSuffix("ou=Roles,dc=jboss,dc=org").groupDNSuffix("ou=Groups,dc=jboss,dc=org");
+
         return builder;
     }
-    
+
 }

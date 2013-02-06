@@ -50,7 +50,7 @@ public class EntitlementCollection {
     /**
      * Get the name of the {@link EntitlementCollection}
      *
-     * @return the name 
+     * @return the name
      */
     public String getName() {
         return this.name;

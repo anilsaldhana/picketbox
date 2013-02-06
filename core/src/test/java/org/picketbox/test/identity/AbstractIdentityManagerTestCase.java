@@ -47,7 +47,7 @@ import org.picketlink.idm.model.User;
 
 /**
  * @author Pedro Silva
- * 
+ *
  */
 public abstract class AbstractIdentityManagerTestCase extends AbstractDefaultPicketBoxManagerTestCase {
 
@@ -109,7 +109,7 @@ public abstract class AbstractIdentityManagerTestCase extends AbstractDefaultPic
         assertTrue(authenticatedContext.hasGroup("PicketBox Discussions"));
         assertTrue(authenticatedContext.hasGroup("Sales"));
     }
-    
+
     @Test
     public void testUnsuccessfulAuthentication() throws Exception {
         UserContext authenticatingContext = new UserContext();
@@ -120,7 +120,7 @@ public abstract class AbstractIdentityManagerTestCase extends AbstractDefaultPic
 
         assertNotNull(authenticatedContext);
         assertFalse(authenticatedContext.isAuthenticated());
-        
+
         authenticatingContext.setCredential(new UsernamePasswordCredential("invalidUser", "password"));
 
         authenticatedContext = getPicketBoxManager().authenticate(authenticatingContext);
@@ -128,59 +128,59 @@ public abstract class AbstractIdentityManagerTestCase extends AbstractDefaultPic
         assertNotNull(authenticatedContext);
         assertFalse(authenticatedContext.isAuthenticated());
     }
-    
+
     @Test
     public void testUserCreatedEvent() throws Exception {
         IdentityManagementEventHandler handler = new IdentityManagementEventHandler();
-        
+
         getPicketBoxManager().getEventManager().addHandler(handler);
-        
+
         SimpleUser user = new SimpleUser("someUser");
-        
+
         getIdentityManager().add(user);
-        
+
         assertNotNull(handler.getCreatedUser());
         assertEquals(user, handler.getCreatedUser());
         assertEquals(user.getLoginName(), handler.getCreatedUser().getLoginName());
     }
-    
+
     @Test
     public void testUserRemovedEvent() throws Exception {
         IdentityManagementEventHandler handler = new IdentityManagementEventHandler();
-        
+
         getPicketBoxManager().getEventManager().addHandler(handler);
-        
+
         SimpleUser user = new SimpleUser("someUser");
-        
+
         getIdentityManager().add(user);
         getIdentityManager().remove(user);
-        
+
         assertNotNull(handler.getRemovedUser());
         assertEquals(user, handler.getRemovedUser());
         assertEquals(user.getLoginName(), handler.getRemovedUser().getLoginName());
     }
-    
+
     @Test
     public void testUserUpdatedEvent() throws Exception {
         IdentityManagementEventHandler handler = new IdentityManagementEventHandler();
-        
+
         getPicketBoxManager().getEventManager().addHandler(handler);
-        
+
         SimpleUser user = new SimpleUser("someUser");
-        
+
         getIdentityManager().add(user);
-        
+
         user.setAttribute(new Attribute<String>("name", "value"));
-        
+
         getIdentityManager().update(user);
-        
+
         assertNotNull(handler.getUpdatedUser());
         assertEquals(user, handler.getUpdatedUser());
         assertEquals(user.getLoginName(), handler.getUpdatedUser().getLoginName());
         assertNotNull(handler.getUpdatedUser().getAttribute("name"));
         assertEquals("value", handler.getUpdatedUser().getAttribute("name").getValue());
     }
-    
+
     public PicketBoxManager getPicketBoxManager() {
         return this.picketBoxManager;
     }
