@@ -22,9 +22,9 @@
 
 package org.picketbox.http.config;
 
-import org.picketbox.core.config.AuthenticationConfigurationBuilder;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketbox.core.config.builder.AuthenticationConfigurationBuilder;
 
 /**
  * A {@link ConfigurationBuilder} for HTTP

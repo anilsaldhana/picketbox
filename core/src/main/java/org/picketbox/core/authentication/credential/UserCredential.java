@@ -20,49 +20,39 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.authentication.credential;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.picketbox.core.authorization.AuthorizationManager;
+import org.picketlink.idm.credential.Credentials;
 
 /**
+ * <p>
+ * This class represents a specific credential type. Eg.: username/password, digest, certificate, security tokens, etc.
+ * </p>
+ * <p>
+ * Each credential type is supported by some mechanism that knows how to get the necessary informations to proceed with the user
+ * authentication.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class AuthorizationConfigurationBuilder extends AbstractConfigurationBuilder<AuthorizationConfiguration> {
+public interface UserCredential {
 
-    private final List<AuthorizationManager> managers;
-
-    public AuthorizationConfigurationBuilder(ConfigurationBuilder builder) {
-        super(builder);
-        this.managers = new ArrayList<AuthorizationManager>();
-    }
-
-    /*
-     * (non-Javadoc)
+    /**
+     * <p>
+     * Returns the username.
+     * </p>
      *
-     * @see org.picketbox.core.config.AbstractConfigurationBuilder#setDefaults()
+     * @return
      */
-    @Override
-    protected void setDefaults() {
+    String getUserName();
 
-    }
-
-    public AuthorizationConfigurationBuilder manager(AuthorizationManager authorizationManager) {
-        this.managers.add(authorizationManager);
-        return this;
-    }
-
-    /*
-     * (non-Javadoc)
+    /**
+     * <p>
+     * Returns the user credential.
+     * </p>
      *
-     * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
+     * @return
      */
-    @Override
-    public AuthorizationConfiguration doBuild() {
-        return new AuthorizationConfiguration(this.managers);
-    }
-
+    Credentials getCredential();
 }

@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,8 @@ import org.picketbox.core.authentication.impl.CertificateAuthenticationMechanism
 import org.picketbox.core.authentication.impl.OTPAuthenticationMechanism;
 import org.picketbox.core.authentication.impl.TrustedUsernameAuthenticationMechanism;
 import org.picketbox.core.authentication.impl.UserNamePasswordAuthenticationMechanism;
+import org.picketbox.core.config.AuthenticationConfiguration;
+import org.picketbox.core.config.ConfigurationBuilder;
 
 /**
  * A {@link ConfigurationBuilder} for Authentication

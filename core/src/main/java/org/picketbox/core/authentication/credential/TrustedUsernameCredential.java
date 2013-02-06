@@ -22,7 +22,6 @@
 
 package org.picketbox.core.authentication.credential;
 
-import org.picketbox.core.AbstractUserCredential;
 
 /**
  * <p>

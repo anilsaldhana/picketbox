@@ -25,7 +25,7 @@ package org.picketbox.http.authentication.credential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.credential.AbstractUserCredential;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.util.HTTPDigestUtil;
 import org.picketlink.idm.credential.internal.Digest;

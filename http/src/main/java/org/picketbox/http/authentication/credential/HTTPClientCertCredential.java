@@ -27,7 +27,7 @@ import java.security.cert.X509Certificate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.credential.AbstractUserCredential;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketlink.idm.credential.internal.X509Cert;
 import org.picketlink.idm.credential.internal.X509CertificateCredentials;

@@ -22,6 +22,14 @@
 
 package org.picketbox.core.config;
 
+import org.picketbox.core.config.builder.AbstractConfigurationBuilder;
+import org.picketbox.core.config.builder.AuditConfigurationBuilder;
+import org.picketbox.core.config.builder.AuthenticationConfigurationBuilder;
+import org.picketbox.core.config.builder.AuthorizationConfigurationBuilder;
+import org.picketbox.core.config.builder.EventManagerConfigurationBuilder;
+import org.picketbox.core.config.builder.IdentityManagerConfigurationBuilder;
+import org.picketbox.core.config.builder.SessionManagerConfigurationBuilder;
+
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

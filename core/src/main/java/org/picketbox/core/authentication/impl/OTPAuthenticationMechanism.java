@@ -29,10 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.picketbox.core.PicketBoxPrincipal;
-import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.credential.OTPCredential;
+import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.util.TimeBasedOTP;
 import org.picketbox.core.util.TimeBasedOTPUtil;

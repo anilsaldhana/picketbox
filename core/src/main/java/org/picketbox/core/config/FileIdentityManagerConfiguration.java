@@ -34,11 +34,11 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
     private String workingDir;
     private boolean alwaysCreateFiles = true;
 
-    protected void setWorkingDir(String workingDir) {
+    public void setWorkingDir(String workingDir) {
         this.workingDir = workingDir;
     }
 
-    protected void setAlwaysCreateFiles(boolean alwaysCreateFiles) {
+    public void setAlwaysCreateFiles(boolean alwaysCreateFiles) {
         this.alwaysCreateFiles = alwaysCreateFiles;
     }
 

@@ -22,11 +22,17 @@
 package org.picketbox.core.authentication.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.authentication.AuthenticationInfo;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
+import org.picketbox.core.authentication.credential.UserCredential;
 
 /**
  * <p>
@@ -38,12 +44,36 @@ import org.picketbox.core.authentication.AuthenticationProvider;
  */
 public abstract class AbstractAuthenticationProvider implements AuthenticationProvider {
 
-    private final List<AuthenticationMechanism> mechanisms = new ArrayList<AuthenticationMechanism>();
-    private PicketBoxManager picketBoxManager;
+    private final Map<Class<? extends UserCredential>, List<AuthenticationMechanism>> mechanisms = new HashMap<Class<? extends UserCredential>, List<AuthenticationMechanism>>();
+    private final PicketBoxManager picketboxManager;
 
     public AbstractAuthenticationProvider(PicketBoxManager picketBoxManager) {
-        this.picketBoxManager = picketBoxManager;
-        this.mechanisms.addAll(this.picketBoxManager.getConfiguration().getAuthentication().getMechanisms());
+        this.picketboxManager = picketBoxManager;
+        initMechanisms(this.picketboxManager.getConfiguration().getAuthentication().getMechanisms());
+    }
+
+    private void initMechanisms(List<AuthenticationMechanism> providedMechanisms) {
+        for (AuthenticationMechanism authenticationMechanism : providedMechanisms) {
+
+            if (authenticationMechanism instanceof AbstractAuthenticationMechanism) {
+                ((AbstractAuthenticationMechanism) authenticationMechanism).setPicketBoxManager(this.picketboxManager);
+            }
+
+            List<AuthenticationInfo> mechanismInfos = authenticationMechanism.getAuthenticationInfo();
+
+            for (AuthenticationInfo info : mechanismInfos) {
+                Class<? extends UserCredential> supportedCredential = info.getSupportedCredentials();
+
+                List<AuthenticationMechanism> supportedMechanisms = this.mechanisms.get(supportedCredential);
+
+                if (supportedMechanisms == null) {
+                    supportedMechanisms = new ArrayList<AuthenticationMechanism>();
+                    this.mechanisms.put(supportedCredential, supportedMechanisms);
+                }
+
+                supportedMechanisms.add(authenticationMechanism);
+            }
+        }
     }
 
     /*
@@ -53,15 +83,22 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      */
     @Override
     public String[] getSupportedMechanisms() {
-        String[] mechanisms = new String[this.mechanisms.size()];
+        List<AuthenticationMechanism> supportedMechanisms = getAllMechanisms();
+
+        String[] mechanisms = new String[supportedMechanisms.size()];
 
         int i = 0;
 
-        for (AuthenticationMechanism entry : this.mechanisms) {
+        for (AuthenticationMechanism entry : supportedMechanisms) {
             mechanisms[i++] = entry.getClass().getName();
         }
 
         return mechanisms;
+    }
+
+    @Override
+    public List<AuthenticationMechanism> getMechanisms(UserCredential credential) {
+        return this.mechanisms.get(credential.getClass());
     }
 
     /*
@@ -71,11 +108,12 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      */
     @Override
     public boolean supports(String mechanismName) {
-        for (AuthenticationMechanism mechanism : this.mechanisms) {
-            if (mechanism.getClass().getName().equals(mechanismName)) {
+        for (String supportedMechanismName : getSupportedMechanisms()) {
+            if (supportedMechanismName.equals(mechanismName)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -86,18 +124,25 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      */
     @Override
     public AuthenticationMechanism getMechanism(String mechanismName) {
-        for (AuthenticationMechanism currentMechanism : this.mechanisms) {
-
-            if (currentMechanism instanceof AbstractAuthenticationMechanism) {
-                ((AbstractAuthenticationMechanism) currentMechanism).setPicketBoxManager(this.picketBoxManager);
-            }
-
+        for (AuthenticationMechanism currentMechanism : getAllMechanisms()) {
             if (currentMechanism.getClass().getName().equals(mechanismName)) {
                 return currentMechanism;
             }
         }
 
         return null;
+    }
+
+    private List<AuthenticationMechanism> getAllMechanisms() {
+        Set<Entry<Class<? extends UserCredential>, List<AuthenticationMechanism>>> entrySet = this.mechanisms.entrySet();
+
+        List<AuthenticationMechanism> supportedMechanisms = new ArrayList<AuthenticationMechanism>();
+
+        for (Entry<Class<? extends UserCredential>, List<AuthenticationMechanism>> entry : entrySet) {
+            supportedMechanisms.addAll(entry.getValue());
+        }
+
+        return supportedMechanisms;
     }
 
 }

@@ -22,8 +22,8 @@
 
 package org.picketbox.http.config;
 
-import org.picketbox.core.config.AbstractConfigurationBuilder;
 import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.core.config.builder.AbstractConfigurationBuilder;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

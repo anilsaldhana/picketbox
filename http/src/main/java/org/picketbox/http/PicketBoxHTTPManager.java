@@ -32,6 +32,7 @@ import org.picketbox.core.AbstractPicketBoxManager;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authorization.Resource;
+import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.http.authorization.resource.WebResource;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 import org.picketbox.http.resource.ProtectedResource;
@@ -48,11 +49,9 @@ public final class PicketBoxHTTPManager extends AbstractPicketBoxManager {
 
     @SuppressWarnings("rawtypes")
     private ProtectedResourceManager protectedResourceManager;
-    private PicketBoxHTTPConfiguration configuration;
 
     public PicketBoxHTTPManager(PicketBoxHTTPConfiguration configuration) {
         super(configuration);
-        this.configuration = configuration;
     }
 
     /*
@@ -104,15 +103,12 @@ public final class PicketBoxHTTPManager extends AbstractPicketBoxManager {
         return resource;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.AbstractPicketBoxManager#doConfigure()
-     */
     @Override
-    protected void doConfigure() {
-        this.protectedResourceManager = this.configuration.getProtectedResource().getManager();
-        List<ProtectedResource> resources = this.configuration.getProtectedResource().getResources();
+    protected void doConfigure(PicketBoxConfiguration configuration) {
+        PicketBoxHTTPConfiguration httpConfig = (PicketBoxHTTPConfiguration) configuration;
+
+        this.protectedResourceManager = httpConfig.getProtectedResource().getManager();
+        List<ProtectedResource> resources = httpConfig.getProtectedResource().getResources();
 
         for (ProtectedResource protectedResource : resources) {
             this.protectedResourceManager.addProtectedResource(protectedResource);
@@ -120,11 +116,7 @@ public final class PicketBoxHTTPManager extends AbstractPicketBoxManager {
 
         this.protectedResourceManager.start();
 
-        HTTPSessionManager sessionManager = new HTTPSessionManager(this);
-
-        sessionManager.start();
-
-        setSessionManager(sessionManager);
+        setSessionManager(new HTTPSessionManager(this));
     }
 
     public UserContext getUserContext(HttpServletRequest request) {
@@ -143,13 +135,17 @@ public final class PicketBoxHTTPManager extends AbstractPicketBoxManager {
      * @return
      */
     private String getUserAttributeName() {
-        String name = this.configuration.getSessionManager().getSessionAttributeName();
+        String name = getHTTPConfiguration().getSessionManager().getSessionAttributeName();
 
         if (name == null) {
             name = PicketBoxConstants.SUBJECT;
         }
 
         return name;
+    }
+
+    private PicketBoxHTTPConfiguration getHTTPConfiguration() {
+        return (PicketBoxHTTPConfiguration) getConfiguration();
     }
 
     @SuppressWarnings("unchecked")

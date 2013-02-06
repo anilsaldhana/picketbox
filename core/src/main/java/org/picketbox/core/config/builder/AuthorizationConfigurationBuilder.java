@@ -20,26 +20,28 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.picketbox.core.event.DefaultEventManager;
-import org.picketbox.core.event.PicketBoxEventManager;
+import org.picketbox.core.authorization.AuthorizationManager;
+import org.picketbox.core.config.AuthorizationConfiguration;
+import org.picketbox.core.config.ConfigurationBuilder;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class EventManagerConfigurationBuilder extends AbstractConfigurationBuilder<EventManagerConfiguration> {
+public class AuthorizationConfigurationBuilder extends AbstractConfigurationBuilder<AuthorizationConfiguration> {
 
-    private PicketBoxEventManager manager;
-    private List<Object> handlers;
+    private final List<AuthorizationManager> managers;
+    private EntitlementsConfigurationBuilder entitlements;
 
-    public EventManagerConfigurationBuilder(ConfigurationBuilder builder) {
+    public AuthorizationConfigurationBuilder(ConfigurationBuilder builder) {
         super(builder);
-        this.handlers = new ArrayList<Object>();
+        this.managers = new ArrayList<AuthorizationManager>();
+        this.entitlements = new EntitlementsConfigurationBuilder(builder);
     }
 
     /*
@@ -49,19 +51,16 @@ public class EventManagerConfigurationBuilder extends AbstractConfigurationBuild
      */
     @Override
     protected void setDefaults() {
-        if (this.manager == null) {
-            this.manager = new DefaultEventManager(this.handlers);
-        }
+
     }
 
-    public EventManagerConfigurationBuilder manager(PicketBoxEventManager eventManager) {
-        this.manager = eventManager;
+    public AuthorizationConfigurationBuilder manager(AuthorizationManager authorizationManager) {
+        this.managers.add(authorizationManager);
         return this;
     }
 
-    public EventManagerConfigurationBuilder handler(Object handler) {
-        this.handlers.add(handler);
-        return this;
+    public EntitlementsConfigurationBuilder entitlements() {
+        return this.entitlements;
     }
 
     /*
@@ -70,12 +69,8 @@ public class EventManagerConfigurationBuilder extends AbstractConfigurationBuild
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
      */
     @Override
-    protected EventManagerConfiguration doBuild() {
-        return new EventManagerConfiguration(this.manager);
-    }
-
-    public void setEventManager(PicketBoxEventManager eventManager) {
-        this.manager = eventManager;
+    public AuthorizationConfiguration doBuild() {
+        return new AuthorizationConfiguration(this.managers, this.entitlements.build());
     }
 
 }

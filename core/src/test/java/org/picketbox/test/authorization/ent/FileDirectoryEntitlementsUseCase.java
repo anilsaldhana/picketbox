@@ -29,15 +29,16 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authorization.Resource;
 import org.picketbox.core.authorization.ent.Entitlement;
 import org.picketbox.core.authorization.ent.EntitlementCollection;
-import org.picketbox.core.authorization.ent.EntitlementStore;
 import org.picketbox.core.authorization.ent.EntitlementsManager;
-import org.picketbox.core.authorization.ent.impl.DefaultEntitlementsManager;
 import org.picketbox.core.authorization.ent.impl.SimpleEntitlement;
 import org.picketbox.core.authorization.impl.SimpleResource;
+import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.SimpleGroup;
@@ -51,17 +52,16 @@ import org.picketlink.idm.model.User;
  * @author anil saldhana
  * @since Oct 25, 2012
  */
-public class FileDirectoryEntitlementsUseCase {
+public class FileDirectoryEntitlementsUseCase extends AbstractDefaultPicketBoxManagerTestCase {
     private EntitlementsManager mgr = null;
 
     private User useranil = new SimpleUser("anil");
     private Role employee = new SimpleRole("employee");
     private Group jboss = new SimpleGroup("1", new SimpleGroup("jboss"));
+    private PicketBoxManager picketboxManaber;
 
     @Before
     public void setup() throws Exception {
-        DefaultEntitlementsManager dm = new DefaultEntitlementsManager();
-
         // We have a directory called "home"
         DirResource home = new DirResource("home");
         DirResource anil = new DirResource("anil");
@@ -81,26 +81,28 @@ public class FileDirectoryEntitlementsUseCase {
 
         EntitlementCollection rwx = EntitlementCollection.create("rwx", new Entitlement[] { readEntitlement, writeEntitlement,
                 executeEntitlement });
-        EntitlementCollection rw = EntitlementCollection.create("rwx", new Entitlement[] { readEntitlement, writeEntitlement });
-        EntitlementCollection r = EntitlementCollection.create("rwx", new Entitlement[] { readEntitlement });
+        EntitlementCollection rw = EntitlementCollection.create("rw", new Entitlement[] { readEntitlement, writeEntitlement });
+        EntitlementCollection r = EntitlementCollection.create("r", new Entitlement[] { readEntitlement });
 
-        EntitlementStore store = dm.store();
-        store.addUserEntitlements(fileA, this.useranil, rwx);
-        store.addUserEntitlements(fileB, this.useranil, rwx);
-        store.addUserEntitlements(fileC, this.useranil, rwx);
-        store.addUserEntitlements(work, this.useranil, rwx);
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+        
+        builder.authorization().entitlements().add(fileA, this.useranil, rwx);
+        builder.authorization().entitlements().add(fileB, this.useranil, rwx);
+        builder.authorization().entitlements().add(fileC, this.useranil, rwx);
+        builder.authorization().entitlements().add(work, this.useranil, rwx);
+        
+        builder.authorization().entitlements().add(fileA, this.employee, rw);
+        builder.authorization().entitlements().add(fileA, this.employee, rw);
+        builder.authorization().entitlements().add(fileA, this.employee, rw);
+        builder.authorization().entitlements().add(fileA, this.employee, rw);
 
-        store.addRoleEntitlements(fileA, this.employee, rw);
-        store.addRoleEntitlements(fileA, this.employee, rw);
-        store.addRoleEntitlements(fileA, this.employee, rw);
-        store.addRoleEntitlements(fileA, this.employee, rw);
-
-        store.addGroupEntitlements(fileA, this.jboss, r);
-        store.addGroupEntitlements(fileA, this.jboss, r);
-        store.addGroupEntitlements(fileA, this.jboss, r);
-        store.addGroupEntitlements(fileA, this.jboss, r);
-
-        this.mgr = dm;
+        builder.authorization().entitlements().add(fileA, this.jboss, r);
+        builder.authorization().entitlements().add(fileA, this.jboss, r);
+        builder.authorization().entitlements().add(fileA, this.jboss, r);
+        builder.authorization().entitlements().add(fileA, this.jboss, r);
+        
+        this.picketboxManaber = createManager(builder);
+        this.mgr = this.picketboxManaber.getEntitlementsManager();
     }
 
     @Test

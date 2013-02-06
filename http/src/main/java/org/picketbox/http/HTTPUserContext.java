@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.UserContext;
-import org.picketbox.core.UserCredential;
+import org.picketbox.core.authentication.credential.UserCredential;
 
 /**
  * <p>

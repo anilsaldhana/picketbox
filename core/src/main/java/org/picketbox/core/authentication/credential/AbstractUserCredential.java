@@ -20,41 +20,58 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.authentication.credential;
 
-import org.picketbox.core.audit.AuditProvider;
-import org.picketbox.core.audit.providers.LogAuditProvider;
+import org.picketlink.idm.credential.AbstractBaseCredentials;
+import org.picketlink.idm.credential.Credentials;
 
 /**
+ * <p>
+ * Base class for the {@link UserCredential} interface.
+ * </p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class AuditConfigurationBuilder extends AbstractConfigurationBuilder<AuditConfig> {
+public class AbstractUserCredential extends AbstractBaseCredentials implements UserCredential {
 
-    private AuditProvider provider;
+    private String userName;
 
-    public AuditConfigurationBuilder(ConfigurationBuilder configurationBuilder) {
-        super(configurationBuilder);
+    private Credentials credential;
+
+    public AbstractUserCredential() {
+    }
+
+    public AbstractUserCredential(Credentials credential) {
+        this.credential = credential;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.picketbox.core.Credential#getUserName()
+     */
+    @Override
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
-    protected void setDefaults() {
+    public Credentials getCredential() {
+        return this.credential;
+    }
 
+    public void setCredential(Credentials credential) {
+        this.credential = credential;
     }
 
     @Override
-    protected AuditConfig doBuild() {
-        return new AuditConfig(this.provider);
-    }
-
-    public AuditConfigurationBuilder logProvider() {
-        this.provider = new LogAuditProvider();
-        return this;
-    }
-
-    public AuditConfigurationBuilder provider(AuditProvider provider) {
-        this.provider = provider;
-        return this;
+    public void invalidate() {
+        this.credential = null;
     }
 
 }

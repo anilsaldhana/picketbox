@@ -27,6 +27,7 @@ import org.jboss.logging.Cause;
 import org.jboss.logging.Message;
 import org.jboss.logging.MessageBundle;
 import org.jboss.logging.Messages;
+import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.exceptions.AuthorizationException;
 import org.picketbox.core.exceptions.ConfigurationException;

@@ -28,19 +28,19 @@ import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
 import org.picketbox.core.session.DefaultSessionManager;
 import org.picketbox.core.session.PicketBoxSession;
+import org.picketbox.core.session.SessionManager;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 
 /**
+ * <p>{@link SessionManager} implementation that knows how to manage HTTP sessions.</p>
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
 public class HTTPSessionManager extends DefaultSessionManager {
 
-    private PicketBoxHTTPConfiguration configuration;
-
     public HTTPSessionManager(PicketBoxManager picketBoxManager) {
         super(picketBoxManager);
-        this.configuration = (PicketBoxHTTPConfiguration) picketBoxManager.getConfiguration();
     }
 
     @Override
@@ -60,12 +60,16 @@ public class HTTPSessionManager extends DefaultSessionManager {
      * @return
      */
     private String getUserAttributeName() {
-        String name = this.configuration.getSessionManager().getSessionAttributeName();
+        String name = getConfiguration().getSessionManager().getSessionAttributeName();
 
         if (name == null) {
             name = PicketBoxConstants.SUBJECT;
         }
 
         return name;
+    }
+
+    private PicketBoxHTTPConfiguration getConfiguration() {
+        return (PicketBoxHTTPConfiguration) getPicketBoxManager().getConfiguration();
     }
 }

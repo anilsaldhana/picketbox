@@ -22,6 +22,10 @@
 
 package org.picketbox.core.authentication;
 
+import java.util.List;
+
+import org.picketbox.core.authentication.credential.UserCredential;
+
 /**
  * <p>
  * This interface defines the contract for a Authentication Provider.
@@ -60,5 +64,15 @@ public interface AuthenticationProvider {
      * @return
      */
     AuthenticationMechanism getMechanism(String string);
+
+    /**
+     * <p>
+     * Returns all registered mechanisms for the given {@link UserCredential}.
+     * </p>
+     *
+     * @param string
+     * @return
+     */
+    List<AuthenticationMechanism> getMechanisms(UserCredential credential);
 
 }

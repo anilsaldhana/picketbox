@@ -20,7 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
+
+import org.picketbox.core.config.FileIdentityManagerConfiguration;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

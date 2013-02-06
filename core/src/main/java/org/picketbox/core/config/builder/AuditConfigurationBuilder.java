@@ -19,33 +19,44 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.core.config;
+
+package org.picketbox.core.config.builder;
+
+import org.picketbox.core.audit.AuditProvider;
+import org.picketbox.core.audit.providers.LogAuditProvider;
+import org.picketbox.core.config.AuditConfig;
+import org.picketbox.core.config.ConfigurationBuilder;
 
 /**
- * Configuration for the Identity Store such as LDAP and DB
+ * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
- * @author anil saldhana
- * @since Jul 18, 2012
  */
-public interface BasicIdentityStoreConfig {
-    /**
-     * The URL to the store
-     *
-     * @return
-     */
-    String getStoreURL();
+public class AuditConfigurationBuilder extends AbstractConfigurationBuilder<AuditConfig> {
 
-    /**
-     * Identity the admin for the store
-     *
-     * @return
-     */
-    String getUserName();
+    private AuditProvider provider;
 
-    /**
-     * The password for the admin
-     *
-     * @return
-     */
-    String getUserPassword();
+    public AuditConfigurationBuilder(ConfigurationBuilder configurationBuilder) {
+        super(configurationBuilder);
+    }
+
+    @Override
+    protected void setDefaults() {
+
+    }
+
+    @Override
+    protected AuditConfig doBuild() {
+        return new AuditConfig(this.provider);
+    }
+
+    public AuditConfigurationBuilder logProvider() {
+        this.provider = new LogAuditProvider();
+        return this;
+    }
+
+    public AuditConfigurationBuilder provider(AuditProvider provider) {
+        this.provider = provider;
+        return this;
+    }
+
 }

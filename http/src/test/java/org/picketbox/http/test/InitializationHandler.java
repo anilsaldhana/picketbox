@@ -26,8 +26,8 @@ import java.io.InputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import org.picketbox.core.InitializedEvent;
 import org.picketbox.core.event.EventObserver;
+import org.picketbox.core.event.InitializedEvent;
 import org.picketbox.http.authentication.AbstractHTTPAuthentication;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.internal.Digest;

@@ -20,52 +20,64 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.http.config;
+package org.picketbox.core.config.builder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.picketbox.core.config.ConfigurationBuilder;
-import org.picketbox.core.config.builder.AbstractConfigurationBuilder;
+import org.picketbox.core.config.EventManagerConfiguration;
+import org.picketbox.core.event.DefaultEventManager;
+import org.picketbox.core.event.PicketBoxEventManager;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class HTTPFormConfigurationBuilder extends AbstractConfigurationBuilder<HTTPFormConfiguration> {
+public class EventManagerConfigurationBuilder extends AbstractConfigurationBuilder<EventManagerConfiguration> {
 
-    private HTTPFormConfiguration configuration = new HTTPFormConfiguration();
+    private PicketBoxEventManager manager;
+    private List<Object> handlers;
 
-    public HTTPFormConfigurationBuilder(ConfigurationBuilder builder) {
+    public EventManagerConfigurationBuilder(ConfigurationBuilder builder) {
         super(builder);
+        this.handlers = new ArrayList<Object>();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.picketbox.core.config.AbstractConfigurationBuilder#setDefaults()
+     */
     @Override
     protected void setDefaults() {
+        if (this.manager == null) {
+            this.manager = new DefaultEventManager(this.handlers);
+        }
     }
 
-    public HTTPFormConfigurationBuilder Form() {
+    public EventManagerConfigurationBuilder manager(PicketBoxEventManager eventManager) {
+        this.manager = eventManager;
         return this;
     }
 
-    public HTTPFormConfigurationBuilder defaultPage(String defaultPage) {
-        this.configuration.setDefaultPage(defaultPage);
+    public EventManagerConfigurationBuilder handler(Object handler) {
+        this.handlers.add(handler);
         return this;
     }
 
-    public HTTPFormConfigurationBuilder authPage(String formAuthPage) {
-        this.configuration.setFormAuthPage(formAuthPage);
-        return this;
-    }
-
-    public HTTPFormConfigurationBuilder errorPage(String errorPage) {
-        this.configuration.setErrorPage(errorPage);
-        return this;
-    }
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
      */
     @Override
-    public HTTPFormConfiguration doBuild() {
-        return this.configuration ;
+    protected EventManagerConfiguration doBuild() {
+        return new EventManagerConfiguration(this.manager);
+    }
+
+    public void setEventManager(PicketBoxEventManager eventManager) {
+        this.manager = eventManager;
     }
 
 }

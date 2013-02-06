@@ -24,7 +24,7 @@ package org.picketbox.core.authentication;
 
 import java.util.List;
 
-import org.picketbox.core.UserCredential;
+import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 
 /**

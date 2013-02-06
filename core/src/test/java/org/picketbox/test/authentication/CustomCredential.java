@@ -22,7 +22,7 @@
 
 package org.picketbox.test.authentication;
 
-import org.picketbox.core.AbstractUserCredential;
+import org.picketbox.core.authentication.credential.AbstractUserCredential;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

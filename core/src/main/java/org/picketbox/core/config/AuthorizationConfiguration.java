@@ -34,12 +34,18 @@ import org.picketbox.core.authorization.AuthorizationManager;
 public class AuthorizationConfiguration {
 
     private List<AuthorizationManager> managers;
+    private EntitlementsConfiguration entitlements;
 
-    public AuthorizationConfiguration(List<AuthorizationManager> managers) {
+    public AuthorizationConfiguration(List<AuthorizationManager> managers, EntitlementsConfiguration entitlements) {
         this.managers = managers;
+        this.entitlements = entitlements;
     }
 
     public List<AuthorizationManager> getManagers() {
         return this.managers;
+    }
+
+    public EntitlementsConfiguration getEntitlements() {
+        return this.entitlements;
     }
 }

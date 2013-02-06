@@ -20,8 +20,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
 
+import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.core.config.GlobalIdentityManagerConfiguration;
+import org.picketbox.core.config.IdentityManagerConfiguration;
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketlink.idm.IdentityManager;
 

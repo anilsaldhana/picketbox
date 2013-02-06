@@ -22,13 +22,18 @@
 package org.picketbox.core.authorization.ent.impl;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.picketbox.core.UserContext;
 import org.picketbox.core.authorization.Resource;
 import org.picketbox.core.authorization.ent.EntitlementCollection;
 import org.picketbox.core.authorization.ent.EntitlementStore;
 import org.picketbox.core.authorization.ent.EntitlementsManager;
+import org.picketbox.core.config.EntitlementsConfiguration;
 import org.picketlink.idm.model.Group;
+import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.model.Role;
 
 /**
@@ -38,24 +43,46 @@ import org.picketlink.idm.model.Role;
  * @since Oct 25, 2012
  */
 public class DefaultEntitlementsManager implements EntitlementsManager {
-    protected EntitlementStore store = new InMemoryEntitlementStore();
+
+    private final EntitlementStore store;
+
+    public DefaultEntitlementsManager(EntitlementsConfiguration configuration) {
+        this.store = configuration.getEntitlementStore();
+        initStore(configuration);
+    }
+
+    private void initStore(EntitlementsConfiguration configuration) {
+        Map<Resource, Map<IdentityType, EntitlementCollection>> entitlements = configuration.getEntitlements();
+
+        if (entitlements != null && !entitlements.isEmpty()) {
+            Set<Entry<Resource, Map<IdentityType, EntitlementCollection>>> resources = entitlements.entrySet();
+
+            for (Entry<Resource, Map<IdentityType, EntitlementCollection>> resourceEntry : resources) {
+                Resource resource = resourceEntry.getKey();
+
+                Map<IdentityType, EntitlementCollection> identityTypes = resourceEntry.getValue();
+
+                if (identityTypes != null) {
+                    Set<Entry<IdentityType, EntitlementCollection>> identityTypeEntrySet = identityTypes.entrySet();
+
+                    for (Entry<IdentityType, EntitlementCollection> entry : identityTypeEntrySet) {
+                        IdentityType identityType = entry.getKey();
+                        EntitlementCollection entitlementsCollection = entry.getValue();
+
+                        this.store.addEntitlements(resource, identityType, entitlementsCollection);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Return the {@link EntitlementStore}
      *
      * @return
      */
-    public EntitlementStore store() {
+    public EntitlementStore getStore() {
         return this.store;
-    }
-
-    /**
-     * Set the {@link EntitlementStore}
-     *
-     * @param theStore
-     */
-    public void setStore(EntitlementStore theStore) {
-        this.store = theStore;
     }
 
     @Override

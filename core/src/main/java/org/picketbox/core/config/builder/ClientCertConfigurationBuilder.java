@@ -20,36 +20,48 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
 
-import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
+import org.picketbox.core.config.ClientCertConfiguration;
+import org.picketbox.core.config.ConfigurationBuilder;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class JPAIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<JPAIdentityManagerConfiguration> {
+public class ClientCertConfigurationBuilder extends AbstractConfigurationBuilder<ClientCertConfiguration> {
 
-    private JPAIdentityManagerConfiguration configuration = new JPAIdentityManagerConfiguration();
+    private ClientCertConfiguration configuration = new ClientCertConfiguration();
 
-    public JPAIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
-        super(identityManagerConfigurationBuilder);
-    }
-
-    public JPAIdentityManagerConfigurationBuilder entityManagerLookupStrategy(EntityManagerLookupStrategy strategy) {
-        this.configuration.setEntityManagerLookupStrategy(strategy);
-        return this;
+    public ClientCertConfigurationBuilder(ConfigurationBuilder builder) {
+        super(builder);
     }
 
     @Override
     protected void setDefaults() {
-        if (this.configuration.getEntityManagerLookupStrategy() == null) {
-            this.configuration.setEntityManagerLookupStrategy(new EntityManagerLookupStrategy());
-        }
     }
 
+    public ClientCertConfigurationBuilder clientCert() {
+        return this;
+    }
+
+    public ClientCertConfigurationBuilder useCNAsPrincipal() {
+        this.configuration.setUseCNAsPrincipal(true);
+        return this;
+    }
+
+    public ClientCertConfigurationBuilder useCertificateValidation() {
+        this.configuration.setUseCertificateValidation(true);
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
+     */
     @Override
-    protected JPAIdentityManagerConfiguration doBuild() {
+    public ClientCertConfiguration doBuild() {
         return this.configuration;
     }
 }

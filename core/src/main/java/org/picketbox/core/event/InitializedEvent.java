@@ -20,39 +20,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core;
+package org.picketbox.core.event;
 
-import org.picketlink.idm.credential.Credentials;
+import org.picketbox.core.PicketBoxManager;
 
 /**
- * <p>
- * This class represents a specific credential type. Eg.: username/password, digest, certificate, security tokens, etc.
- * </p>
- * <p>
- * Each credential type is supported by some mechanism that knows how to get the necessary informations to proceed with the user
- * authentication.
- * </p>
- *
- * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
+ * @author Pedro Silva
  *
  */
-public interface UserCredential {
+public class InitializedEvent {
 
-    /**
-     * <p>
-     * Returns the username.
-     * </p>
-     *
-     * @return
-     */
-    String getUserName();
+    private PicketBoxManager picketBoxManager;
 
-    /**
-     * <p>
-     * Returns the user credential.
-     * </p>
-     *
-     * @return
-     */
-    Credentials getCredential();
+    public InitializedEvent(PicketBoxManager picketBoxManager) {
+        this.picketBoxManager = picketBoxManager;
+    }
+
+    public PicketBoxManager getPicketBoxManager() {
+        return this.picketBoxManager;
+    }
+
 }

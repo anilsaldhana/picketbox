@@ -32,9 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.UserContext;
-import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.AuthenticationStatus;
+import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.http.PicketBoxHTTPManager;

@@ -28,8 +28,8 @@ import static junit.framework.Assert.assertTrue;
 import org.junit.Test;
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.UserContext;
-import org.picketbox.core.UserCredential;
 import org.picketbox.core.authentication.credential.TrustedUsernameCredential;
+import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.test.AbstractDefaultPicketBoxManagerTestCase;
 

@@ -20,9 +20,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
 
 import org.picketbox.core.PicketBoxMessages;
+import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.core.config.SessionManagerConfig;
 import org.picketbox.core.session.FileSessionStore;
 import org.picketbox.core.session.InMemorySessionStore;
 import org.picketbox.core.session.SessionManager;

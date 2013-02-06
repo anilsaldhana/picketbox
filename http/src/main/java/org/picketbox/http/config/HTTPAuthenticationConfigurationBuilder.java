@@ -23,8 +23,8 @@
 package org.picketbox.http.config;
 
 import org.picketbox.core.config.AuthenticationConfiguration;
-import org.picketbox.core.config.AuthenticationConfigurationBuilder;
 import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.core.config.builder.AuthenticationConfigurationBuilder;
 import org.picketbox.http.authentication.HTTPBasicAuthentication;
 import org.picketbox.http.authentication.HTTPClientCertAuthentication;
 import org.picketbox.http.authentication.HTTPDigestAuthentication;

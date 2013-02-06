@@ -34,6 +34,7 @@ import javax.security.auth.Subject;
 
 import org.picketbox.core.authentication.AuthenticationResult;
 import org.picketbox.core.authentication.AuthenticationStatus;
+import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.exceptions.PicketBoxSessionException;
 import org.picketbox.core.session.PicketBoxSession;
 import org.picketbox.core.session.SessionId;

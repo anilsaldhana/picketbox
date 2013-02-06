@@ -22,7 +22,7 @@
 
 package org.picketbox.core.authentication;
 
-import org.picketbox.core.UserCredential;
+import org.picketbox.core.authentication.credential.UserCredential;
 
 /**
  * <p>

@@ -33,7 +33,7 @@ import java.util.List;
  * This class provides some information collected during the authentication process.
  * </p>
  * <p>
- * It can be used to check the authentication status, messages, {@link AuthenticationUser} instance, etc.
+ * It can be used to check the authentication status, messages, authenticated principal, etc.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

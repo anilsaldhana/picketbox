@@ -20,45 +20,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
+
+import org.picketbox.core.config.JPAIdentityManagerConfiguration;
+import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *
  */
-public class ClientCertConfigurationBuilder extends AbstractConfigurationBuilder<ClientCertConfiguration> {
+public class JPAIdentityManagerConfigurationBuilder extends AbstractConfigurationBuilder<JPAIdentityManagerConfiguration> {
 
-    private ClientCertConfiguration configuration = new ClientCertConfiguration();
+    private JPAIdentityManagerConfiguration configuration = new JPAIdentityManagerConfiguration();
 
-    public ClientCertConfigurationBuilder(ConfigurationBuilder builder) {
-        super(builder);
+    public JPAIdentityManagerConfigurationBuilder(IdentityManagerConfigurationBuilder identityManagerConfigurationBuilder) {
+        super(identityManagerConfigurationBuilder);
+    }
+
+    public JPAIdentityManagerConfigurationBuilder entityManagerLookupStrategy(EntityManagerLookupStrategy strategy) {
+        this.configuration.setEntityManagerLookupStrategy(strategy);
+        return this;
     }
 
     @Override
     protected void setDefaults() {
+        if (this.configuration.getEntityManagerLookupStrategy() == null) {
+            this.configuration.setEntityManagerLookupStrategy(new EntityManagerLookupStrategy());
+        }
     }
 
-    public ClientCertConfigurationBuilder clientCert() {
-        return this;
-    }
-
-    public ClientCertConfigurationBuilder useCNAsPrincipal() {
-        this.configuration.setUseCNAsPrincipal(true);
-        return this;
-    }
-
-    public ClientCertConfigurationBuilder useCertificateValidation() {
-        this.configuration.setUseCertificateValidation(true);
-        return this;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.picketbox.core.config.AbstractConfigurationBuilder#doBuild()
-     */
     @Override
-    public ClientCertConfiguration doBuild() {
+    protected JPAIdentityManagerConfiguration doBuild() {
         return this.configuration;
     }
 }

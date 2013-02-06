@@ -24,7 +24,7 @@ package org.picketbox.http.config;
 
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.config.SessionManagerConfig;
-import org.picketbox.core.config.SessionManagerConfigurationBuilder;
+import org.picketbox.core.config.builder.SessionManagerConfigurationBuilder;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

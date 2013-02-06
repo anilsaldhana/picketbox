@@ -25,7 +25,7 @@ package org.picketbox.http.authentication.credential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.picketbox.core.UserCredential;
+import org.picketbox.core.authentication.credential.UserCredential;
 
 /**
  * <p>{@link UserCredential} interface for HTTP authentication schemes.</p>

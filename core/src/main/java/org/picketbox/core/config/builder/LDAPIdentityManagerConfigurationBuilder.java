@@ -20,10 +20,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.picketbox.core.config;
+package org.picketbox.core.config.builder;
 
 import java.util.Properties;
 
+import org.picketbox.core.config.LDAPIdentityManagerConfiguration;
 import org.picketlink.idm.ldap.internal.LDAPIdentityStoreConfiguration;
 
 /**

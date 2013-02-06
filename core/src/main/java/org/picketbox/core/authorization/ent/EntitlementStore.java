@@ -22,9 +22,7 @@
 package org.picketbox.core.authorization.ent;
 
 import org.picketbox.core.authorization.Resource;
-import org.picketlink.idm.model.Group;
-import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.User;
+import org.picketlink.idm.model.IdentityType;
 
 /**
  * A store of {@link Entitlement}
@@ -33,33 +31,6 @@ import org.picketlink.idm.model.User;
  * @since Oct 25, 2012
  */
 public interface EntitlementStore {
-    /**
-     * Add a {@link EntitlementCollection} for a {@link Resource}
-     *
-     * @param resource
-     * @param user
-     * @param collection
-     * @return
-     */
-    boolean addUserEntitlements(Resource resource, User user, EntitlementCollection collection);
-
-    /**
-     *
-     * @param resource
-     * @param role
-     * @param collection
-     * @return
-     */
-    boolean addRoleEntitlements(Resource resource, Role role, EntitlementCollection collection);
-
-    /**
-     *
-     * @param resource
-     * @param group
-     * @param collection
-     * @return
-     */
-    boolean addGroupEntitlements(Resource resource, Group group, EntitlementCollection collection);
 
     /**
      * Add a {@link EntitlementCollection} for a {@link Resource}
@@ -69,23 +40,15 @@ public interface EntitlementStore {
      * @param collection
      * @return
      */
-    EntitlementCollection entitlements(Resource resource, User user);
+    boolean addEntitlements(Resource resource, IdentityType identityType, EntitlementCollection collection);
 
     /**
+     * <p>Returns a {@link EntitlementCollection} for the given {@link Resource} and {@link IdentityType}.</p>
      *
      * @param resource
-     * @param role
-     * @param collection
+     * @param identityType
      * @return
      */
-    EntitlementCollection entitlements(Resource resource, Role role);
+    EntitlementCollection entitlements(Resource resource, IdentityType identityType);
 
-    /**
-     *
-     * @param resource
-     * @param group
-     * @param collection
-     * @return
-     */
-    EntitlementCollection entitlements(Resource resource, Group group);
 }

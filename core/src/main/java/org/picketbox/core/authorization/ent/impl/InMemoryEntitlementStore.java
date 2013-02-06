@@ -29,9 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.picketbox.core.authorization.Resource;
 import org.picketbox.core.authorization.ent.EntitlementCollection;
 import org.picketbox.core.authorization.ent.EntitlementStore;
-import org.picketlink.idm.model.Group;
-import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.User;
+import org.picketlink.idm.model.IdentityType;
 
 /**
  * An implementation of {@link EntitlementStore} that resides in the memory
@@ -43,70 +41,22 @@ public class InMemoryEntitlementStore implements EntitlementStore {
     private Map<Resource, Holder> map = new ConcurrentHashMap<Resource, Holder>();
 
     @Override
-    public boolean addUserEntitlements(Resource resource, User user, EntitlementCollection collection) {
+    public boolean addEntitlements(Resource resource, IdentityType identityType, EntitlementCollection collection) {
         Holder holder = this.map.get(resource);
         if (holder == null) {
             holder = new Holder();
             this.map.put(resource, holder);
         }
-        holder.userMap.put(user, collection);
+        holder.identityTypeMap.put(identityType, collection);
         return true;
     }
 
     @Override
-    public boolean addRoleEntitlements(Resource resource, Role role, EntitlementCollection collection) {
-        Holder holder = this.map.get(resource);
-        if (holder == null) {
-            holder = new Holder();
-            this.map.put(resource, holder);
-        }
-        holder.roleMap.put(role, collection);
-        return true;
-    }
-
-    @Override
-    public boolean addGroupEntitlements(Resource resource, Group group, EntitlementCollection collection) {
-        Holder holder = this.map.get(resource);
-        if (holder == null) {
-            holder = new Holder();
-            this.map.put(resource, holder);
-        }
-        holder.groupMap.put(group, collection);
-        return true;
-    }
-
-    @Override
-    public EntitlementCollection entitlements(Resource resource, User user) {
+    public EntitlementCollection entitlements(Resource resource, IdentityType identityType) {
         EntitlementCollection coll = null;
         Holder holder = this.map.get(resource);
         if (holder != null) {
-            coll = holder.userMap.get(user);
-        }
-        if (coll == null) {
-            coll = EntitlementCollection.EMPTY_COLLECTION;
-        }
-        return coll;
-    }
-
-    @Override
-    public EntitlementCollection entitlements(Resource resource, Role role) {
-        EntitlementCollection coll = null;
-        Holder holder = this.map.get(resource);
-        if (holder != null) {
-            coll = holder.roleMap.get(role);
-        }
-        if (coll == null) {
-            coll = EntitlementCollection.EMPTY_COLLECTION;
-        }
-        return coll;
-    }
-
-    @Override
-    public EntitlementCollection entitlements(Resource resource, Group group) {
-        EntitlementCollection coll = null;
-        Holder holder = this.map.get(resource);
-        if (holder != null) {
-            coll = holder.groupMap.get(group);
+            coll = holder.identityTypeMap.get(identityType);
         }
         if (coll == null) {
             coll = EntitlementCollection.EMPTY_COLLECTION;
@@ -116,8 +66,6 @@ public class InMemoryEntitlementStore implements EntitlementStore {
 
     private static class Holder implements Serializable {
         private static final long serialVersionUID = 1L;
-        private Map<User, EntitlementCollection> userMap = new HashMap<User, EntitlementCollection>();
-        private Map<Role, EntitlementCollection> roleMap = new HashMap<Role, EntitlementCollection>();
-        private Map<Group, EntitlementCollection> groupMap = new HashMap<Group, EntitlementCollection>();
+        private Map<IdentityType, EntitlementCollection> identityTypeMap = new HashMap<IdentityType, EntitlementCollection>();
     }
 }

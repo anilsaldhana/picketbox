@@ -24,6 +24,7 @@ package org.picketbox.core;
 
 import org.picketbox.core.audit.AuditProvider;
 import org.picketbox.core.authorization.Resource;
+import org.picketbox.core.authorization.ent.EntitlementsManager;
 import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.core.event.PicketBoxEventManager;
 import org.picketbox.core.exceptions.AuthenticationException;
@@ -116,5 +117,12 @@ public interface PicketBoxManager extends PicketBoxLifecycle {
      * @return
      */
     AuditProvider getAuditProvider();
+
+    /**
+     * <p>Returns the configured {@link EntitlementsManager} instance.</p>
+     *
+     * @return
+     */
+    EntitlementsManager getEntitlementsManager();
 
 }
