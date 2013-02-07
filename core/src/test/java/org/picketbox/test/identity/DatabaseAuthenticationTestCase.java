@@ -35,9 +35,9 @@ import org.picketbox.core.identity.jpa.EntityManagerPropagationContext;
  * <p>
  * Tests the authenticaiton using a JPA-based Identity Store.
  * </p>
- * 
+ *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
- * 
+ *
  */
 public class DatabaseAuthenticationTestCase extends AbstractIdentityManagerTestCase {
 
@@ -52,7 +52,7 @@ public class DatabaseAuthenticationTestCase extends AbstractIdentityManagerTestC
         entityManager.getTransaction().begin();
 
         EntityManagerPropagationContext.set(entityManager);
-        
+
         super.onSetup();
     }
 
@@ -62,10 +62,10 @@ public class DatabaseAuthenticationTestCase extends AbstractIdentityManagerTestC
 
         // configure the JPA identity store
         builder.identityManager().jpaStore();
-        
+
         return builder;
     }
-    
+
     @After
     public void onFinish() throws Exception {
         EntityManager entityManager = EntityManagerPropagationContext.get();

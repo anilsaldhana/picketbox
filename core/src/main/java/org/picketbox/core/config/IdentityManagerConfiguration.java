@@ -24,7 +24,6 @@ package org.picketbox.core.config;
 
 import org.picketlink.idm.config.IdentityStoreConfiguration;
 
-
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  *

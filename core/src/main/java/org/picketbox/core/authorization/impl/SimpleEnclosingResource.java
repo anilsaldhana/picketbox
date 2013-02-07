@@ -19,25 +19,53 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.picketbox.core.authorization.ent;
+package org.picketbox.core.authorization.impl;
 
-import org.picketbox.core.UserContext;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.picketbox.core.authorization.Resource;
 
 /**
- * Unlike the {@link AuthorizationManager}, the {@link EntitlementsManager} is used to obtain all the {@link Entitlement} with
- * one call.
+ * An implementation of {@link Resource} that encloses a collection of resources
  *
  * @author anil saldhana
- * @since Jul 17, 2012
+ * @since Feb 6, 2013
  */
-public interface EntitlementsManager {
+public class SimpleEnclosingResource extends SimpleResource implements Resource {
+
+    private static final long serialVersionUID = -9038254109218663011L;
+
+    protected List<Resource> resources = new ArrayList<Resource>();
+
     /**
-     * Obtain a collection of {@link Entitlement}
+     * Create a {@link SimpleEnclosingResource}
      *
-     * @param resource resource for which we need to check entitlements
-     * @param userContext subject (user/process) that is performing an action on the resource
-     * @return a collection of {@link EntitlementCollection}
+     * @param name name of the resource
      */
-    EntitlementCollection entitlements(Resource resource, UserContext userContext);
+    public SimpleEnclosingResource(String name) {
+        super(name);
+    }
+
+    /**
+     * Add a {@link Resource}
+     *
+     * @param resource
+     * @return
+     */
+    public SimpleEnclosingResource add(Resource resource) {
+        this.resources.add(resource);
+        return this;
+    }
+
+    /**
+     * Add a list of {@link Resource}
+     *
+     * @param resources
+     * @return
+     */
+    public SimpleEnclosingResource addAll(List<Resource> resources) {
+        this.resources.addAll(resources);
+        return this;
+    }
 }

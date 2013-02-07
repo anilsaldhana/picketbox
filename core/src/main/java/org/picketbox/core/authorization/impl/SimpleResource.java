@@ -30,9 +30,12 @@ import org.picketbox.core.authorization.Resource;
  * @since Oct 25, 2012
  */
 public class SimpleResource implements Resource {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = -7900510923493737833L;
 
     protected String name = null;
+
+    protected boolean needsAuthorization = false;
 
     public SimpleResource(String name) {
         this.name = name;
@@ -44,11 +47,12 @@ public class SimpleResource implements Resource {
 
     @Override
     public boolean isAuthorized() {
-        return false;
+        return needsAuthorization;
     }
 
     @Override
     public void setAuthorized(boolean authorize) {
+        this.needsAuthorization = authorize;
     }
 
     @Override

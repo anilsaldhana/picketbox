@@ -24,7 +24,6 @@ package org.picketbox.test.identity;
 
 import org.picketbox.core.config.ConfigurationBuilder;
 
-
 /**
  * <p>
  * Tests the configuration for the file-based identity store.
@@ -39,5 +38,5 @@ public class FileBasedIdentityManagerTestCase extends AbstractIdentityManagerTes
     protected ConfigurationBuilder doGetConfigurationBuilder() {
         return new ConfigurationBuilder();
     }
-    
+
 }
