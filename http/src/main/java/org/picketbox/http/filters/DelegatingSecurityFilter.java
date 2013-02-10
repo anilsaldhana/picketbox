@@ -89,15 +89,22 @@ public class DelegatingSecurityFilter implements Filter {
         // configures the credential to be used during authentication
         this.credentialType = getSupporttedCredential(fc.getServletContext());
 
+        this.securityManager = doInitSecurityManager(fc);
+
+        // sets the manager as a context attribute and make it available for the application
+        fc.getServletContext().setAttribute(PicketBoxConstants.PICKETBOX_MANAGER, this.securityManager);
+    }
+
+    protected PicketBoxHTTPManager doInitSecurityManager(FilterConfig fc) {
         // gets the configuration that will be used to configure and start the manager
         HTTPConfigurationBuilder configuration = getConfigurationBuilder(fc.getServletContext());
 
         // create and start the manager
-        this.securityManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
-        this.securityManager.start();
+        PicketBoxHTTPManager securityManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
 
-        // sets the manager as a context attribute and make it available for the application
-        fc.getServletContext().setAttribute(PicketBoxConstants.PICKETBOX_MANAGER, this.securityManager);
+        securityManager.start();
+
+        return securityManager;
     }
 
     /**
@@ -128,6 +135,7 @@ public class DelegatingSecurityFilter implements Filter {
 
         configuration.authorization().manager(getAuthorizationManager(authzValue));
         configuration.sessionManager().userAttributeName(userAttributeName);
+
         return configuration;
     }
 
@@ -343,4 +351,5 @@ public class DelegatingSecurityFilter implements Filter {
         }
         return null;
     }
+
 }

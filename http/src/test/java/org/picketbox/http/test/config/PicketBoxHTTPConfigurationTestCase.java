@@ -73,10 +73,10 @@ public class PicketBoxHTTPConfigurationTestCase {
             }
         });
 
-        builder.protectedResource().resource("/secure/*", ProtectedResourceConstraint.ALL)
-                .resource("/notSecured/index.html", ProtectedResourceConstraint.NOT_PROTECTED)
-                .resource("/onlyRoleManager/index.html", new String[] { "Manager" })
-                .resource("/onlyRoleFinancial/index.html", new String[] { "Financial" }).eventManager()
+        builder.protectedResource().restrict("/secure/*", ProtectedResourceConstraint.ALL)
+                .restrict("/notSecured/index.html", ProtectedResourceConstraint.NOT_PROTECTED)
+                .allowedRoles("/onlyRoleManager/index.html", new String[] { "Manager" })
+                .allowedRoles("/onlyRoleFinancial/index.html", new String[] { "Financial" }).eventManager()
                 .handler(new InitializationHandler());
 
         PicketBoxHTTPConfiguration build = (PicketBoxHTTPConfiguration) builder.build();
