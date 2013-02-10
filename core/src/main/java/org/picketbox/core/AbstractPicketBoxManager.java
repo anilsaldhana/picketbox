@@ -34,6 +34,7 @@ import org.picketbox.core.audit.event.AuditEventHandler;
 import org.picketbox.core.authentication.AuthenticationMechanism;
 import org.picketbox.core.authentication.AuthenticationProvider;
 import org.picketbox.core.authentication.AuthenticationResult;
+import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.credential.TrustedUsernameCredential;
 import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.authentication.event.UserAuthenticatedEvent;
@@ -345,8 +346,10 @@ public abstract class AbstractPicketBoxManager extends AbstractPicketBoxLifeCycl
      * @param userContext
      */
     protected void performUnsuccessfulAuthentication(UserContext userContext) {
+        if (userContext.getAuthenticationResult().getStatus().equals(AuthenticationStatus.INVALID_CREDENTIALS)) {
+            getEventManager().raiseEvent(new UserNotAuthenticatedEvent(userContext));
+        }
         userContext.setCredential(null);
-        getEventManager().raiseEvent(new UserNotAuthenticatedEvent(userContext));
     }
 
     /**
