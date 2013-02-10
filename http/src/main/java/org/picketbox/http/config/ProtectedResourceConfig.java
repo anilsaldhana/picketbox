@@ -23,6 +23,7 @@
 package org.picketbox.http.config;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,12 +51,12 @@ public class ProtectedResourceConfig {
      * Construct a resource config using a manager and a list of resources
      *
      * @param manager
-     * @param resources
+     * @param collection
      */
     @SuppressWarnings("rawtypes")
-    public ProtectedResourceConfig(ProtectedResourceManager manager, List<ProtectedResource> resources) {
+    public ProtectedResourceConfig(ProtectedResourceManager manager, Collection<ProtectedResource> collection) {
         this.manager = manager;
-        this.resources.addAll(resources);
+        this.resources.addAll(collection);
     }
 
     /**

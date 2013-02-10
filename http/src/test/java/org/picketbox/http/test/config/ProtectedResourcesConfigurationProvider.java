@@ -44,8 +44,8 @@ public class ProtectedResourcesConfigurationProvider implements ConfigurationBui
     public HTTPConfigurationBuilder getBuilder(ServletContext context) {
         HTTPConfigurationBuilder configurationBuilder = new HTTPConfigurationBuilder();
 
-        configurationBuilder.protectedResource().resource("/notProtected", ProtectedResourceConstraint.NOT_PROTECTED)
-                .resource("/onlyManagers", "manager").resource("/confidentialResource", "confidential");
+        configurationBuilder.protectedResource().restrict("/notProtected", ProtectedResourceConstraint.NOT_PROTECTED)
+                .allowedRoles("/onlyManagers", "manager").allowedRoles("/confidentialResource", "confidential");
 
         configurationBuilder.identityManager().fileStore();
         

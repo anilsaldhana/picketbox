@@ -63,23 +63,21 @@ public class ProtectedResource {
     private String constraint = ProtectedResourceConstraint.ALL.name();
 
     private String[] roles;
-
-    public ProtectedResource() {
-    }
+    private String[] groups;
 
     public ProtectedResource(String pattern, ProtectedResourceConstraint constraint) {
-        setPattern(pattern);
-        setConstraint(constraint.name());
+        this.pattern = pattern;
+        this.constraint = constraint.name();
     }
 
     public ProtectedResource(String pattern, ProtectedResourceConstraint constraint, String[] roles) {
-        setPattern(pattern);
-        setConstraint(constraint.name());
-        setRoles(roles);
+        this(pattern, constraint);
+        this.roles = roles;
     }
 
-    public void setRoles(String[] roles) {
-        this.roles = roles;
+    public ProtectedResource(String pattern, ProtectedResourceConstraint constraint, String[] roles, String[] groups) {
+        this(pattern, constraint, roles);
+        this.groups = groups;
     }
 
     public String[] getRoles() {
@@ -94,24 +92,10 @@ public class ProtectedResource {
     }
 
     /**
-     * @param pattern the pattern to set
-     */
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
-
-    /**
      * @return the constraint
      */
     public String getConstraint() {
         return this.constraint;
-    }
-
-    /**
-     * @param constraint the constraint to set
-     */
-    public void setConstraint(String constraint) {
-        this.constraint = constraint;
     }
 
     /**
@@ -172,24 +156,53 @@ public class ProtectedResource {
             }
         }
 
-        return false;
+        if (pattern.equals("*")) {
+            return true;
+        } else {
+            return (pattern.startsWith(ANY_RESOURCE_PATTERN) && uri.endsWith(pattern.substring(
+                    ANY_RESOURCE_PATTERN.length() + 1, pattern.length())));
+        }
     }
 
     public boolean isAllowed(UserContext subject) {
-        if (this.roles == null || this.roles.length == 0) {
-            return true;
-        }
+        boolean isRoleAllowed = false;
 
-        boolean isAllowed = false;
-
-        for (String role : this.roles) {
-            if (subject.hasRole(role)) {
-                isAllowed = true;
-                break;
+        if (this.roles != null && this.roles.length > 0) {
+            for (String role : this.roles) {
+                if (subject.hasRole(role)) {
+                    isRoleAllowed = true;
+                    break;
+                }
             }
+        } else {
+            isRoleAllowed = true;
         }
 
-        return isAllowed;
+        boolean isGroupAllowed = false;
+
+        if (this.groups != null && this.groups.length > 0) {
+            for (String group : this.groups) {
+                if (subject.hasGroup(group)) {
+                    isGroupAllowed = true;
+                    break;
+                }
+            }
+        } else {
+            isGroupAllowed = true;
+        }
+
+        return isGroupAllowed && isRoleAllowed;
     }
 
+    public void setRoles(String[] roles) {
+        this.roles = roles;
+    }
+
+    public void setConstraint(ProtectedResourceConstraint constraint) {
+        this.constraint = constraint.name();
+    }
+
+    public void setGroups(String[] groups) {
+        this.groups = groups;
+    }
 }
