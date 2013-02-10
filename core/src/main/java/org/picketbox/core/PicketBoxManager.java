@@ -124,5 +124,4 @@ public interface PicketBoxManager extends PicketBoxLifecycle {
      * @return
      */
     EntitlementsManager getEntitlementsManager();
-
 }
