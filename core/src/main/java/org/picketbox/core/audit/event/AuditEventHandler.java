@@ -44,6 +44,10 @@ public class AuditEventHandler {
 
     private AuditProvider auditProvider;
 
+    public AuditEventHandler() {
+
+    }
+
     public AuditEventHandler(AuditProvider auditProvider) {
         this.auditProvider = auditProvider;
     }
@@ -55,9 +59,9 @@ public class AuditEventHandler {
         AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map);
 
         auditRecord.setUserContext(event.getUserContext());
-        auditRecord.setDescription("User was authenticated");
+        auditRecord.setDescription("User " + event.getUserContext().getUser().getLoginName() + " was authenticated");
 
-        this.auditProvider.audit(auditRecord);
+        getAuditProvider().audit(auditRecord);
     }
 
     @EventObserver
@@ -67,9 +71,9 @@ public class AuditEventHandler {
         AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map);
 
         auditRecord.setUserContext(event.getUserContext());
-        auditRecord.setDescription("Invalid user");
+        auditRecord.setDescription("Invalid credentials for User " + event.getUserContext().getCredential().getUserName() + ".");
 
-        this.auditProvider.audit(auditRecord);
+        getAuditProvider().audit(auditRecord);
     }
 
     @EventObserver
@@ -79,9 +83,12 @@ public class AuditEventHandler {
         AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map, event.getException());
 
         auditRecord.setUserContext(event.getUserContext());
-        auditRecord.setDescription("Authentication failed");
+        auditRecord.setDescription("Authentication Failed for User " + event.getUserContext().getCredential().getUserName() + ".");
 
-        this.auditProvider.audit(auditRecord);
+        getAuditProvider().audit(auditRecord);
     }
 
+    public AuditProvider getAuditProvider() {
+        return this.auditProvider;
+    }
 }

@@ -45,7 +45,7 @@ import org.picketbox.http.resource.ProtectedResourceManager;
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
  */
-public final class PicketBoxHTTPManager extends AbstractPicketBoxManager {
+public class PicketBoxHTTPManager extends AbstractPicketBoxManager {
 
     @SuppressWarnings("rawtypes")
     private ProtectedResourceManager protectedResourceManager;
