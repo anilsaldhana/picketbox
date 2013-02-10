@@ -34,7 +34,7 @@ import org.picketbox.core.audit.event.PreAuditEvent;
  */
 public abstract class AbstractAuditProvider implements AuditProvider {
 
-    public PicketBoxManager picketBoxManager;
+    private PicketBoxManager picketBoxManager;
 
     @Override
     public void audit(AuditEvent ae) {
