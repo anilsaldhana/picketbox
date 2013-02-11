@@ -22,7 +22,7 @@
 package org.picketbox.http.test.authentication;
 
 import org.picketbox.core.PicketBoxManager;
-import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.DefaultPicketBoxHTTPManager;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
 import org.picketbox.http.test.InitializationHandler;
@@ -35,7 +35,7 @@ import org.picketbox.http.test.InitializationHandler;
  */
 public class AbstractAuthenticationTest {
     protected HTTPConfigurationBuilder configuration;
-    protected PicketBoxHTTPManager picketBoxManager;
+    protected DefaultPicketBoxHTTPManager picketBoxManager;
 
     public void initialize() throws Exception {
         this.configuration = new HTTPConfigurationBuilder();
@@ -44,7 +44,7 @@ public class AbstractAuthenticationTest {
         
         doConfigureManager(this.configuration);
 
-        this.picketBoxManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) this.configuration.build());
+        this.picketBoxManager = new DefaultPicketBoxHTTPManager((PicketBoxHTTPConfiguration) this.configuration.build());
 
         this.picketBoxManager.start();
     }

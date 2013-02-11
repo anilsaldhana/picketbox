@@ -36,7 +36,7 @@ import org.picketbox.core.UserContext;
 import org.picketbox.core.authentication.credential.UsernamePasswordCredential;
 import org.picketbox.core.identity.UserContextPopulator;
 import org.picketbox.http.HTTPUserContext;
-import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.DefaultPicketBoxHTTPManager;
 import org.picketbox.http.authorization.resource.WebResource;
 import org.picketbox.http.config.HTTPConfigurationBuilder;
 import org.picketbox.http.config.PicketBoxHTTPConfiguration;
@@ -53,7 +53,7 @@ import org.picketlink.idm.model.SimpleRole;
  */
 public class PicketBoxHTTPConfigurationTestCase {
 
-    private PicketBoxHTTPManager picketBoxManager;
+    private DefaultPicketBoxHTTPManager picketBoxManager;
 
     @Before
     public void onSetup() {
@@ -81,7 +81,7 @@ public class PicketBoxHTTPConfigurationTestCase {
 
         PicketBoxHTTPConfiguration build = (PicketBoxHTTPConfiguration) builder.build();
 
-        this.picketBoxManager = new PicketBoxHTTPManager(build);
+        this.picketBoxManager = new DefaultPicketBoxHTTPManager(build);
 
         this.picketBoxManager.start();
     }

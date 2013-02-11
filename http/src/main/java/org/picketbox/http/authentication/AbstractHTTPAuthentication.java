@@ -37,7 +37,7 @@ import org.picketbox.core.authentication.AuthenticationStatus;
 import org.picketbox.core.authentication.credential.UserCredential;
 import org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism;
 import org.picketbox.core.exceptions.AuthenticationException;
-import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.DefaultPicketBoxHTTPManager;
 import org.picketbox.http.authentication.credential.HttpServletCredential;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 
@@ -242,8 +242,8 @@ public abstract class AbstractHTTPAuthentication extends AbstractAuthenticationM
      * @see org.picketbox.core.authentication.impl.AbstractAuthenticationMechanism#getPicketBoxManager()
      */
     @Override
-    protected PicketBoxHTTPManager getPicketBoxManager() {
-        return (PicketBoxHTTPManager) super.getPicketBoxManager();
+    protected DefaultPicketBoxHTTPManager getPicketBoxManager() {
+        return (DefaultPicketBoxHTTPManager) super.getPicketBoxManager();
     }
 
     protected HTTPAuthenticationConfiguration getAuthenticationConfig() {

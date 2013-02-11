@@ -44,6 +44,7 @@ import org.picketbox.core.ctx.SecurityContext;
 import org.picketbox.core.ctx.SecurityContextPropagation;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketbox.core.exceptions.ProcessingException;
+import org.picketbox.http.DefaultPicketBoxHTTPManager;
 import org.picketbox.http.HTTPUserContext;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.PicketBoxHTTPManager;
@@ -100,7 +101,7 @@ public class DelegatingSecurityFilter implements Filter {
         HTTPConfigurationBuilder configuration = getConfigurationBuilder(fc.getServletContext());
 
         // create and start the manager
-        PicketBoxHTTPManager securityManager = new PicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
+        DefaultPicketBoxHTTPManager securityManager = new DefaultPicketBoxHTTPManager((PicketBoxHTTPConfiguration) configuration.build());
 
         securityManager.start();
 

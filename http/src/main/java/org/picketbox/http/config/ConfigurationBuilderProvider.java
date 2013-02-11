@@ -24,12 +24,12 @@ package org.picketbox.http.config;
 
 import javax.servlet.ServletContext;
 
-import org.picketbox.http.PicketBoxHTTPManager;
+import org.picketbox.http.DefaultPicketBoxHTTPManager;
 
 /**
  * <p>
  * This interfaces can be implemented to provide a {@link HTTPConfigurationBuilder} that will be used to configure and create
- * the {@link PicketBoxHTTPManager}.
+ * the {@link DefaultPicketBoxHTTPManager}.
  * </p>
  *
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>
