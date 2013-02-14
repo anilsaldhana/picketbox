@@ -43,7 +43,7 @@ import org.picketbox.http.authentication.HTTPDigestAuthentication;
 import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.http.test.jetty.EmbeddedWebServerBase;
 import org.picketbox.http.util.HTTPDigestUtil;
-import org.picketlink.idm.credential.internal.Digest;
+import org.picketlink.idm.credential.Digest;
 
 /**
  * Unit test the {@link DelegatingSecurityFilter} for {@link HTTPDigestAuthentication}

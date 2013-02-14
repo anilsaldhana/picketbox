@@ -22,8 +22,8 @@
 
 package org.picketbox.core.authentication.credential;
 
-import org.picketlink.idm.credential.internal.Password;
-import org.picketlink.idm.credential.internal.UsernamePasswordCredentials;
+import org.picketlink.idm.credential.Password;
+import org.picketlink.idm.credential.UsernamePasswordCredentials;
 
 /**
  * <p>

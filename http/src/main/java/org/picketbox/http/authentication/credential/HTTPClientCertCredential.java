@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.picketbox.core.authentication.credential.AbstractUserCredential;
 import org.picketbox.http.PicketBoxConstants;
-import org.picketlink.idm.credential.internal.X509Cert;
-import org.picketlink.idm.credential.internal.X509CertificateCredentials;
+import org.picketlink.idm.credential.X509Cert;
+import org.picketlink.idm.credential.X509CertificateCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

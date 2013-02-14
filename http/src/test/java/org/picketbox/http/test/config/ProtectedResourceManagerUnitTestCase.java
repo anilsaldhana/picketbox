@@ -44,7 +44,7 @@ import org.picketbox.http.filters.DelegatingSecurityFilter;
 import org.picketbox.http.resource.HTTPProtectedResourceManager;
 import org.picketbox.http.test.jetty.EmbeddedWebServerBase;
 import org.picketbox.http.util.HTTPDigestUtil;
-import org.picketlink.idm.credential.internal.Digest;
+import org.picketlink.idm.credential.Digest;
 
 /**
  * Unit test the {@link HTTPProtectedResourceManager} for {@link HTTPDigestAuthentication}.

@@ -44,8 +44,8 @@ import org.picketbox.http.authentication.credential.HttpServletCredential;
 import org.picketbox.http.config.HTTPAuthenticationConfiguration;
 import org.picketbox.http.config.HTTPDigestConfiguration;
 import org.picketlink.idm.credential.Credentials.Status;
-import org.picketlink.idm.credential.internal.Digest;
-import org.picketlink.idm.credential.internal.DigestCredentials;
+import org.picketlink.idm.credential.Digest;
+import org.picketlink.idm.credential.DigestCredentials;
 import org.picketlink.idm.model.User;
 
 /**

@@ -43,7 +43,9 @@ public interface EntitlementStore {
     boolean addEntitlements(Resource resource, IdentityType identityType, EntitlementCollection collection);
 
     /**
-     * <p>Returns a {@link EntitlementCollection} for the given {@link Resource} and {@link IdentityType}.</p>
+     * <p>
+     * Returns a {@link EntitlementCollection} for the given {@link Resource} and {@link IdentityType}.
+     * </p>
      *
      * @param resource
      * @param identityType

@@ -119,7 +119,9 @@ public interface PicketBoxManager extends PicketBoxLifecycle {
     AuditProvider getAuditProvider();
 
     /**
-     * <p>Returns the configured {@link EntitlementsManager} instance.</p>
+     * <p>
+     * Returns the configured {@link EntitlementsManager} instance.
+     * </p>
      *
      * @return
      */

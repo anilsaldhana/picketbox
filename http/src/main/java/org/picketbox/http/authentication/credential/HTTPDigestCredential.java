@@ -28,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.picketbox.core.authentication.credential.AbstractUserCredential;
 import org.picketbox.http.PicketBoxConstants;
 import org.picketbox.http.util.HTTPDigestUtil;
-import org.picketlink.idm.credential.internal.Digest;
-import org.picketlink.idm.credential.internal.DigestCredentials;
+import org.picketlink.idm.credential.Digest;
+import org.picketlink.idm.credential.DigestCredentials;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Silva</a>

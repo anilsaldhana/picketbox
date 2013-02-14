@@ -27,6 +27,7 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 
 import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.config.GlobalIdentityManagerConfiguration;
 import org.picketbox.core.config.IdentityManagerConfiguration;
 import org.picketbox.core.config.JPAIdentityManagerConfiguration;
@@ -185,9 +186,11 @@ public class PicketBoxIdentityManager implements IdentityManager {
         return this.delegate.isMember(identityType, group);
     }
 
-    @Override
+    /**
+     * use {@link #addToGroup(Agent, Group)}
+     */
     public void addToGroup(IdentityType identityType, Group group) {
-        this.delegate.addToGroup(identityType, group);
+        throw PicketBoxMessages.MESSAGES.unsupportedFeature();
     }
 
     @Override
@@ -205,9 +208,11 @@ public class PicketBoxIdentityManager implements IdentityManager {
         return this.delegate.hasGroupRole(identityType, role, group);
     }
 
-    @Override
+    /**
+     * Use {@link #grantGroupRole(Agent, Role, Group)}
+     */
     public void grantGroupRole(IdentityType identityType, Role role, Group group) {
-        this.delegate.grantGroupRole(identityType, role, group);
+        throw PicketBoxMessages.MESSAGES.unsupportedFeature();
     }
 
     @Override
@@ -326,5 +331,15 @@ public class PicketBoxIdentityManager implements IdentityManager {
 
     private void raiseEvent(Object event) {
         this.picketboxManager.getEventManager().raiseEvent(event);
+    }
+
+    @Override
+    public void addToGroup(Agent agent, Group group) {
+        delegate.addToGroup(agent, group);
+    }
+
+    @Override
+    public void grantGroupRole(Agent member, Role role, Group group) {
+        delegate.grantGroupRole(member, role, group);
     }
 }

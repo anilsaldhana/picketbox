@@ -22,7 +22,6 @@
 
 package org.picketbox.core.config.builder;
 
-
 /**
  * An abstract configuration builder
  *

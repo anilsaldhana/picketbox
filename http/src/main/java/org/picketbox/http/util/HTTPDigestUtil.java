@@ -25,7 +25,7 @@ import java.security.MessageDigest;
 
 import org.picketbox.core.PicketBoxMessages;
 import org.picketbox.core.exceptions.FormatException;
-import org.picketlink.idm.credential.internal.Digest;
+import org.picketlink.idm.credential.Digest;
 
 /**
  * Utility class to support HTTP Digest Authentication

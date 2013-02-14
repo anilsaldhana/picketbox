@@ -22,7 +22,6 @@
 
 package org.picketbox.core.authentication.credential;
 
-
 /**
  * <p>
  * Credential that uses only the username to validate the user.

@@ -71,7 +71,8 @@ public class AuditEventHandler {
         AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map);
 
         auditRecord.setUserContext(event.getUserContext());
-        auditRecord.setDescription("Invalid credentials for User " + event.getUserContext().getCredential().getUserName() + ".");
+        auditRecord
+                .setDescription("Invalid credentials for User " + event.getUserContext().getCredential().getUserName() + ".");
 
         getAuditProvider().audit(auditRecord);
     }
@@ -83,7 +84,8 @@ public class AuditEventHandler {
         AuditEvent auditRecord = new AuditEvent(AuditType.AUTHENTICATION, map, event.getException());
 
         auditRecord.setUserContext(event.getUserContext());
-        auditRecord.setDescription("Authentication Failed for User " + event.getUserContext().getCredential().getUserName() + ".");
+        auditRecord.setDescription("Authentication Failed for User " + event.getUserContext().getCredential().getUserName()
+                + ".");
 
         getAuditProvider().audit(auditRecord);
     }

@@ -40,7 +40,7 @@ import org.picketbox.core.config.AuthenticationConfiguration;
 import org.picketbox.core.config.ClientCertConfiguration;
 import org.picketbox.core.exceptions.AuthenticationException;
 import org.picketlink.idm.credential.Credentials.Status;
-import org.picketlink.idm.credential.internal.X509CertificateCredentials;
+import org.picketlink.idm.credential.X509CertificateCredentials;
 
 /**
  * <p>
