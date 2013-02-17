@@ -194,8 +194,8 @@ public class PicketBoxIdentityManager implements IdentityManager {
     }
 
     @Override
-    public void removeFromGroup(IdentityType identityType, Group group) {
-        this.delegate.removeFromGroup(identityType, group);
+    public void removeFromGroup(Agent member, Group group) {
+        this.delegate.removeFromGroup(member, group);
     }
 
     @Override
@@ -216,8 +216,8 @@ public class PicketBoxIdentityManager implements IdentityManager {
     }
 
     @Override
-    public void revokeGroupRole(IdentityType identityType, Role role, Group group) {
-        this.delegate.revokeGroupRole(identityType, role, group);
+    public void revokeGroupRole(Agent member, Role role, Group group) {
+        this.delegate.revokeGroupRole(member, role, group);
     }
 
     @Override
