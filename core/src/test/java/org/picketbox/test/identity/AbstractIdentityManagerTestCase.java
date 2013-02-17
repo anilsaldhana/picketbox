@@ -90,6 +90,8 @@ public abstract class AbstractIdentityManagerTestCase extends AbstractDefaultPic
 
         identityManager.add(sales);
 
+        identityManager.grantRole(mary, manager);
+        identityManager.addToGroup(mary, sales);
         identityManager.grantGroupRole(mary, manager, sales);
     }
 
