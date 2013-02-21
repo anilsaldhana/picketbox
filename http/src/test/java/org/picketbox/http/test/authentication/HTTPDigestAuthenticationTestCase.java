@@ -135,8 +135,8 @@ public class HTTPDigestAuthenticationTestCase extends AbstractAuthenticationTest
         digest.setUsername("Aladdin");
         digest.setMethod("GET");
         digest.setUri("/dir/index.html");
-        digest.setCnonce(cnonce);
-        digest.setNc("00000001");
+        digest.setClientNonce(cnonce);
+        digest.setNonceCount("00000001");
         digest.setQop("auth");
 
         clientResponse = HTTPDigestUtil.clientResponseValue(digest, "Open Sesame".toCharArray());

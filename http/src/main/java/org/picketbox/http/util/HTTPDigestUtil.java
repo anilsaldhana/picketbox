@@ -129,7 +129,7 @@ public class HTTPDigestUtil {
         // Construct a digest holder
         Digest digestHolder = new Digest();
 
-        digestHolder.setUsername(username).setRealm(realm).setNonce(nonce).setUri(uri).setQop(qop).setNc(nc).setCnonce(cnonce)
+        digestHolder.setUsername(username).setRealm(realm).setNonce(nonce).setUri(uri).setQop(qop).setNonceCount(nc).setClientNonce(cnonce)
                 .setDigest(clientResponse).setOpaque(opaque);
 
         digestHolder.setStale(stale).setDomain(domain);
@@ -184,9 +184,9 @@ public class HTTPDigestUtil {
             messageDigest.update((byte) ':');
             messageDigest.update(digest.getNonce().getBytes(UTF8));
             messageDigest.update((byte) ':');
-            messageDigest.update(digest.getNc().getBytes(UTF8));
+            messageDigest.update(digest.getNonceCount().getBytes(UTF8));
             messageDigest.update((byte) ':');
-            messageDigest.update(digest.getCnonce().getBytes(UTF8));
+            messageDigest.update(digest.getClientNonce().getBytes(UTF8));
             messageDigest.update((byte) ':');
             messageDigest.update(digest.getQop().getBytes(UTF8));
             messageDigest.update((byte) ':');

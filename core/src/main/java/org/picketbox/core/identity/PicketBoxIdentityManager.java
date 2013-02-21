@@ -208,15 +208,13 @@ public class PicketBoxIdentityManager implements IdentityManager {
         return this.delegate.hasGroupRole(identityType, role, group);
     }
 
-    /**
-     * Use {@link #grantGroupRole(Agent, Role, Group)}
-     */
+    @Override
     public void grantGroupRole(IdentityType identityType, Role role, Group group) {
-        throw PicketBoxMessages.MESSAGES.unsupportedFeature();
+        this.delegate.grantGroupRole(identityType, role, group);
     }
 
     @Override
-    public void revokeGroupRole(Agent member, Role role, Group group) {
+    public void revokeGroupRole(IdentityType member, Role role, Group group) {
         this.delegate.revokeGroupRole(member, role, group);
     }
 
@@ -338,8 +336,4 @@ public class PicketBoxIdentityManager implements IdentityManager {
         delegate.addToGroup(agent, group);
     }
 
-    @Override
-    public void grantGroupRole(Agent member, Role role, Group group) {
-        delegate.grantGroupRole(member, role, group);
-    }
 }
