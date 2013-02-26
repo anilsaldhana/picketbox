@@ -22,6 +22,7 @@
 
 package org.picketbox.core.config;
 
+import org.picketlink.idm.config.FeatureSet;
 import org.picketlink.idm.ldap.internal.LDAPIdentityStoreConfiguration;
 
 /**
@@ -38,6 +39,9 @@ public class LDAPIdentityManagerConfiguration implements IdentityManagerConfigur
 
     @Override
     public LDAPIdentityStoreConfiguration getConfiguration() {
+        FeatureSet.addFeatureSupport(this.ldapConfig.getFeatureSet());
+        FeatureSet.addRelationshipSupport(this.ldapConfig.getFeatureSet());
+
         return this.ldapConfig;
     }
 

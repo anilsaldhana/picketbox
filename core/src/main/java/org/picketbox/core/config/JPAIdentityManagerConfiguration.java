@@ -23,6 +23,7 @@
 package org.picketbox.core.config;
 
 import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
+import org.picketlink.idm.config.FeatureSet;
 import org.picketlink.idm.config.IdentityStoreConfiguration;
 import org.picketlink.idm.jpa.internal.JPAIdentityStoreConfiguration;
 import org.picketlink.idm.jpa.schema.CredentialObject;
@@ -54,6 +55,11 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
         configuration.setCredentialClass(CredentialObject.class);
         configuration.setCredentialAttributeClass(CredentialObjectAttribute.class);
         configuration.setPartitionClass(PartitionObject.class);
+
+        FeatureSet.addFeatureSupport(configuration.getFeatureSet());
+        FeatureSet.addRelationshipSupport(configuration.getFeatureSet());
+        configuration.getFeatureSet().setSupportsCustomRelationships(true);
+        configuration.getFeatureSet().setSupportsMultiRealm(true);
 
         return configuration;
     }

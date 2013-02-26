@@ -22,6 +22,7 @@
 
 package org.picketbox.core.config;
 
+import org.picketlink.idm.config.FeatureSet;
 import org.picketlink.idm.config.IdentityStoreConfiguration;
 import org.picketlink.idm.file.internal.FileIdentityStoreConfiguration;
 
@@ -44,15 +45,20 @@ public class FileIdentityManagerConfiguration implements IdentityManagerConfigur
 
     @Override
     public IdentityStoreConfiguration getConfiguration() {
-        FileIdentityStoreConfiguration fileStoreConfig = new FileIdentityStoreConfiguration();
+        FileIdentityStoreConfiguration configuration = new FileIdentityStoreConfiguration();
 
-        fileStoreConfig.getDataSource().setAlwaysCreateFiles(this.alwaysCreateFiles);
+        configuration.getDataSource().setAlwaysCreateFiles(this.alwaysCreateFiles);
 
         if (this.workingDir != null) {
-            fileStoreConfig.getDataSource().setWorkingDir(this.workingDir);
+            configuration.getDataSource().setWorkingDir(this.workingDir);
         }
 
-        return fileStoreConfig;
+        FeatureSet.addFeatureSupport(configuration.getFeatureSet());
+        FeatureSet.addRelationshipSupport(configuration.getFeatureSet());
+        configuration.getFeatureSet().setSupportsCustomRelationships(true);
+        configuration.getFeatureSet().setSupportsMultiRealm(true);
+
+        return configuration;
     }
 
 }
