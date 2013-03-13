@@ -25,7 +25,7 @@ package org.picketbox.core.config;
 import org.picketbox.core.identity.jpa.EntityManagerLookupStrategy;
 import org.picketlink.idm.config.FeatureSet;
 import org.picketlink.idm.config.IdentityStoreConfiguration;
-import org.picketlink.idm.jpa.internal.JPAIdentityStoreConfiguration;
+import org.picketlink.idm.config.JPAIdentityStoreConfiguration;
 import org.picketlink.idm.jpa.schema.CredentialObject;
 import org.picketlink.idm.jpa.schema.CredentialObjectAttribute;
 import org.picketlink.idm.jpa.schema.IdentityObject;
@@ -43,6 +43,7 @@ public class JPAIdentityManagerConfiguration implements IdentityManagerConfigura
 
     private EntityManagerLookupStrategy entityManagerLookupStrategy;
 
+    @SuppressWarnings("unchecked")
     @Override
     public IdentityStoreConfiguration getConfiguration() {
         JPAIdentityStoreConfiguration configuration = new JPAIdentityStoreConfiguration();
